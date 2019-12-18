@@ -124,6 +124,12 @@ public class ScoreView extends View {
         }
     }
 
+    void setApp() {
+        if (activity != null) {
+            app = activity.app;
+        }
+    }
+
     int scale(int dim)
     {
         return (int)Math.round(dim * scalefactor);
@@ -156,9 +162,7 @@ public class ScoreView extends View {
 
     private void init(Context context) {
         activity = (MainActivity) context;
-        if (activity != null) {
-            app = activity.app;
-        }
+        setApp();
     }
 
     int getItemCenterX(Drawable drawable) {

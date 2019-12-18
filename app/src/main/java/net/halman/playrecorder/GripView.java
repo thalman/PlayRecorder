@@ -57,11 +57,16 @@ public class GripView extends View {
         init(context);
     }
 
-    private void init(Context context) {
-        activity = (MainActivity) context;
+    void setApp()
+    {
         if (activity != null) {
             app = activity.app;
         }
+    }
+
+    private void init(Context context) {
+        activity = (MainActivity) context;
+        setApp();
     }
 
     private void calculateScale() {
