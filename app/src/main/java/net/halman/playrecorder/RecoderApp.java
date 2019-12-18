@@ -108,4 +108,44 @@ public class RecoderApp {
     {
         return recorder.canPlay(scale, note);
     }
+
+    void recorderTunning(Recorder.Tunning T)
+    {
+        recorder.tunning(T);
+        if (! canPlay()) {
+            switch(T){
+                case C:
+                    note.set(Note.c1, Note.Accidentals.NONE);
+                    break;
+                case F:
+                    note.set(Note.f1, Note.Accidentals.NONE);
+                    break;
+            }
+        }
+    }
+
+    Recorder.Tunning recorderTunning()
+    {
+        return recorder.tunning();
+    }
+
+    void recorderFingering(Recorder.Fingering F)
+    {
+        recorder.fingering(F);
+        if (! canPlay()) {
+            switch(recorder.tunning()){
+                case C:
+                    note.set(Note.c1, Note.Accidentals.NONE);
+                    break;
+                case F:
+                    note.set(Note.f1, Note.Accidentals.NONE);
+                    break;
+            }
+        }
+    }
+
+    Recorder.Fingering recorderFingering()
+    {
+        return recorder.fingering();
+    }
 }

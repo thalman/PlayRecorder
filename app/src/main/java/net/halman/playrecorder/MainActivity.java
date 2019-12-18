@@ -17,9 +17,14 @@
 
 package net.halman.playrecorder;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.DialogInterface;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -62,5 +67,73 @@ public class MainActivity extends AppCompatActivity {
         score.setOnClickListener(scoreOnClickListener);
         grip = findViewById(R.id.Grip);
         score.setGripView(grip);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_playrecorder, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.actionFingering:
+                onFingering();
+                return true;
+            case R.id.actionTunning:
+                onTunning();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void onFingering()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.fingering_title);
+        builder.setItems(R.array.fingering_items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        app.recorderFingering(Recorder.Fingering.BAROQUE);
+                        grip.invalidate();
+                        score.invalidate();
+                        break;
+                    case 1:
+                        app.recorderFingering(Recorder.Fingering.GERMAN);
+                        grip.invalidate();
+                        score.invalidate();
+                        break;
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void onTunning()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.tunning_title);
+        builder.setItems(R.array.tunning_items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        app.recorderTunning(Recorder.Tunning.C);
+                        grip.invalidate();
+                        score.invalidate();
+                        break;
+                    case 1:
+                        app.recorderTunning(Recorder.Tunning.F);
+                        grip.invalidate();
+                        score.invalidate();
+                        break;
+                }
+            }
+        });
+        builder.show();
     }
 }

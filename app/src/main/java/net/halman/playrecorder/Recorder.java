@@ -53,11 +53,6 @@ public class Recorder {
         tunning(Tunning.C);
     }
 
-    Fingering fingering()
-    {
-        return recorderFingering;
-    }
-
     Tunning tunning()
     {
         return recorderTunning;
@@ -68,13 +63,24 @@ public class Recorder {
         recorderTunning = tunning;
     }
 
+    Fingering fingering()
+    {
+        return recorderFingering;
+    }
+
     void fingering(Fingering f)
     {
         recorderFingering = f;
-        setGrips();
+        switch (f) {
+            case BAROQUE:
+                setBaroqueGrips();
+                break;
+            case GERMAN:
+                setGermanGrips();
+        }
     }
 
-    void setGrips()
+    private void setBaroqueGrips()
     {
         grips = new ArrayList<ArrayList<Grip>>();
 
@@ -254,9 +260,194 @@ public class Recorder {
 
     }
 
+    private void setGermanGrips()
+    {
+        grips = new ArrayList<ArrayList<Grip>>();
+
+        // C/F
+        ArrayList<Grip> grip = new ArrayList<Grip>();
+        grip.add(new Grip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN));
+        grips.add(grip);
+
+        // C#
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN));
+        grips.add(grip);
+
+        // D
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // D#
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // E
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // F
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // F#
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(CLOSE, CLOSE, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN));
+        grips.add(grip);
+
+        // G
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // G#
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(CLOSE, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grip.add(new Grip(CLOSE, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // A
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // A#
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(CLOSE, CLOSE, OPEN, CLOSE, OPEN, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN));
+        grip.add(new Grip(CLOSE, CLOSE, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // B
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grip.add(new Grip(CLOSE, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // C
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(CLOSE, OPEN, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grip.add(new Grip(OPEN, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // C#
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grip.add(new Grip(OPEN, OPEN, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN));
+        grip.add(new Grip(OPEN, CLOSE, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // D
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(OPEN, OPEN, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // D#
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(OPEN, OPEN, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // E
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // F
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // F#
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN));
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, CLOSE, OPEN, CLOSE, OPEN, OPEN, CLOSE, CLOSE, OPEN));
+        grips.add(grip);
+
+        // G
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // G#
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN));
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, HALFOPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // A
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // A#
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN));
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN));
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, OPEN, OPEN, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN));
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, OPEN, OPEN, CLOSE, OPEN, OPEN, CLOSE, CLOSE, OPEN));
+        grips.add(grip);
+
+        // B
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // C
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, OPEN, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // C#
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, OPEN, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, OPEN, OPEN, CLOSE));
+        grip.add(new Grip(CLOSE, CLOSE, OPEN, CLOSE, CLOSE, CLOSE, OPEN, OPEN, CLOSE, CLOSE, OPEN));
+        grip.add(new Grip(HALFOPEN, CLOSE, OPEN, CLOSE, CLOSE, CLOSE, OPEN, OPEN, CLOSE, CLOSE, CLOSE));
+        grip.add(new Grip(CLOSE, CLOSE, OPEN, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE));
+        grips.add(grip);
+
+        // D
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, OPEN, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, CLOSE, OPEN, OPEN));
+        grip.add(new Grip(HALFOPEN, CLOSE, OPEN, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // D#
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, OPEN, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // E
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, OPEN, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, CLOSE, OPEN, OPEN, CLOSE));
+        grips.add(grip);
+
+        // F
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, CLOSE));
+        grips.add(grip);
+
+        // F#
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+        // G
+        grip = new ArrayList<Grip>();
+        grip.add(new Grip(HALFOPEN, CLOSE, OPEN, OPEN, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        grips.add(grip);
+
+    }
+
     ArrayList<Grip> grips(Note note, Scale scale)
     {
         int idx = scale.noteAbsoluteValue(note);
+        if (tunning() == Tunning.F) {
+            idx = idx - 6;
+        }
+
         if ((idx >= 0) && (idx < grips.size())) {
             return grips.get(idx);
         }
