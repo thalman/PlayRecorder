@@ -35,7 +35,7 @@ import static net.halman.playrecorder.Grip.Hole.HALFOPEN;
 import static net.halman.playrecorder.Grip.Hole.OPEN;
 
 public class GripView extends View {
-    RecoderApp app = null;
+    RecorderApp app = null;
     MainActivity activity = null;
 
     private Drawable hole_close = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole, null);

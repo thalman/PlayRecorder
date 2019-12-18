@@ -20,7 +20,7 @@ package net.halman.playrecorder;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class RecoderApp implements Serializable {
+public class RecorderApp implements Serializable {
     public Scale scale = new Scale(1);
     public Note note = new Note(Note.c1, Note.Accidentals.NONE);
     public Recorder recorder = new Recorder();

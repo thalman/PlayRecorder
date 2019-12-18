@@ -37,7 +37,7 @@ import java.io.ObjectOutputStream;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    RecoderApp app = new RecoderApp();
+    RecorderApp app = new RecorderApp();
     ScoreView score = null;
     GripView grip = null;
     final private String stateFile = "playrecorder.bin";
@@ -125,12 +125,12 @@ public class MainActivity extends AppCompatActivity {
         try {
             FileInputStream file = openFileInput(stateFile);
             ObjectInputStream ois = new ObjectInputStream(file);
-            app = (RecoderApp) ois.readObject();
+            app = (RecorderApp) ois.readObject();
             app.recorder.fingering(app.recorder.fingering());
             ois.close();
             file.close();
         } catch (Exception e) {
-            app = new RecoderApp();
+            app = new RecorderApp();
         }
 
     }

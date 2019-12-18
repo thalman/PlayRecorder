@@ -75,7 +75,7 @@ public class ScoreView extends View {
         put(Buttons.SCALEDOWN, new Rect(120, score_height - 50, 160, score_height - 30));
     }};
 
-    RecoderApp app = null;
+    RecorderApp app = null;
     MainActivity activity = null;
 
     private Point touchdown = new Point (0, 0);
