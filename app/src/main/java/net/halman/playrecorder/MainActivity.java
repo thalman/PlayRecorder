@@ -20,6 +20,7 @@ package net.halman.playrecorder;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PointF;
 import android.os.Bundle;
@@ -29,12 +30,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     RecoderApp app = new RecoderApp();
     ScoreView score = null;
     GripView grip = null;
+    final private String stateFile = "playrecorder.bin";
 
     PointF lastTouch = new PointF();
 
@@ -90,6 +96,45 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onStart () {
+        super.onStart();
+        loadState();
+    }
+
+    @Override
+    public void onStop () {
+        super.onStop();
+        saveState();
+    }
+
+    void saveState () {
+        try {
+            FileOutputStream file = openFileOutput(stateFile, Context.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(file);
+            oos.writeObject(app);
+            oos.flush();
+            oos.close();
+            file.close();
+        } catch (Exception e) {
+        }
+
+    }
+    void loadState () {
+        try {
+            FileInputStream file = openFileInput(stateFile);
+            ObjectInputStream ois = new ObjectInputStream(file);
+            app = (RecoderApp) ois.readObject();
+            app.recorder.fingering(app.recorder.fingering());
+            ois.close();
+            file.close();
+        } catch (Exception e) {
+            app = new RecoderApp();
+        }
+
+    }
+
 
     private void onFingering()
     {

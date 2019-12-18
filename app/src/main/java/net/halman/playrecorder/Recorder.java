@@ -17,6 +17,8 @@
 
 package net.halman.playrecorder;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -26,7 +28,7 @@ import static net.halman.playrecorder.Grip.Hole.CLOSE;
 import static net.halman.playrecorder.Grip.Hole.OPEN;
 import static net.halman.playrecorder.Grip.Hole.HALFOPEN;
 
-public class Recorder {
+public class Recorder implements Serializable {
     enum Fingering {
         BAROQUE,
         GERMAN
@@ -39,7 +41,7 @@ public class Recorder {
 
     private Fingering recorderFingering;
     private Tunning recorderTunning;
-    private ArrayList<ArrayList<Grip>> grips = null;
+    private transient ArrayList<ArrayList<Grip>> grips = null;
 
     Recorder(Fingering f, Tunning t)
     {
@@ -77,6 +79,7 @@ public class Recorder {
                 break;
             case GERMAN:
                 setGermanGrips();
+                break;
         }
     }
 

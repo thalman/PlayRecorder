@@ -17,7 +17,9 @@
 
 package net.halman.playrecorder;
 
-public class Note {
+import java.io.Serializable;
+
+public class Note implements Serializable {
     enum Accidentals {
         NONE,
         RELEASE,
@@ -63,7 +65,8 @@ public class Note {
 
     public Note(Note note)
     {
-        set(note);
+        this.value = note.value();
+        this.accidentals = note.accidentals();
     }
 
     void set(Note note)
