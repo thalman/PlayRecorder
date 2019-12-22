@@ -18,6 +18,7 @@
 package net.halman.playrecorder;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -277,6 +278,39 @@ public class ScoreView extends View {
         putDrawable(buttonPositions.get(Buttons.SCALEDOWN).centerX(), buttonPositions.get(Buttons.DOWN).centerY(), arrowDown, canvas, 1.3);
     }
 
+    void drawInstrumentDescription(Canvas canvas)
+    {
+        if (app != null) {
+            String txt = "";
+            String [] fingering = getResources().getStringArray(R.array.fingering_items);
+
+            switch (app.recorderFingering()) {
+                case BAROQUE:
+                    txt = fingering[0];
+                    break;
+                case GERMAN:
+                    txt = fingering[1];
+                    break;
+            }
+
+            switch (app.recorderTunning()) {
+                case C:
+                    txt += " C";
+                    break;
+                case F:
+                    txt += " F";
+                    break;
+            }
+
+            Paint paint = new Paint();
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(Color.BLACK);
+            int height = (int)scale(20);
+            paint.setTextSize(height);
+            canvas.drawText(txt, scaleX(20), scaleY(25), paint);
+        }
+    }
+
     private void calculateScale() {
         double sh, sv;
         double height, width;
@@ -313,6 +347,7 @@ public class ScoreView extends View {
         drawSignature(canvas);
         drawNote(canvas);
         drawButtons(canvas);
+        drawInstrumentDescription(canvas);
     }
 
     void setGripView(View v)
