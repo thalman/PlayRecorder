@@ -68,12 +68,12 @@ public class ScoreView extends View {
     private int score_center_y = 0;
 
     Map<Buttons, Rect> buttonPositions = new HashMap<Buttons, Rect>() {{
-        put(Buttons.UP,        new Rect(note_position - 50, 30, note_position - 10, 50));
-        put(Buttons.DOWN,      new Rect(note_position - 50, score_height - 50, note_position - 10, score_height - 30));
-        put(Buttons.HALFUP,    new Rect(note_position + 10, 30, note_position + 50, 50));
-        put(Buttons.HALFDOWN,  new Rect(note_position + 10, score_height - 50, note_position + 50, score_height - 30));
-        put(Buttons.SCALEUP,   new Rect(120, 30, 160, 50));
-        put(Buttons.SCALEDOWN, new Rect(120, score_height - 50, 160, score_height - 30));
+        put(Buttons.UP,        new Rect(note_position - 80, 10, note_position - 10, 80));
+        put(Buttons.DOWN,      new Rect(note_position - 80, score_height - 80, note_position - 10, score_height - 10));
+        put(Buttons.HALFUP,    new Rect(note_position + 10, 10, note_position + 90, 80));
+        put(Buttons.HALFDOWN,  new Rect(note_position + 10, score_height - 80, note_position + 90, score_height - 10));
+        put(Buttons.SCALEUP,   new Rect(100, 10, 170, 80));
+        put(Buttons.SCALEDOWN, new Rect(100, score_height - 80, 170, score_height - 10));
     }};
 
     MainActivity activity = null;
@@ -260,6 +260,12 @@ public class ScoreView extends View {
             drawLine(note_position - 35, score_offset_y - (a - 11) * 10 - 10 + 1, 70, 2, canvas);
         }
 
+    }
+
+    void drawRect(Rect r, Canvas c)
+    {
+        drawLine(r.left, r.top, r.right - r.left, 2, c);
+        drawLine(r.right, r.top, 2, r.bottom - r.top, c);
     }
 
     void drawButtons(Canvas canvas)
