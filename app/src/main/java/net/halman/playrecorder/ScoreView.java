@@ -76,7 +76,6 @@ public class ScoreView extends View {
         put(Buttons.SCALEDOWN, new Rect(120, score_height - 50, 160, score_height - 30));
     }};
 
-    RecorderApp app = null;
     MainActivity activity = null;
 
     private Point touchdown = new Point (0, 0);
@@ -125,12 +124,6 @@ public class ScoreView extends View {
         }
     }
 
-    void setApp() {
-        if (activity != null) {
-            app = activity.app;
-        }
-    }
-
     int scale(int dim)
     {
         return (int)Math.round(dim * scalefactor);
@@ -163,7 +156,6 @@ public class ScoreView extends View {
 
     private void init(Context context) {
         activity = (MainActivity) context;
-        setApp();
     }
 
     int getItemCenterX(Drawable drawable) {
@@ -221,10 +213,11 @@ public class ScoreView extends View {
     void drawSignature(Canvas canvas) {
         int [] accidentalsPositions = new int []{3,7,4,8,5,9,6,0,10,7,11,8,5,9,6};
 
-        if (app == null) {
+        if (activity == null || activity.app == null) {
             return;
         }
-        int signature = app.scale.signature();
+
+        int signature = activity.app.scale.signature();
         // draw #
         for(int i = 1; i <= signature; i++) {
             putDrawable(80 + i * 20, score_offset_y + 5 * 20 - accidentalsPositions[i + 7] * 10 + 1, sharp, canvas);
@@ -237,15 +230,16 @@ public class ScoreView extends View {
 
     void drawNote(Canvas canvas)
     {
-        if (app == null) {
+        if (activity == null || activity.app == null) {
             return;
         }
-        int position = app.notePosition();
+
+        int position = activity.app.notePosition();
 
         // debug("pos " + Integer.toString(position) + " sh" + Integer.toString(score_height), canvas);
         int y = score_offset_y + 2 + 5 * 20 - position * 10;
         putDrawable(note_position, y, note, canvas);
-        switch (app.note.accidentals()) {
+        switch (activity.app.note.accidentals()) {
             case SHARP:
                 putDrawable(note_position - 40, y, sharp, canvas);
                 break;
@@ -280,11 +274,11 @@ public class ScoreView extends View {
 
     void drawInstrumentDescription(Canvas canvas)
     {
-        if (app != null) {
+        if (activity != null && activity.app != null) {
             String txt = "";
             String [] fingering = getResources().getStringArray(R.array.fingering_items);
 
-            switch (app.recorderFingering()) {
+            switch (activity.app.recorderFingering()) {
                 case BAROQUE:
                     txt = fingering[0];
                     break;
@@ -293,7 +287,7 @@ public class ScoreView extends View {
                     break;
             }
 
-            switch (app.recorderTunning()) {
+            switch (activity.app.recorderTunning()) {
                 case C:
                     txt += " C";
                     break;
@@ -363,41 +357,41 @@ public class ScoreView extends View {
 
     private void noteUp()
     {
-        app.noteUp();
+        activity.app.noteUp();
         invalidate();
         invalidateGripView();
     }
 
     private void noteDown()
     {
-        app.noteDown();
+        activity.app.noteDown();
         invalidate();
         invalidateGripView();
     }
     private void noteUpHalf()
     {
-        app.noteUpHalf();
+        activity.app.noteUpHalf();
         invalidate();
         invalidateGripView();
     }
 
     private void noteDownHalf()
     {
-        app.noteDownHalf();
+        activity.app.noteDownHalf();
         invalidate();
         invalidateGripView();
     }
 
     private void scaleUp()
     {
-        app.signatureUp();
+        activity.app.signatureUp();
         invalidate();
         invalidateGripView();
     }
 
     private void scaleDown()
     {
-        app.signatureDown();
+        activity.app.signatureDown();
         invalidate();
         invalidateGripView();
     }

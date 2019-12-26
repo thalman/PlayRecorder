@@ -35,7 +35,6 @@ import static net.halman.playrecorder.Grip.Hole.HALFOPEN;
 import static net.halman.playrecorder.Grip.Hole.OPEN;
 
 public class GripView extends View {
-    RecorderApp app = null;
     MainActivity activity = null;
 
     private Drawable hole_close = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole, null);
@@ -57,16 +56,8 @@ public class GripView extends View {
         init(context);
     }
 
-    void setApp()
-    {
-        if (activity != null) {
-            app = activity.app;
-        }
-    }
-
     private void init(Context context) {
         activity = (MainActivity) context;
-        setApp();
     }
 
     private void calculateScale() {
@@ -156,11 +147,11 @@ public class GripView extends View {
     }
 
     protected void onDraw(Canvas canvas) {
-        if (app != null) {
+        if (activity != null && activity.app != null) {
             calculateScale();
-            ArrayList<Grip> grips = app.grips();
+            ArrayList<Grip> grips = activity.app.grips();
             drawGrip(grips, canvas);
-            drawText(grip_width / 2, 80, app.noteName(), canvas);
+            drawText(grip_width / 2, 80, activity.app.noteName(), canvas);
         }
     }
 

@@ -132,12 +132,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             app = new RecorderApp();
         }
-        if (score != null) {
-            score.setApp();
-        }
-        if (grip != null) {
-            grip.setApp();
-        }
     }
 
 
