@@ -448,7 +448,7 @@ public class Recorder implements Serializable {
     {
         int idx = scale.noteAbsoluteValue(note);
         if (tunning() == Tunning.F) {
-            idx = idx - 6;
+            idx = idx - 5;
         }
 
         if ((idx >= 0) && (idx < grips.size())) {
