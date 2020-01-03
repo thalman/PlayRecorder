@@ -22,19 +22,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Map;
+
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class MainActivity extends AppCompatActivity {
     RecorderApp app = null; //new RecorderApp();
@@ -102,12 +107,29 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         loadState();
         updateTitle();
+        updateOrientation();
     }
 
     @Override
     public void onStop () {
         super.onStop();
         saveState();
+    }
+
+    private void updateOrientation() {
+        LinearLayout l = (LinearLayout) findViewById(R.id.Layout);
+        if (l == null) {
+            return;
+        }
+
+        switch (getResources().getConfiguration().orientation) {
+            case ORIENTATION_PORTRAIT:
+                l.setOrientation(LinearLayout.VERTICAL);
+                break;
+            default:
+                l.setOrientation(LinearLayout.HORIZONTAL);
+                break;
+        }
     }
 
     void saveState () {

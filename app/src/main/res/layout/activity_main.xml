@@ -7,19 +7,24 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/Layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:background="#00000000"
+        android:divider="?attr/dividerVertical"
+        android:dividerPadding="10dp"
+        android:orientation="vertical"
+        android:showDividers="middle">
 
-        <net.halman.playrecorder.ScoreView
-            android:id="@+id/Score"
+        <net.halman.playrecorder.GripView
+            android:id="@+id/Grip"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             app:srcCompat="@android:color/background_light" />
 
-        <net.halman.playrecorder.GripView
-            android:id="@+id/Grip"
+        <net.halman.playrecorder.ScoreView
+            android:id="@+id/Score"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
