@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
     public void onStart () {
         super.onStart();
         loadState();
+        updateTitle();
     }
 
     @Override
@@ -121,7 +122,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    void loadState () {
+
+    void loadState ()
+    {
         try {
             FileInputStream file = openFileInput(stateFile);
             ObjectInputStream ois = new ObjectInputStream(file);
@@ -134,6 +137,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void updateTitle() {
+        String type = "";
+        String [] fingering = getResources().getStringArray(R.array.fingering_items);
+
+        if (app == null) {
+            return;
+        }
+
+        switch (app.recorderFingering()) {
+            case BAROQUE:
+                type = fingering[0];
+                break;
+            case GERMAN:
+                type = fingering[1];
+                break;
+        }
+
+        switch (app.recorderTunning()) {
+            case C:
+                type += " in C";
+                break;
+            case F:
+                type += " in F";
+                break;
+        }
+
+        setTitle("Play Recorder / " + type);
+    }
 
     private void onFingering()
     {
@@ -146,11 +177,13 @@ public class MainActivity extends AppCompatActivity {
                         app.recorderFingering(Recorder.Fingering.BAROQUE);
                         grip.invalidate();
                         score.invalidate();
+                        updateTitle();
                         break;
                     case 1:
                         app.recorderFingering(Recorder.Fingering.GERMAN);
                         grip.invalidate();
                         score.invalidate();
+                        updateTitle();
                         break;
                 }
             }
@@ -169,11 +202,13 @@ public class MainActivity extends AppCompatActivity {
                         app.recorderTunning(Recorder.Tunning.C);
                         grip.invalidate();
                         score.invalidate();
+                        updateTitle();
                         break;
                     case 1:
                         app.recorderTunning(Recorder.Tunning.F);
                         grip.invalidate();
                         score.invalidate();
+                        updateTitle();
                         break;
                 }
             }
