@@ -18,19 +18,14 @@
 package net.halman.playrecorder;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.graphics.drawable.shapes.RectShape;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -61,7 +56,7 @@ public class ScoreView extends View {
     private double scalefactor = 1.0;
     private int score_offset_x = 0;
     private int score_offset_y = 180;
-    private int score_height = 400;
+    private int score_height = 450;
     private int score_width = 450;
     private int note_position = 350;
     private int score_center_x = 0;
@@ -94,8 +89,8 @@ public class ScoreView extends View {
 
     void onClick(PointF point)
     {
-        int x = unscaleX(Math.round(point.x));
-        int y = unscaleY(Math.round(point.y));
+        int x = unscale(Math.round(point.x) - score_center_x);
+        int y = unscale(Math.round(point.y) - score_center_y);
 
         for (Map.Entry<Buttons, Rect> item: buttonPositions.entrySet()) {
             Rect r = item.getValue();
@@ -129,29 +124,9 @@ public class ScoreView extends View {
         return (int)Math.round(dim * scalefactor);
     }
 
-    int scaleX(int dim)
-    {
-        return scale(dim) + score_center_x;
-    }
-
-    int scaleY(int dim)
-    {
-        return scale(dim) + score_center_y;
-    }
-
     int unscale(int dim)
     {
         return (int)Math.round(dim / scalefactor);
-    }
-
-    int unscaleX(int dim)
-    {
-        return unscale(dim - score_center_x);
-    }
-
-    int unscaleY(int dim)
-    {
-        return unscale(dim - score_center_y);
     }
 
     private void init(Context context) {
@@ -177,10 +152,10 @@ public class ScoreView extends View {
         int offsetx = getItemCenterX(drawable);
         int offsety = getItemCenterY(drawable);
         drawable.setBounds(
-                scaleX(x - (int)(offsetx * zoom)),
-                scaleY(y - (int)(offsety * zoom)),
-                scaleX(x + (int)((-offsetx + drawable.getIntrinsicWidth()) * zoom)),
-                scaleY(y + (int)((-offsety + drawable.getIntrinsicHeight()) * zoom)));
+                scale(x - (int)(offsetx * zoom)) + score_center_x,
+                scale(y - (int)(offsety * zoom)) + score_center_y,
+                scale(x + (int)((-offsetx + drawable.getIntrinsicWidth()) * zoom)) + score_center_x,
+                scale(y + (int)((-offsety + drawable.getIntrinsicHeight()) * zoom)) + score_center_y);
         drawable.draw(canvas);
     }
 
@@ -199,7 +174,11 @@ public class ScoreView extends View {
             height_scaled = 2;
         }
         line.getPaint().setColor(0xff000000);
-        line.setBounds(scaleX(x), scaleY(y), scaleX(x) + width_scaled, scaleY(y) + height_scaled);
+        line.setBounds(
+                scale(x) + score_center_x,
+                scale(y) + score_center_y,
+                scale(x) + width_scaled + score_center_x,
+                scale(y) + height_scaled + score_center_y);
         line.draw(canvas);
     }
 
@@ -290,11 +269,11 @@ public class ScoreView extends View {
         if (sh < sv) {
             scalefactor = sh;
             score_center_x = 0;
-            score_center_y = (int)((width - scalefactor * score_height) / 2);
+            score_center_y = (int) (height - width) / 2;
         } else {
             scalefactor = sv;
             score_center_y = 0;
-            score_center_x = (int)((height - scalefactor * score_width) / 2);
+            score_center_x = (int) (width - height) / 2;
         }
     }
 

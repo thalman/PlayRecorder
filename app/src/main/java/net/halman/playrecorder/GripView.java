@@ -30,8 +30,6 @@ import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
 
-import static net.halman.playrecorder.Grip.Hole.CLOSE;
-import static net.halman.playrecorder.Grip.Hole.HALFOPEN;
 import static net.halman.playrecorder.Grip.Hole.OPEN;
 
 public class GripView extends View {
@@ -45,6 +43,8 @@ public class GripView extends View {
     private double scalefactor = 1;
     private int grip_width = 600;
     private int grip_height = grip_width;
+    private int grip_center_x = 0;
+    private int grip_center_y = 0;
 
     public GripView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -62,10 +62,22 @@ public class GripView extends View {
 
     private void calculateScale() {
         double sh, sv;
+        double height, width;
 
-        sh = (double)getWidth() / grip_width;
-        sv = (double)getHeight() / grip_height;
+        width = getWidth();
+        height = getHeight();
+        sh = width / grip_width;
+        sv = height / grip_height;
         scalefactor = (sv < sh) ? sv : sh;
+        if (sh < sv) {
+            scalefactor = sh;
+            grip_center_x = 0;
+            grip_center_y = (int) (height - width) / 2;
+        } else {
+            scalefactor = sv;
+            grip_center_y = 0;
+            grip_center_x = (int) (width - height) / 2;
+        }
     }
 
     int scale(int dim)
@@ -91,23 +103,23 @@ public class GripView extends View {
         int offsetx = getItemCenterX(drawable);
         int offsety = getItemCenterY(drawable);
         drawable.setBounds(
-                scale(x - (int)(offsetx * zoom)),
-                scale(y - (int)(offsety * zoom)),
-                scale(x + (int)((-offsetx + drawable.getIntrinsicWidth()) * zoom)),
-                scale(y + (int)((-offsety + drawable.getIntrinsicHeight()) * zoom)));
+                scale(x - (int)(offsetx * zoom)) + grip_center_x,
+                scale(y - (int)(offsety * zoom)) + grip_center_y,
+                scale(x + (int)((-offsetx + drawable.getIntrinsicWidth()) * zoom)) + grip_center_x,
+                scale(y + (int)((-offsety + drawable.getIntrinsicHeight()) * zoom)) + grip_center_y);
         drawable.draw(canvas);
     }
 
     void drawText(int x, int y, String txt, Canvas c)
     {
         Paint paint = new Paint();
-        //paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
         int height = (int)scale(50);
         paint.setTextSize(height);
         int width = (int)paint.measureText(txt);
-        c.drawText(txt, scale(x) - width / 2, scale(y) - height / 2, paint);
+        c.drawText(txt, scale(x) - width / 2 + grip_center_x,
+                scale(y) - height / 2 + grip_center_y, paint);
     }
 
     void drawGrip(ArrayList<Grip> grips, Canvas canvas)
@@ -120,7 +132,7 @@ public class GripView extends View {
             return;
         }
 
-        int step = unscale(getWidth() / (grips.size() + 1));
+        int step = grip_width / (grips.size() + 1);
 
         for (int g = 0; g < grips.size(); g++) {
             int x = step + g * step;
