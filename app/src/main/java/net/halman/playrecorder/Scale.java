@@ -107,6 +107,24 @@ public class Scale implements Serializable {
         return idx + octave * 7;
     }
 
+    public Note noteByPosition (int position)
+    {
+        Note note = new Note(Note.c1, NONE);
+        int pos = notePosition(note);
+
+        while (pos < position) {
+            noteUp(note);
+            pos = notePosition(note);
+        }
+
+        while (pos > position) {
+            noteDown(note);
+            pos = notePosition(note);
+        }
+
+        return note;
+    }
+
     void noteUp (Note note)
     {
         int octave = note.value() / 12;

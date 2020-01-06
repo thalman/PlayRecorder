@@ -30,6 +30,18 @@ public class RecorderApp implements Serializable {
         return scale.notePosition(note);
     }
 
+    void noteByPosition(int position)
+    {
+        note = scale.noteByPosition(position);
+        if (! canPlay()) {
+            if (position < 5) {
+                lowestNote();
+            } else {
+                highestNote();
+            }
+        }
+    }
+
     void lowestNote()
     {
         switch(recorder.tunning()) {

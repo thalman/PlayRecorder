@@ -51,6 +51,7 @@ public class ScoreView extends View {
         HALFDOWN,
         SCALEUP,
         SCALEDOWN,
+        SETNOTE,
     }
 
     private double scalefactor = 1.0;
@@ -69,6 +70,7 @@ public class ScoreView extends View {
         put(Buttons.HALFDOWN,  new Rect(note_position + 10, score_height - 80, note_position + 90, score_height - 10));
         put(Buttons.SCALEUP,   new Rect(100, 10, 170, 80));
         put(Buttons.SCALEDOWN, new Rect(100, score_height - 80, 170, score_height - 10));
+        put(Buttons.SETNOTE,   new Rect(note_position - 35,80, note_position + 35, score_height - 80));
     }};
 
     MainActivity activity = null;
@@ -113,6 +115,9 @@ public class ScoreView extends View {
                         return;
                     case SCALEDOWN:
                         scaleDown();
+                        return;
+                    case SETNOTE:
+                        setNote(y);
                         return;
                 }
             }
@@ -343,6 +348,14 @@ public class ScoreView extends View {
     private void scaleDown()
     {
         activity.app.signatureDown();
+        invalidate();
+        invalidateGripView();
+    }
+
+    private void setNote(int y)
+    {
+        int position = (score_offset_y + 2 + 5 * 20 - y + 3) / 10;
+        activity.app.noteByPosition(position);
         invalidate();
         invalidateGripView();
     }
