@@ -41,7 +41,7 @@ public class GripView extends View {
     private Drawable hole_bell = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_bell, null);
 
     private double scalefactor = 1;
-    private int grip_width = 600;
+    private int grip_width = 610;
     private int grip_height = grip_width;
     private int grip_center_x = 0;
     private int grip_center_y = 0;
@@ -125,7 +125,7 @@ public class GripView extends View {
     void drawGrip(ArrayList<Grip> grips, Canvas canvas)
     {
         int [] xpos = new int[]      {0,   0,   0,   0,   0,   0,   -15, +15, -15, +15,   0};
-        int [] ypos = new int[]      {150, 220, 270, 320, 390, 440, 490, 490, 540, 540, 590};
+        int [] ypos = new int[]      {150, 220, 270, 320, 390, 440, 490, 490, 530, 530, 580};
         double [] zoom = new double[]{1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.0, 1.0, 1.0, 1.0, 1.5};
 
         if ((grips == null) || (grips.size() == 0)) {

@@ -142,7 +142,7 @@ public class ScoreView extends View {
             return drawable.getIntrinsicHeight() * 75 / 100;
         }
         if (drawable == flat) {
-            return drawable.getIntrinsicHeight() * 75 / 100;
+            return drawable.getIntrinsicHeight() * 72 / 100;
         }
         return drawable.getIntrinsicHeight() / 2;
     }
