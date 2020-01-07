@@ -97,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.actionTunning:
                 onTunning();
                 return true;
+            case R.id.actionClef:
+                onClef();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -231,6 +234,29 @@ public class MainActivity extends AppCompatActivity {
                         grip.invalidate();
                         score.invalidate();
                         updateTitle();
+                        break;
+                }
+            }
+        });
+        builder.show();
+    }
+
+    public void onClef()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.clef_title);
+        builder.setItems(R.array.clef_items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        app.clef(Scale.Clefs.G);
+                        grip.invalidate();
+                        score.invalidate();
+                        break;
+                    case 1:
+                        app.clef(Scale.Clefs.F);
+                        grip.invalidate();
+                        score.invalidate();
                         break;
                 }
             }

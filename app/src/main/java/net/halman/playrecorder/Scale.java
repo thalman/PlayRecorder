@@ -26,6 +26,10 @@ import static net.halman.playrecorder.Note.Accidentals.RELEASE;
 import static net.halman.playrecorder.Note.Accidentals.SHARP;
 
 public class Scale implements Serializable {
+    enum Clefs {
+        G,
+        F
+    }
 
                                     /* c  d  e  f  g  a  b   c */
                                     /* 0  1  2  3  4  5  6   7 */
@@ -34,11 +38,17 @@ public class Scale implements Serializable {
     private int[] scalesAccidentals = { 3,   0,   4,   1,   5,   2,   6, -1,  3,  0,  4,  1,  5,  2,   6};
     private int scaleSignature;
     private static final String [] noteNames = new String[] {"C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"};
-
+    private Clefs scaleClef;
     private Note[] scale;
 
     Scale(int asignature) {
         signature(asignature);
+        clef(Clefs.G);
+    }
+
+    Scale(int asignature, Clefs aclef) {
+        signature(asignature);
+        clef(aclef);
     }
 
     int signature()
@@ -56,6 +66,15 @@ public class Scale implements Serializable {
         initScale();
     }
 
+    Clefs clef()
+    {
+        return scaleClef;
+    }
+
+    void clef(Clefs aclef)
+    {
+        scaleClef = aclef;
+    }
 
     private void initScale()
     {
@@ -103,6 +122,9 @@ public class Scale implements Serializable {
         int octave = note.value() / 12;
         if (note.value() < 0) {
             octave--;
+        }
+        if (scaleClef == Clefs.F) {
+            idx -= 2;
         }
         return idx + octave * 7;
     }

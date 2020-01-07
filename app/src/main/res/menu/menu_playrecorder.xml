@@ -8,4 +8,8 @@
         android:id="@+id/actionFingering"
         android:orderInCategory="110"
         android:title="@string/fingering" />
+    <item
+        android:id="@+id/actionClef"
+        android:orderInCategory="120"
+        android:title="@string/clef" />
 </menu>

@@ -161,4 +161,14 @@ public class RecorderApp implements Serializable {
     {
         return recorder.fingering();
     }
+
+    public Scale.Clefs clef()
+    {
+        return scale.clef();
+    }
+
+    public void clef(Scale.Clefs C)
+    {
+        scale.clef(C);
+    }
 }

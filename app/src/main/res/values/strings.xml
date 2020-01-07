@@ -2,6 +2,7 @@
     <string name="app_name">Play Recorder</string>
     <string name="tunning">Tunning</string>
     <string name="fingering">Fingering</string>
+    <string name="clef">Clef</string>
     <string name="tunning_title">Select recorder tunning</string>
     <string-array name="tunning_items">
         <item>C (soprano, descant, tenor)</item>
@@ -11,5 +12,10 @@
     <string-array name="fingering_items">
         <item>Baroque</item>
         <item>German</item>
+    </string-array>
+    <string name="clef_title">Select clef</string>
+    <string-array name="clef_items">
+        <item>Treble</item>
+        <item>Bass</item>
     </string-array>
 </resources>

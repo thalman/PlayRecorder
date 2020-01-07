@@ -34,7 +34,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ScoreView extends View {
-    private Drawable clef = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_g_clef, null);
+    private Drawable gclef = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_g_clef, null);
+    private Drawable fclef = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_f_clef, null);
     private Drawable note = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_whole_note, null);
     private Drawable arrowUp = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_up, null);
     private Drawable arrowDown = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_down, null);
@@ -52,6 +53,7 @@ public class ScoreView extends View {
         SCALEUP,
         SCALEDOWN,
         SETNOTE,
+        CLEF,
     }
 
     private double scalefactor = 1.0;
@@ -71,6 +73,7 @@ public class ScoreView extends View {
         put(Buttons.SCALEUP,   new Rect(100, 10, 170, 80));
         put(Buttons.SCALEDOWN, new Rect(100, score_height - 80, 170, score_height - 10));
         put(Buttons.SETNOTE,   new Rect(note_position - 35,80, note_position + 35, score_height - 80));
+        put(Buttons.CLEF,      new Rect(score_offset_x + 15,score_offset_y - 15, score_offset_x + 65, score_offset_y + 5 * 20 + 15));
     }};
 
     MainActivity activity = null;
@@ -119,6 +122,9 @@ public class ScoreView extends View {
                     case SETNOTE:
                         setNote(y);
                         return;
+                    case CLEF:
+                        activity.onClef();
+                        return;
                 }
             }
         }
@@ -143,8 +149,11 @@ public class ScoreView extends View {
     }
 
     int getItemCenterY(Drawable drawable) {
-        if (drawable == clef) {
+        if (drawable == gclef) {
             return drawable.getIntrinsicHeight() * 75 / 100;
+        }
+        if (drawable == fclef) {
+            return drawable.getIntrinsicHeight() * 25 / 100;
         }
         if (drawable == flat) {
             return drawable.getIntrinsicHeight() * 72 / 100;
@@ -202,13 +211,17 @@ public class ScoreView extends View {
         }
 
         int signature = activity.app.scale.signature();
+        int offset = 0;
+        if (activity.app.clef() == Scale.Clefs.F) {
+            offset = 2;
+        }
         // draw #
         for(int i = 1; i <= signature; i++) {
-            putDrawable(80 + i * 20, score_offset_y + 5 * 20 - accidentalsPositions[i + 7] * 10 + 1, sharp, canvas);
+            putDrawable(80 + i * 20, score_offset_y + 5 * 20 - (accidentalsPositions[i + 7] - offset) * 10 + 1, sharp, canvas);
         }
         // draw b
         for(int i = -1; i >= signature; i--) {
-            putDrawable(80 - i * 20, score_offset_y + 5 * 20 - accidentalsPositions[i + 7] * 10 + 1, flat, canvas);
+            putDrawable(80 - i * 20, score_offset_y + 5 * 20 - (accidentalsPositions[i + 7] - offset) * 10 + 1, flat, canvas);
         }
     }
 
@@ -282,18 +295,19 @@ public class ScoreView extends View {
         }
     }
 
+    private void drawClef(Canvas canvas)
+    {
+        if (activity.app.clef() == Scale.Clefs.G) {
+            putDrawable(score_offset_x + 40, score_offset_y + 4 * 20, gclef, canvas);
+        } else {
+            putDrawable(score_offset_x + 40, score_offset_y + 20, fclef, canvas);
+        }
+    }
+
     protected void onDraw(Canvas canvas)
     {
-        int h = this.getHeight();
-
-        if (h == 0) {
-            h = 300;
-        }
-
         calculateScale();
-        // scalefactor = h / 300;
-        // score_offset_y = unscale(h) / 2 - 2*20;
-        putDrawable(score_offset_x + 40, score_offset_y + 4 * 20, clef, canvas);
+        drawClef(canvas);
         drawScoreLines(canvas);
         drawSignature(canvas);
         drawNote(canvas);
