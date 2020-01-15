@@ -2,34 +2,49 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:id="@+id/Layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00000000"
-        android:divider="?attr/dividerVertical"
-        android:dividerPadding="10dp"
-        android:orientation="vertical"
-        android:showDividers="middle">
+        android:orientation="vertical">
 
-        <net.halman.playrecorder.GripView
-            android:id="@+id/Grip"
+        <LinearLayout
+            android:id="@+id/Layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:srcCompat="@android:color/background_light" />
+            android:layout_weight="10"
+            android:divider="?attr/dividerVertical"
+            android:dividerPadding="10dp"
+            android:orientation="vertical"
+            android:showDividers="middle">
 
-        <net.halman.playrecorder.ScoreView
-            android:id="@+id/Score"
+            <net.halman.playrecorder.GripView
+                android:id="@+id/Grip"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:srcCompat="@android:color/background_light" />
+
+            <net.halman.playrecorder.ScoreView
+                android:id="@+id/Score"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:srcCompat="@android:color/background_light" />
+
+        </LinearLayout>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:srcCompat="@android:color/background_light" />
-
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            ads:adUnitId="@string/admob_app_id"
+            app:adSize="SMART_BANNER" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
