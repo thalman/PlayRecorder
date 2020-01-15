@@ -33,6 +33,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -45,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     RecorderApp app = null; //new RecorderApp();
     ScoreView score = null;
     GripView grip = null;
+    AdView adView = null;
+
     final private String stateFile = "playrecorder.bin";
 
     PointF lastTouch = new PointF();
@@ -78,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
         score.setOnClickListener(scoreOnClickListener);
         grip = findViewById(R.id.Grip);
         score.setGripView(grip);
+        adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
     }
 
     @Override
