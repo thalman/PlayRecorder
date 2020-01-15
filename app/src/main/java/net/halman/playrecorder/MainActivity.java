@@ -48,6 +48,12 @@ import cn.sherlock.com.sun.media.sound.SoftSynthesizer;
 import jp.kshoji.javax.sound.midi.MidiChannel;
 import jp.kshoji.javax.sound.midi.MidiUnavailableException;
 
+// import libraries for ads
+import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+// import libraries for ads
+
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class MainActivity extends AppCompatActivity implements ScoreView.ScoreViewListener, GripView.GripViewListener {
@@ -58,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     RecorderApp app = null;
     ScoreView score = null;
     GripView grip = null;
+    AdView adView = null;
     Thread frequencyAnalyzer = null;
     SoftSynthesizer synthesizer = null;
     boolean keepScreenOn = false;
@@ -156,6 +163,13 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         grip.setOnClickListener(gripOnClickListener);
         grip.setGripViewListener(this);
 
+        adView = findViewById(R.id.adView);
+        Bundle extras = new Bundle();
+        AdRequest adRequest = new AdRequest.Builder()
+                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                .build();
+        adView.loadAd(adRequest);
+
         // initialize midi synthetizer
         try {
             /* credit to https://stackoverflow.com/questions/56541361/android-play-soundfont-with-midi-file */
@@ -171,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
             synthesizer = null;
             e.printStackTrace();
         }
-
     }
 
     @Override
