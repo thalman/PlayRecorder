@@ -34,6 +34,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -48,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     RecorderApp app = null; //new RecorderApp();
     ScoreView score = null;
     GripView grip = null;
+    AdView adView = null;
+
     final private String stateFile = "playrecorder.bin";
 
     PointF lastTouch = new PointF();
@@ -105,6 +112,14 @@ public class MainActivity extends AppCompatActivity {
         grip.setOnTouchListener(gripOnTouchListener);
         grip.setOnClickListener(gripOnClickListener);
         score.setGripView(grip);
+        adView = findViewById(R.id.adView);
+        Bundle extras = new Bundle();
+        extras.putString("max_ad_content_rating", "G");
+        AdRequest adRequest = new AdRequest.Builder()
+                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                .tagForChildDirectedTreatment(true)
+                .build();
+        adView.loadAd(adRequest);
     }
 
     @Override
