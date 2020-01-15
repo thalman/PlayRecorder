@@ -37,7 +37,6 @@ public class Scale implements Serializable {
     private String[] scaleNames     = {"Cb","Gb","Db","Ab","Eb","Bb","F","C","G","D","A","E","B","F#","C#"};
     private int[] scalesAccidentals = { 3,   0,   4,   1,   5,   2,   6, -1,  3,  0,  4,  1,  5,  2,   6};
     private int scaleSignature;
-    private static final String [] noteNames = new String[] {"C", "C#/Db", "D", "D#/Eb", "E", "F", "F#/Gb", "G", "G#/Ab", "A", "A#/Bb", "B"};
     private Clefs scaleClef;
     private Note[] scale;
 
@@ -49,6 +48,7 @@ public class Scale implements Serializable {
     Scale(int asignature, Clefs aclef) {
         signature(asignature);
         clef(aclef);
+        // noteNames = getResources().getStringArray(R.array.note_names);
     }
 
     int signature()
@@ -245,11 +245,11 @@ public class Scale implements Serializable {
     }
 
 
-    String noteName(Note n)
+    int noteNameIndex(Note n)
     {
         int i = noteAbsoluteValue(n) % 12;
         while (i < 0) i += 12;
-        return noteNames[i];
+        return i;
     }
 
     void noteDownHalf(Note note)

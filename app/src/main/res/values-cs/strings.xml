@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Play Recorder</string>
+    <string name="tunning">Ladění</string>
+    <string name="fingering">Prstoklad</string>
+    <string name="clef">Klíč</string>
+    <string name="tunning_title">Vyberte ladění vaší flétny</string>
+    <string-array name="tunning_items">
+        <item>C (sopránová, tenorová)</item>
+        <item>F (altová, sopraninová, basová)</item>
+    </string-array>
+    <string name="fingering_title">Vyberte typ vaší flétny</string>
+    <string-array name="fingering_items">
+        <item>Barokní</item>
+        <item>Německá</item>
+    </string-array>
+    <string name="clef_title">Vyberte klíč</string>
+    <string-array name="clef_items">
+        <item>Houslový</item>
+        <item>Basový</item>
+    </string-array>
+    <string name="app_title">%1$s v %2$s</string>
+    <string-array name="note_names">
+        <item>C</item>
+        <item>C#/Db</item>
+        <item>D</item>
+        <item>D#/Eb</item>
+        <item>E</item>
+        <item>F</item>
+        <item>F#/Gb</item>
+        <item>G</item>
+        <item>G#/Ab</item>
+        <item>A</item>
+        <item>B</item>
+        <item>H</item>
+    </string-array>
+</resources>

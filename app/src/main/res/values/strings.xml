@@ -18,4 +18,19 @@
         <item>Treble</item>
         <item>Bass</item>
     </string-array>
+    <string name="app_title">%1$s in %2$s</string>
+    <string-array name="note_names">
+        <item>C</item>
+        <item>C#/Db</item>
+        <item>D</item>
+        <item>D#/Eb</item>
+        <item>E</item>
+        <item>F</item>
+        <item>F#/Gb</item>
+        <item>G</item>
+        <item>G#/Ab</item>
+        <item>A</item>
+        <item>A#/Bb</item>
+        <item>B</item>
+    </string-array>
 </resources>

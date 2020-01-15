@@ -164,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateTitle() {
         String type = "";
+        String tunning = "";
         String [] fingering = getResources().getStringArray(R.array.fingering_items);
 
         if (app == null) {
@@ -181,14 +182,14 @@ public class MainActivity extends AppCompatActivity {
 
         switch (app.recorderTunning()) {
             case C:
-                type += " in C";
+                tunning = "C";
                 break;
             case F:
-                type += " in F";
+                tunning = "F";
                 break;
         }
 
-        setTitle("Play Recorder / " + type);
+        setTitle("Play Recorder / " + getString(R.string.app_title, type, tunning));
     }
 
     private void onFingering()

@@ -112,9 +112,9 @@ public class RecorderApp implements Serializable {
         return recorder.grips(note, scale);
     }
 
-    String noteName()
+    int noteNameIndex()
     {
-        return scale.noteName(note);
+        return scale.noteNameIndex(note);
     }
 
     boolean canPlay()

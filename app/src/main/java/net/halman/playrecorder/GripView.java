@@ -45,6 +45,7 @@ public class GripView extends View {
     private int grip_height = grip_width;
     private int grip_center_x = 0;
     private int grip_center_y = 0;
+    private String noteNames[] = null;
 
     public GripView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -58,6 +59,7 @@ public class GripView extends View {
 
     private void init(Context context) {
         activity = (MainActivity) context;
+        noteNames = getResources().getStringArray(R.array.note_names);
     }
 
     private void calculateScale() {
@@ -117,6 +119,7 @@ public class GripView extends View {
         paint.setColor(Color.BLACK);
         int height = (int)scale(50);
         paint.setTextSize(height);
+
         int width = (int)paint.measureText(txt);
         c.drawText(txt, scale(x) - width / 2 + grip_center_x,
                 scale(y) - height / 2 + grip_center_y, paint);
@@ -163,7 +166,7 @@ public class GripView extends View {
             calculateScale();
             ArrayList<Grip> grips = activity.app.grips();
             drawGrip(grips, canvas);
-            drawText(grip_width / 2, 80, activity.app.noteName(), canvas);
+            drawText(grip_width / 2, 80, noteNames[activity.app.noteNameIndex()], canvas);
         }
     }
 
