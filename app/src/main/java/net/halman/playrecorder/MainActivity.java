@@ -39,6 +39,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     GripView grip = null;
     Thread frequencyAnalyzer = null;
     boolean keepScreenOn = false;
+    AdView adView = null;
     PointF lastTouch = new PointF();
 
     View.OnTouchListener scoreOnTouchListener = new View.OnTouchListener() {
@@ -113,6 +118,12 @@ public class MainActivity extends AppCompatActivity {
         grip.setOnTouchListener(gripOnTouchListener);
         grip.setOnClickListener(gripOnClickListener);
         score.setGripView(grip);
+        adView = findViewById(R.id.adView);
+        Bundle extras = new Bundle();
+        AdRequest adRequest = new AdRequest.Builder()
+                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                .build();
+        adView.loadAd(adRequest);
     }
 
     @Override

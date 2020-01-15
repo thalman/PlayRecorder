@@ -12,7 +12,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            resValue("string","admob_app_id","ca-app-pub-3940256099942544/6300978111")
+        }
         release {
+            resValue("string","admob_app_id","ca-app-pub-4999966770694793/5438886480")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -26,4 +30,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    implementation 'com.google.android.gms:play-services-ads:18.3.0'
 }
