@@ -39,6 +39,8 @@ public class GripView extends View {
     private Drawable hole_open = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_empty, null);
     private Drawable hole_half = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_half, null);
     private Drawable hole_bell = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_bell, null);
+    private Drawable sharp = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp, null);
+    private Drawable flat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat, null);
 
     private double scalefactor = 1;
     private int grip_width = 610;
@@ -120,9 +122,36 @@ public class GripView extends View {
         int height = (int)scale(50);
         paint.setTextSize(height);
 
-        int width = (int)paint.measureText(txt);
-        c.drawText(txt, scale(x) - width / 2 + grip_center_x,
-                scale(y) - height / 2 + grip_center_y, paint);
+        String txt_space = txt.replace("♯", " ").replace("♭"," ");
+        int width = (int)paint.measureText(txt_space);
+        int xpos = scale(x) - width / 2 + grip_center_x;
+        int ypos = scale(y) - height / 2 + grip_center_y;
+        c.drawText(txt_space, xpos, ypos, paint);
+
+        double zoom = 1.3;
+        int idx = txt.indexOf("♯");
+        if (idx > 0) {
+            String tmp = txt_space.substring(0, idx);
+            int inpos = (int)paint.measureText(tmp);
+            sharp.setBounds(
+                    xpos + inpos,
+                    ypos - height,
+                    xpos + inpos + (int)(sharp.getIntrinsicWidth() * zoom),
+                    ypos + (int)(sharp.getIntrinsicHeight() * zoom) - height);
+            sharp.draw(c);
+        }
+        idx = txt.indexOf("♭");
+        if (idx > 0) {
+            String tmp = txt_space.substring(0, idx);
+            int inpos = (int)paint.measureText(tmp);
+            flat.setBounds(
+                    xpos + inpos,
+                    ypos - height,
+                    xpos + inpos + (int)(flat.getIntrinsicWidth() * zoom),
+                    ypos + (int)(flat.getIntrinsicHeight() * zoom) - height);
+            flat.draw(c);
+
+        }
     }
 
     void drawGrip(ArrayList<Grip> grips, Canvas canvas)
@@ -166,7 +195,7 @@ public class GripView extends View {
             calculateScale();
             ArrayList<Grip> grips = activity.app.grips();
             drawGrip(grips, canvas);
-            drawText(grip_width / 2, 80, noteNames[activity.app.noteNameIndex()], canvas);
+            drawText(grip_width / 2, 90, noteNames[activity.app.noteNameIndex()], canvas);
         }
     }
 
