@@ -128,7 +128,7 @@ public class GripView extends View {
         int ypos = scale(y) - height / 2 + grip_center_y;
         c.drawText(txt_space, xpos, ypos, paint);
 
-        double zoom = 1.3;
+        double zoom = scale(100) * 0.01;
         int idx = txt.indexOf("♯");
         if (idx > 0) {
             String tmp = txt_space.substring(0, idx);
