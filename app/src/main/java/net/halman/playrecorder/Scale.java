@@ -181,35 +181,30 @@ public class Scale implements Serializable {
         note.accidentals (Note.Accidentals.NONE);
     }
 
-    void noteUpHalf (Note note)
+    void noteUpHalf(Note note)
     {
         switch (note.accidentals()) {
             case SHARP:
-                noteUp (note);
+                note.accidentals(NONE);
+                noteUp(note);
                 return;
             case FLAT:
-                note.accidentals(Note.Accidentals.NONE);
+                note.accidentals(NONE);
                 return;
             case NONE:
-                int idx = noteIdx (note);
-                if (scale[idx].accidentals() == FLAT && note.accidentals() == NONE) {
+                int idx = noteIdx(note);
+                if (scale[idx].accidentals() == FLAT) {
                     note.accidentals(RELEASE);
                     return;
                 }
-
-                Note tmp = new Note (note);
-                noteUp (tmp);
                 note.accidentals (SHARP);
-                if (noteAbsoluteValue(tmp) == noteAbsoluteValue(note)) {
-                    note.set(tmp);
-                }
                 return;
             case RELEASE:
-                if (scaleSignature > 0) {
-                    note.accidentals(Note.Accidentals.NONE);
+                if (scaleSignature >= 0) {
+                    note.accidentals(NONE);
                 }
                 if (scaleSignature < 0) {
-                    noteUp(note);
+                    note.accidentals(SHARP);
                 }
                 return;
         }
@@ -218,17 +213,14 @@ public class Scale implements Serializable {
     int noteAbsoluteValue(Note note)
     {
         int result = note.value ();
-        if (note.accidentals() == Note.Accidentals.RELEASE) {
-            return result;
-        }
 
         switch (note.accidentals()) {
+            case RELEASE:
+                return result;
             case SHARP:
-                result++;
-                break;
+                return result+1;
             case FLAT:
-                result--;
-                break;
+                return result-1;
         }
 
         int idx = noteIdx (note);
@@ -256,31 +248,26 @@ public class Scale implements Serializable {
     {
         switch (note.accidentals()) {
             case SHARP:
-                note.accidentals(Note.Accidentals.NONE);
+                note.accidentals(NONE);
                 return;
             case FLAT:
+                note.accidentals(NONE);
                 noteDown (note);
                 return;
             case NONE:
                 int idx = noteIdx (note);
-                if (scale[idx].accidentals() == SHARP && note.accidentals() == NONE) {
+                if (scale[idx].accidentals() == SHARP) {
                     note.accidentals(RELEASE);
                     return;
                 }
-
-                Note tmp = new Note(note);
-                noteDown(tmp);
                 note.accidentals(FLAT);
-                if (noteAbsoluteValue(tmp) == noteAbsoluteValue(note)) {
-                    note.set(tmp);
-                }
                 return;
             case RELEASE:
                 if (scaleSignature > 0) {
-                    noteDown(note);
+                    note.accidentals(FLAT);
                 }
-                if (scaleSignature < 0) {
-                    note.accidentals(Note.Accidentals.NONE);
+                if (scaleSignature <= 0) {
+                    note.accidentals(NONE);
                 }
                 return;
         }

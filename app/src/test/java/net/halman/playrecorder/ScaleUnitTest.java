@@ -115,5 +115,22 @@ public class ScaleUnitTest {
         assertEquals (4, n.value ());
         assertEquals (Note.Accidentals.NONE, n.accidentals ());
     }
+
+    @Test
+    public void noteAbsoluteValue() {
+        Scale s = new Scale (-1);
+
+        Note n = new Note (Note.b1, Note.Accidentals.NONE);
+        assertEquals(10, s.noteAbsoluteValue(n));
+
+        n.set(Note.b1, Note.Accidentals.FLAT);
+        assertEquals(10, s.noteAbsoluteValue(n));
+
+        n.set(Note.b1, Note.Accidentals.RELEASE);
+        assertEquals(11, s.noteAbsoluteValue(n));
+
+        n.set(Note.b1, Note.Accidentals.SHARP);
+        assertEquals(12, s.noteAbsoluteValue(n));
+    }
 }
 
