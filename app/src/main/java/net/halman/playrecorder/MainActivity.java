@@ -166,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         String type = "";
         String tunning = "";
         String [] fingering = getResources().getStringArray(R.array.fingering_items);
+        String [] noteNames = getResources().getStringArray(R.array.note_names);
 
         if (app == null) {
             return;
@@ -182,10 +183,10 @@ public class MainActivity extends AppCompatActivity {
 
         switch (app.recorderTunning()) {
             case C:
-                tunning = "C";
+                tunning = noteNames[0];
                 break;
             case F:
-                tunning = "F";
+                tunning = noteNames[5];
                 break;
         }
 
