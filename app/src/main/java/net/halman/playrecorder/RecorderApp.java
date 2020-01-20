@@ -100,12 +100,22 @@ public class RecorderApp implements Serializable {
 
     void signatureUp()
     {
-        scale.signature(scale.signature() + 1);
+        int sig = scale.signature() + 1;
+        if (sig > 7) {
+            sig = -7;
+        }
+
+        scale.signature(sig);
     }
 
     void signatureDown()
     {
-        scale.signature(scale.signature() - 1);
+        int sig = scale.signature() - 1;
+        if (sig < -7) {
+            sig = 7;
+        }
+
+        scale.signature(sig);
     }
 
     ArrayList<Grip> grips() {
