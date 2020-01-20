@@ -183,30 +183,57 @@ public class Scale implements Serializable {
 
     void noteUpHalf(Note note)
     {
+        Note.Accidentals scaleAccidentals = scale[noteIdx(note)].accidentals();
+        if (scaleAccidentals == note.accidentals()) {
+            note.accidentals(NONE);
+        }
+
         switch (note.accidentals()) {
+            case FLAT:
+                switch (scaleAccidentals) {
+                    case NONE:
+                    case FLAT:
+                        note.accidentals(NONE);
+                        return;
+                    case SHARP:
+                        note.accidentals(RELEASE);
+                        return;
+                }
             case SHARP:
                 note.accidentals(NONE);
                 noteUp(note);
-                return;
-            case FLAT:
-                note.accidentals(NONE);
+                if (scale[noteIdx(note)].accidentals() == SHARP) {
+                    note.accidentals(RELEASE);
+                }
+
                 return;
             case NONE:
-                int idx = noteIdx(note);
-                if (scale[idx].accidentals() == FLAT) {
-                    note.accidentals(RELEASE);
-                    return;
+                switch (scaleAccidentals) {
+                    case NONE:
+                        note.accidentals(SHARP);
+                        return;
+                    case FLAT:
+                        note.accidentals(RELEASE);
+                        return;
+                    case SHARP:
+                        note.accidentals(NONE);
+                        noteUp(note);
+                        if (scale[noteIdx(note)].accidentals() == SHARP) {
+                            note.accidentals(RELEASE);
+                        }
+
+                        return;
                 }
-                note.accidentals (SHARP);
-                return;
             case RELEASE:
-                if (scaleSignature >= 0) {
-                    note.accidentals(NONE);
+                switch (scaleAccidentals) {
+                    case NONE:
+                    case FLAT:
+                        note.accidentals(SHARP);
+                        return;
+                    case SHARP:
+                        note.accidentals(NONE);
+                        return;
                 }
-                if (scaleSignature < 0) {
-                    note.accidentals(SHARP);
-                }
-                return;
         }
     }
 
@@ -246,30 +273,57 @@ public class Scale implements Serializable {
 
     void noteDownHalf(Note note)
     {
+        Note.Accidentals scaleAccidentals = scale[noteIdx(note)].accidentals();
+        if (scaleAccidentals == note.accidentals()) {
+            note.accidentals(NONE);
+        }
+
         switch (note.accidentals()) {
             case SHARP:
-                note.accidentals(NONE);
-                return;
+                switch (scaleAccidentals) {
+                    case NONE:
+                    case SHARP:
+                        note.accidentals(NONE);
+                        return;
+                    case FLAT:
+                        note.accidentals(RELEASE);
+                        return;
+                }
             case FLAT:
                 note.accidentals(NONE);
-                noteDown (note);
+                noteDown(note);
+                if (scale[noteIdx(note)].accidentals() == FLAT) {
+                    note.accidentals(RELEASE);
+                }
+
                 return;
             case NONE:
-                int idx = noteIdx (note);
-                if (scale[idx].accidentals() == SHARP) {
-                    note.accidentals(RELEASE);
-                    return;
+                switch (scaleAccidentals) {
+                    case NONE:
+                        note.accidentals(FLAT);
+                        return;
+                    case SHARP:
+                        note.accidentals(RELEASE);
+                        return;
+                    case FLAT:
+                        note.accidentals(NONE);
+                        noteDown(note);
+                        if (scale[noteIdx(note)].accidentals() == FLAT) {
+                            note.accidentals(RELEASE);
+                        }
+
+                        return;
                 }
-                note.accidentals(FLAT);
-                return;
             case RELEASE:
-                if (scaleSignature > 0) {
-                    note.accidentals(FLAT);
+                switch (scaleAccidentals) {
+                    case NONE:
+                    case SHARP:
+                        note.accidentals(FLAT);
+                        return;
+                    case FLAT:
+                        note.accidentals(NONE);
+                        return;
                 }
-                if (scaleSignature <= 0) {
-                    note.accidentals(NONE);
-                }
-                return;
         }
     }
 
