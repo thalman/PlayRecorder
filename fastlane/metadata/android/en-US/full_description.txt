@@ -1,0 +1,7 @@
+Application lets you to pick a note on the score and it shows
+how to play it on your recorder.
+
+You can select the scale, change the clef between treble and bass.
+
+Baroque and German fingering are both supported as well as recorder
+tunning.

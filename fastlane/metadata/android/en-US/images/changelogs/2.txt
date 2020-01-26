@@ -1,0 +1,2 @@
+* localization (cs, fr)
+* minor fixes and improvements
