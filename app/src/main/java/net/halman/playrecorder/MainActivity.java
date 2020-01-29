@@ -33,6 +33,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -85,7 +86,12 @@ public class MainActivity extends AppCompatActivity {
         grip = findViewById(R.id.Grip);
         score.setGripView(grip);
         adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        Bundle extras = new Bundle();
+        extras.putString("max_ad_content_rating", "G");
+        AdRequest adRequest = new AdRequest.Builder()
+                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                .tagForChildDirectedTreatment(true)
+                .build();
         adView.loadAd(adRequest);
     }
 
