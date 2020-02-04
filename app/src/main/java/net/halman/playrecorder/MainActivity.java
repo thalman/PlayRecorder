@@ -69,6 +69,28 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    PointF lastGripTouch = new PointF();
+
+    View.OnTouchListener gripOnTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                lastGripTouch.set(event.getX(), event.getY());
+            }
+
+            return false;
+        }
+    };
+
+    View.OnClickListener gripOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (grip !=  null) {
+                grip.onClick(lastGripTouch);
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
         score.setOnTouchListener(scoreOnTouchListener);
         score.setOnClickListener(scoreOnClickListener);
         grip = findViewById(R.id.Grip);
+        grip.setOnTouchListener(gripOnTouchListener);
+        grip.setOnClickListener(gripOnClickListener);
         score.setGripView(grip);
     }
 
