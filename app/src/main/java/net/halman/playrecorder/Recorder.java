@@ -17,52 +17,47 @@
 
 package net.halman.playrecorder;
 
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Random;
-
-import net.halman.playrecorder.Grip;
 
 import static net.halman.playrecorder.Grip.Hole.CLOSE;
 import static net.halman.playrecorder.Grip.Hole.OPEN;
 import static net.halman.playrecorder.Grip.Hole.HALFOPEN;
 
-public class Recorder implements Serializable {
+public class Recorder {
     enum Fingering {
         BAROQUE,
         GERMAN
     }
 
-    enum Tunning {
+    enum Tuning {
         C,
         F
     }
 
     private Fingering recorderFingering;
-    private Tunning recorderTunning;
-    private transient ArrayList<ArrayList<Grip>> grips = null;
+    private Tuning recorderTuning;
+    private ArrayList<ArrayList<Grip>> grips = null;
 
-    Recorder(Fingering f, Tunning t)
+    Recorder(Fingering f, Tuning t)
     {
         fingering(f);
-        tunning(t);
+        tuning(t);
     }
 
     Recorder()
     {
         fingering(Fingering.BAROQUE);
-        tunning(Tunning.C);
+        tuning(Tuning.C);
     }
 
-    Tunning tunning()
+    Tuning tuning()
     {
-        return recorderTunning;
+        return recorderTuning;
     }
 
-    void tunning(Tunning tunning)
+    void tuning(Tuning tuning)
     {
-        recorderTunning = tunning;
+        recorderTuning = tuning;
     }
 
     Fingering fingering()
@@ -447,7 +442,7 @@ public class Recorder implements Serializable {
     ArrayList<Grip> grips(Note note, Scale scale)
     {
         int idx = scale.noteAbsoluteValue(note);
-        if (tunning() == Tunning.F) {
+        if (tuning() == Tuning.F) {
             idx = idx - 5;
         }
 

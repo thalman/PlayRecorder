@@ -17,7 +17,6 @@
 
 package net.halman.playrecorder;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import static net.halman.playrecorder.Note.Accidentals.FLAT;
@@ -25,7 +24,7 @@ import static net.halman.playrecorder.Note.Accidentals.NONE;
 import static net.halman.playrecorder.Note.Accidentals.RELEASE;
 import static net.halman.playrecorder.Note.Accidentals.SHARP;
 
-public class Scale implements Serializable {
+public class Scale {
     enum Clefs {
         G,
         F

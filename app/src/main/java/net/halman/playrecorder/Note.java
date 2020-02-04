@@ -17,9 +17,8 @@
 
 package net.halman.playrecorder;
 
-import java.io.Serializable;
 
-public class Note implements Serializable {
+public class Note {
     enum Accidentals {
         NONE,
         RELEASE,

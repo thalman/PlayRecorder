@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Play Recorder</string>
-    <string name="tunning">Tunning</string>
+    <string name="tuning">Tuning</string>
     <string name="fingering">Fingering</string>
     <string name="clef">Clef</string>
-    <string name="tunning_title">Select recorder tunning</string>
-    <string-array name="tunning_items">
+    <string name="tuning_title">Select recorder tuning</string>
+    <string-array name="tuning_items">
         <item>C (soprano, descant, tenor)</item>
         <item>F (alto, sopranino, bass)</item>
     </string-array>

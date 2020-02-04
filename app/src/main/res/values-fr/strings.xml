@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Play Recorder</string>
-    <string name="tunning">Famille de la flûte</string>
+    <string name="tuning">Famille de la flûte</string>
     <string name="fingering">Doigté</string>
     <string name="clef">Clé</string>
-    <string name="tunning_title">Sélectionner la famille de la flûte</string>
-    <string-array name="tunning_items">
+    <string name="tuning_title">Sélectionner la famille de la flûte</string>
+    <string-array name="tuning_items">
         <item>Famille en do (soprano, tenor)</item>
         <item>Famille en fa (alto, sopranino, basse)</item>
     </string-array>
