@@ -17,36 +17,25 @@
 
 package net.halman.playrecorder;
 
-import java.util.ArrayList;
 
 public class Grip {
-    enum Hole {
-        OPEN,
-        CLOSE,
-        HALFOPEN
-    }
-
-    private int number_of_holes = 11;
-    private Hole[] holes = null;
+    private int number_of_holes;
+    private int[] holes = null;
 
     public Grip()
     {
         number_of_holes = 11; // recorder default
-        holes = new Hole[number_of_holes];
+        holes = new int[number_of_holes];
 
         for (int i = 0; i < number_of_holes; ++i) {
              holes[i] = Hole.OPEN;
         }
     }
 
-    public Grip(ArrayList<Hole> h)
+    public Grip(int[] h)
     {
-        number_of_holes = h.size();
-        holes = new Hole[number_of_holes];
-
-        for(int i = 0; i < h.size(); ++i) {
-            holes[i] = h.get(i);
-        }
+        number_of_holes = h.length;
+        set(h);
     }
 
     int holes()
@@ -54,7 +43,7 @@ public class Grip {
         return number_of_holes;
     }
 
-    Hole get(int idx)
+    int get(int idx)
     {
         if (idx >= 0 && idx < number_of_holes) {
             return holes[idx];
@@ -62,17 +51,22 @@ public class Grip {
         return Hole.OPEN;
     }
 
-    void set(int idx, Hole hole)
+    void set(int idx, int hole)
     {
         if (idx >= 0 && idx < number_of_holes) {
             holes[idx] = hole;
         }
     }
-    
-    void set(ArrayList<Hole> holelist)
+
+    void set(int[] holelist)
     {
-        for(int a = 0; a < holelist.size() && a < number_of_holes; ++a) {
-            holes[a] = holelist.get(a);
+        if (holelist == null) {
+            return;
+        }
+
+        holes = new int[number_of_holes];
+        for(int a = 0; a < holelist.length && a < number_of_holes; ++a) {
+            holes[a] = holelist[a];
         }
     }
 }

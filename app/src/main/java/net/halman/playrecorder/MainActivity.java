@@ -23,32 +23,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Map;
-
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
-import static net.halman.playrecorder.Recorder.Fingering.BAROQUE;
-import static net.halman.playrecorder.Recorder.Fingering.GERMAN;
 
 public class MainActivity extends AppCompatActivity {
     RecorderApp app = null; //new RecorderApp();
     ScoreView score = null;
     GripView grip = null;
-    final private String stateFile = "playrecorder.bin";
 
     PointF lastTouch = new PointF();
 
@@ -172,8 +160,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt("score-signature", app.signature());
         editor.putInt("score-clef", app.clefAsInt());
-        editor.putInt("recorder-fingering", app.fingeringAsInt());
-        editor.putInt("recorder-tuning", app.tuningAsInt());
+        editor.putInt("instrument-type", app.instrumentType());
+        editor.putInt("instrument-tuning", app.instrumentTuning());
         editor.putInt("note-value", app.noteValue());
         editor.putInt("note-accidentals", app.noteAccidentalsAsInt());
         editor.putInt("grip-orientation", grip.orientation());
@@ -182,29 +170,18 @@ public class MainActivity extends AppCompatActivity {
 
     void loadState ()
     {
-        try {
-
-            FileInputStream file = openFileInput(stateFile);
-            ObjectInputStream ois = new ObjectInputStream(file);
-            app = (RecorderApp) ois.readObject();
-            app.recorder.fingering(app.recorder.fingering());
-            ois.close();
-            file.close();
-        } catch (Exception e) {
-            app = new RecorderApp();
-        }
-
         app = new RecorderApp();
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         app.signature(sharedPref.getInt("score-signature", 0));
         app.clef(sharedPref.getInt("score-clef", 0));
-        app.fingering(sharedPref.getInt("recorder-fingering", 0));
-        app.tuning(sharedPref.getInt("recorder-tuning", 0));
+        app.instrument(
+                sharedPref.getInt("instrument-type", Recorder.BAROQUE),
+                sharedPref.getInt("instrument-tuning", Note.C));
         app.note(
             sharedPref.getInt("note-value", 0),
             sharedPref.getInt("note-accidentals", 0)
         );
-        grip.orientation(sharedPref.getInt("grip-orientation", grip.UP));
+        grip.orientation(sharedPref.getInt("grip-orientation", Orientation.UP));
     }
 
     public void updateTitle() {
@@ -217,20 +194,20 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        switch (app.fingering()) {
-            case BAROQUE:
+        switch (app.instrumentType()) {
+            case Recorder.BAROQUE:
                 type = fingering[0];
                 break;
-            case GERMAN:
+            case Recorder.GERMAN:
                 type = fingering[1];
                 break;
         }
 
-        switch (app.recordertuning()) {
-            case C:
+        switch (app.instrumentTuning()) {
+            case Note.C:
                 tuning = noteNames[0];
                 break;
-            case F:
+            case Note.F:
                 tuning = noteNames[5];
                 break;
         }
@@ -246,13 +223,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        app.recorderFingering(BAROQUE);
+                        app.instrument(Recorder.BAROQUE, app.instrumentTuning());
                         grip.invalidate();
                         score.invalidate();
                         updateTitle();
                         break;
                     case 1:
-                        app.recorderFingering(GERMAN);
+                        app.instrument(Recorder.GERMAN, app.instrumentTuning());
                         grip.invalidate();
                         score.invalidate();
                         updateTitle();
@@ -271,13 +248,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        app.recordertuning(Recorder.Tuning.C);
+                        app.instrument(app.instrumentType(), Note.C);
                         grip.invalidate();
                         score.invalidate();
                         updateTitle();
                         break;
                     case 1:
-                        app.recordertuning(Recorder.Tuning.F);
+                        app.instrument(app.instrumentType(), Note.F);
                         grip.invalidate();
                         score.invalidate();
                         updateTitle();

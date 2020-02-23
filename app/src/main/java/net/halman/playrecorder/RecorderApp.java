@@ -25,7 +25,7 @@ import static net.halman.playrecorder.Scale.Clefs.G;
 public class RecorderApp {
     public Scale scale = new Scale(0);
     public Note note = new Note(Note.c1, Note.Accidentals.NONE);
-    public Recorder recorder = new Recorder();
+    private MusicalInstrument musical_instrument = new Recorder();
 
     int notePosition()
     {
@@ -44,13 +44,23 @@ public class RecorderApp {
         }
     }
 
+    void instrument(int type, int tuning)
+    {
+        switch (type) {
+            default:
+            case Recorder.BAROQUE:
+                musical_instrument = new Recorder(type, tuning);
+                break;
+        }
+    }
+
     void lowestNote()
     {
-        switch(recorder.tuning()) {
-            case C:
+        switch(musical_instrument.tuning()) {
+            case Note.C:
                 note.set(Note.c1,Note.Accidentals.NONE);
                 break;
-            case F:
+            case Note.F:
                 note.set(Note.f1,Note.Accidentals.NONE);
                 break;
         }
@@ -58,11 +68,11 @@ public class RecorderApp {
 
     void highestNote()
     {
-        switch(recorder.tuning()) {
-            case C:
+        switch(musical_instrument.tuning()) {
+            case Note.C:
                 note.set(Note.g3, Note.Accidentals.NONE);
                 break;
-            case F:
+            case Note.F:
                 note.set(Note.c4, Note.Accidentals.NONE);
                 break;
         }
@@ -129,7 +139,7 @@ public class RecorderApp {
     }
 
     ArrayList<Grip> grips() {
-        return recorder.grips(note, scale);
+        return musical_instrument.grips(scale, note);
     }
 
     int noteNameIndex()
@@ -139,57 +149,7 @@ public class RecorderApp {
 
     boolean canPlay()
     {
-        return recorder.canPlay(scale, note);
-    }
-
-    void recordertuning(Recorder.Tuning T)
-    {
-        recorder.tuning(T);
-        if (! canPlay()) {
-            switch(T){
-                case C:
-                    note.set(Note.c1, Note.Accidentals.NONE);
-                    break;
-                case F:
-                    note.set(Note.f1, Note.Accidentals.NONE);
-                    break;
-            }
-        }
-    }
-
-    Recorder.Tuning recordertuning()
-    {
-        return recorder.tuning();
-    }
-
-    void recorderFingering(Recorder.Fingering F)
-    {
-        recorder.fingering(F);
-        if (! canPlay()) {
-            switch(recorder.tuning()){
-                case C:
-                    note.set(Note.c1, Note.Accidentals.NONE);
-                    break;
-                case F:
-                    note.set(Note.f1, Note.Accidentals.NONE);
-                    break;
-            }
-        }
-    }
-
-    int fingeringAsInt()
-    {
-        return recorder.fingering() == Recorder.Fingering.BAROQUE ? 0 : 1;
-    }
-
-    void fingering(int F)
-    {
-        recorder.fingering(F == 0 ? Recorder.Fingering.BAROQUE : Recorder.Fingering.GERMAN);
-    }
-
-    public Recorder.Fingering fingering()
-    {
-        return recorder.fingering();
+        return musical_instrument.canPlay(scale, note);
     }
 
     public Clefs clef()
@@ -212,14 +172,14 @@ public class RecorderApp {
         scale.clef( c == 0 ? Clefs.G : Clefs.F);
     }
 
-    public int tuningAsInt()
+    public int instrumentTuning()
     {
-        return recorder.tuning() == Recorder.Tuning.C ? 0 : 1;
+        return musical_instrument.tuning();
     }
 
-    public void tuning(int t)
+    public int instrumentType()
     {
-        recorder.tuning(t == 0 ? Recorder.Tuning.C : Recorder.Tuning.F);
+        return musical_instrument.type();
     }
 
     int noteValue()
@@ -263,5 +223,15 @@ public class RecorderApp {
                 break;
         }
         note.set(value, a);
+    }
+
+    int numberOfHoles()
+    {
+        return musical_instrument.holes();
+    }
+
+    Hole getHole(int orientation, int index)
+    {
+        return musical_instrument.hole(orientation, index);
     }
 }

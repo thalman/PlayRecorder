@@ -26,6 +26,14 @@ public class Note {
         FLAT
     }
 
+    static final int C = 0;
+    static final int D = 2;
+    static final int E = 4;
+    static final int F = 5;
+    static final int G = 7;
+    static final int A = 9;
+    static final int B = 11;
+
     static int c1 = 0;
     static int d1 = 2;
     static int e1 = 4;
