@@ -26,27 +26,37 @@ public class Grip {
         HALFOPEN
     }
 
-    static final int NUMBER_OF_HOLES = 11;
-
-    private Hole[] holes = new Hole[NUMBER_OF_HOLES];
+    private int number_of_holes = 11;
+    private Hole[] holes = null;
 
     public Grip()
     {
-        for (int i = 0; i < NUMBER_OF_HOLES; ++i) {
+        number_of_holes = 11; // recorder default
+        holes = new Hole[number_of_holes];
+
+        for (int i = 0; i < number_of_holes; ++i) {
              holes[i] = Hole.OPEN;
         }
     }
 
-    public Grip(Hole h0, Hole h1, Hole h2, Hole h3, Hole h4,
-                Hole h5, Hole h6, Hole h7, Hole h8, Hole h9,
-                Hole h10)
+    public Grip(ArrayList<Hole> h)
     {
-        set(h0, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10);
+        number_of_holes = h.size();
+        holes = new Hole[number_of_holes];
+
+        for(int i = 0; i < h.size(); ++i) {
+            holes[i] = h.get(i);
+        }
+    }
+
+    int holes()
+    {
+        return number_of_holes;
     }
 
     Hole get(int idx)
     {
-        if (idx >= 0 && idx < NUMBER_OF_HOLES) {
+        if (idx >= 0 && idx < number_of_holes) {
             return holes[idx];
         }
         return Hole.OPEN;
@@ -54,31 +64,14 @@ public class Grip {
 
     void set(int idx, Hole hole)
     {
-        if (idx >= 0 && idx < NUMBER_OF_HOLES) {
+        if (idx >= 0 && idx < number_of_holes) {
             holes[idx] = hole;
         }
     }
-
-    void set(Hole h0, Hole h1, Hole h2, Hole h3, Hole h4,
-             Hole h5, Hole h6, Hole h7, Hole h8, Hole h9,
-             Hole h10)
-    {
-        holes[0] = h0;
-        holes[1] = h1;
-        holes[2] = h2;
-        holes[3] = h3;
-        holes[4] = h4;
-        holes[5] = h5;
-        holes[6] = h6;
-        holes[7] = h7;
-        holes[8] = h8;
-        holes[9] = h9;
-        holes[10] = h10;
-    }
-
+    
     void set(ArrayList<Hole> holelist)
     {
-        for(int a = 0; a < holelist.size() && a < NUMBER_OF_HOLES; ++a) {
+        for(int a = 0; a < holelist.size() && a < number_of_holes; ++a) {
             holes[a] = holelist.get(a);
         }
     }

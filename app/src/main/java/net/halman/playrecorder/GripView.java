@@ -240,13 +240,14 @@ public class GripView extends View {
             xpos = holesXPosDown;
             ypos = holesYPosDown;
         }
+        int holesCount = xpos.length;
 
         int step = grip_width / (grips.size() + 1);
 
         for (int g = 0; g < grips.size(); g++) {
             int x = step + g * step;
             Grip grip = grips.get(g);
-            for (int i = 0; i < Grip.NUMBER_OF_HOLES - 1; i++) {
+            for (int i = 0; i < holesCount - 1; i++) {
                 int y = ypos[i];
                 switch (grip.get(i)) {
                     case OPEN:
@@ -261,8 +262,8 @@ public class GripView extends View {
                 }
 
             }
-            if (grip.get(Grip.NUMBER_OF_HOLES - 1) != OPEN) {
-                putDrawable(x + xpos[Grip.NUMBER_OF_HOLES-1], ypos[Grip.NUMBER_OF_HOLES-1], hole_bell, canvas, 2.0);
+            if (grip.get(holesCount - 1) != OPEN) {
+                putDrawable(x + xpos[holesCount - 1], ypos[holesCount - 1], hole_bell, canvas, 2.0);
             }
         }
     }
