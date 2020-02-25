@@ -34,16 +34,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.halman.playrecorder.Grip.Hole.OPEN;
 
 public class GripView extends View {
 
     private enum Buttons {
         SWITCH,
     }
-
-    final int UP = 0;
-    final int DOWN = 1;
 
     private MainActivity activity = null;
 
@@ -61,17 +57,11 @@ public class GripView extends View {
     private int grip_center_x = 0;
     private int grip_center_y = 0;
     private String noteNames[] = null;
-    private int current_orientation = UP;
+    private int current_orientation = Orientation.UP;
 
     private Map<GripView.Buttons, Rect> buttonPositions = new HashMap<GripView.Buttons, Rect>() {{
         put(GripView.Buttons.SWITCH, new Rect(0, grip_height - 80, 70, grip_height - 10));
     }};
-
-    private double [] holesZoom = new double[]{1.5, 1.5, 1.5, 1.5, 1.5, 1.5, 1.0, 1.0, 1.0, 1.0, 1.5};
-    int [] holesXPosUp = new int[] {0,   0,   0,   0,   0,   0,   -15, +15, -15, +15,   0};
-    int [] holesYPosUp = new int[] {150, 220, 270, 320, 390, 440, 490, 490, 530, 530, 580};
-    int [] holesXPosDown = new int[] {0,   0,   0,   0,   0,   0,   +15, -15, +15, -15,   0};
-    int [] holesYPosDown = new int[] {530, 460, 410, 360, 290, 240, 190, 190, 150, 150, 100};
 
     public GripView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -115,19 +105,19 @@ public class GripView extends View {
 
     void orientation(int o)
     {
-        if (o >= UP && o <= DOWN) {
+        if (o >= Orientation.UP && o <= Orientation.DOWN) {
             current_orientation = o;
         } else {
-            current_orientation = UP;
+            current_orientation = Orientation.UP;
         }
         invalidate();
     }
 
     void changeOrientation() {
-        if (current_orientation == UP) {
-            current_orientation = DOWN;
+        if (current_orientation == Orientation.UP) {
+            current_orientation = Orientation.DOWN;
         } else {
-            current_orientation = UP;
+            current_orientation = Orientation.UP;
         }
         invalidate();
     }
@@ -226,43 +216,34 @@ public class GripView extends View {
 
     private void drawGrip(ArrayList<Grip> grips, Canvas canvas)
     {
-        int [] xpos = null;
-        int [] ypos = null;
-
         if ((grips == null) || (grips.size() == 0)) {
             return;
         }
 
-        if (current_orientation == UP) {
-            xpos = holesXPosUp;
-            ypos = holesYPosUp;
-        } else {
-            xpos = holesXPosDown;
-            ypos = holesYPosDown;
-        }
+        int holesCount = activity.app.numberOfHoles();
 
         int step = grip_width / (grips.size() + 1);
 
         for (int g = 0; g < grips.size(); g++) {
             int x = step + g * step;
             Grip grip = grips.get(g);
-            for (int i = 0; i < Grip.NUMBER_OF_HOLES - 1; i++) {
-                int y = ypos[i];
+            for (int i = 0; i < holesCount; i++) {
+                Hole h = activity.app.getHole(current_orientation, i);
                 switch (grip.get(i)) {
-                    case OPEN:
-                        putDrawable(x + xpos[i], y, hole_open, canvas, holesZoom[i]);
+                    case Hole.OPEN:
+                        putDrawable(x + h.x, h.y, hole_open, canvas, h.zoom);
                         break;
-                    case CLOSE:
-                        putDrawable(x + xpos[i], y, hole_close, canvas, holesZoom[i]);
+                    case Hole.CLOSE:
+                        putDrawable(x + h.x, h.y, hole_close, canvas, h.zoom);
                         break;
-                    case HALFOPEN:
-                        putDrawable(x + xpos[i], y, hole_half, canvas, holesZoom[i]);
+                    case Hole.HALFOPEN:
+                        putDrawable(x + h.x, h.y, hole_half, canvas, h.zoom);
+                        break;
+                    case Hole.BELLCLOSE:
+                        putDrawable(x + h.x, h.y, hole_bell, canvas, h.zoom);
                         break;
                 }
 
-            }
-            if (grip.get(Grip.NUMBER_OF_HOLES - 1) != OPEN) {
-                putDrawable(x + xpos[Grip.NUMBER_OF_HOLES-1], ypos[Grip.NUMBER_OF_HOLES-1], hole_bell, canvas, 2.0);
             }
         }
     }
