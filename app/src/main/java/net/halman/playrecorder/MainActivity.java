@@ -19,12 +19,18 @@ package net.halman.playrecorder;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.PointF;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -37,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     RecorderApp app = null;
     ScoreView score = null;
     GripView grip = null;
-
+    Thread frequencyAnalyzer = null;
     PointF lastTouch = new PointF();
 
     View.OnTouchListener scoreOnTouchListener = new View.OnTouchListener() {
@@ -78,6 +84,16 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (grip !=  null) {
                 grip.onClick(lastGripTouch);
+            }
+        }
+    };
+
+    Handler freqHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message inputMessage) {
+            if (inputMessage.what == Frequency.MSG_FREQUENCY) {
+                int freq100 = inputMessage.arg1;
+                // do something with frequency
             }
         }
     };
@@ -135,6 +151,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStop () {
         super.onStop();
+        if (frequencyAnalyzer != null) {
+            frequencyAnalyzer.interrupt();
+            frequencyAnalyzer = null;
+        }
         saveState();
     }
 
@@ -349,5 +369,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode,
+            String permissions[],
+            int[] grantResults) {
+        switch (requestCode) {
+            case 42:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    onListen();
+                }
+        }
+    }
+
+    public void onListen()
+    {
+        if (frequencyAnalyzer == null) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 42);
+            } else {
+                frequencyAnalyzer = new Thread(new Frequency(freqHandler));
+                frequencyAnalyzer.start();
+            }
+        } else {
+            frequencyAnalyzer.interrupt();
+            frequencyAnalyzer = null;
+        }
     }
 }
