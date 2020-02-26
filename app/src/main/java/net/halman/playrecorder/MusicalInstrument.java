@@ -71,10 +71,16 @@ public abstract class MusicalInstrument {
     }
 
     Note lowestNote () {
-        return lowest_note;
+        if (lowest_note == null) {
+            return null;
+        }
+        return new Note(lowest_note.value() + score_offset, lowest_note.accidentals());
     }
 
     Note highestNote () {
-        return highest_note;
+        if (highest_note == null) {
+            return null;
+        }
+        return new Note(highest_note.value() + score_offset, highest_note.accidentals());
     }
 }

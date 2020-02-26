@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Play Recorder</string>
-    <string name="tuning">Famille de la flûte</string>
+    <string name="instrument">Instrument</string>
     <string name="fingering">Doigté</string>
     <string name="clef">Clé</string>
-    <string name="tuning_title">Sélectionner la famille de la flûte</string>
-    <string-array name="tuning_items">
-        <item>Famille en do (soprano, tenor)</item>
-        <item>Famille en fa (alto, sopranino, basse)</item>
+    <string name="instrument_title">Sélectionner l\'instrument</string>
+    <string-array name="instrument_items">
+        <item>Sopranino flûte</item>
+        <item>Soprano flûte</item>
+        <item>Alto flûte</item>
+        <item>Tenor flûte</item>
+        <item>Basse flûte</item>
+        <item>Tin whistle en ré</item>
     </string-array>
     <string name="fingering_title">Sélectionner le doigté de la flûte</string>
     <string-array name="fingering_items">
@@ -19,7 +23,7 @@
         <item>sol</item>
         <item>fa</item>
     </string-array>
-    <string name="app_title">%1$s en %2$s</string>
+    <string name="recorder_app_title">%1$s (%2$s)</string>
     <string-array name="note_names">
         <item>do</item>
         <item>do♯/ré♭</item>

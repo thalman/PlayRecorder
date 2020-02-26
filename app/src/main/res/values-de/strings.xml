@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="app_name">Play Recorder</string>
-<string name="tuning">Stimmung</string>
+<string name="instrument">Musikinstrument</string>
 <string name="fingering">Griffweise</string>
 <string name="clef">Notenschlüssel</string>
-<string name="tuning_title">Wählen Sie die Blockflötenfamilie</string>
-<string-array name="tuning_items">
-    <item>C (Sopran, Tenor)</item>
-    <item>F (Alt, Sopranino, Bass)</item>
+<string name="instrument_title">Wählen Sie die Musikinstrument</string>
+<string-array name="instrument_items">
+    <item>Sopraninoblockflöte</item>
+    <item>Sopranblockflöte</item>
+    <item>Altblockflöte</item>
+    <item>Tenorblockflöte</item>
+    <item>Bassblockflöte</item>
+    <item>Tin Whistle in D</item>
 </string-array>
 <string name="fingering_title">Wählen Sie die Blockflötengriffe</string>
 <string-array name="fingering_items">
@@ -19,8 +23,8 @@
     <item>Violinschlüssel</item>
     <item>Bassschlüssel</item>
 </string-array>
-<string name="app_title">%1$s in %2$s</string>
-<!--    name="app_title">Barock in F< -->
+<string name="recorder_app_title">%1$s (%2$s)</string>
+<!--    name="app_title">Altblockflöte (Barock)< -->
 <string-array name="note_names">
     <item>C</item>
     <item>C♯/D♭</item>

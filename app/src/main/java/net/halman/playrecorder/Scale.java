@@ -17,8 +17,6 @@
 
 package net.halman.playrecorder;
 
-import java.util.ArrayList;
-
 import static net.halman.playrecorder.Note.Accidentals.FLAT;
 import static net.halman.playrecorder.Note.Accidentals.NONE;
 import static net.halman.playrecorder.Note.Accidentals.RELEASE;

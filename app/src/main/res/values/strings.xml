@@ -1,12 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Play Recorder</string>
-    <string name="tuning">Tuning</string>
+    <string name="instrument">Instrument</string>
     <string name="fingering">Fingering</string>
     <string name="clef">Clef</string>
-    <string name="tuning_title">Select recorder tuning</string>
-    <string-array name="tuning_items">
-        <item>C (soprano, descant, tenor)</item>
-        <item>F (alto, sopranino, bass)</item>
+    <string name="instrument_title">Select instrument</string>
+    <string-array name="instrument_items">
+        <item>Sopranino recorder</item>
+        <item>Soprano recorder</item>
+        <item>Alto recorder</item>
+        <item>Tenor recorder</item>
+        <item>Bass recorder</item>
+        <item>Tin Whistle in D</item>
     </string-array>
     <string name="fingering_title">Select recorder fingering</string>
     <string-array name="fingering_items">
@@ -18,7 +23,7 @@
         <item>Treble</item>
         <item>Bass</item>
     </string-array>
-    <string name="app_title">%1$s in %2$s</string>
+    <string name="recorder_app_title">%1$s (%2$s)</string>
     <string-array name="note_names">
         <item>C</item>
         <item>C♯/D♭</item>

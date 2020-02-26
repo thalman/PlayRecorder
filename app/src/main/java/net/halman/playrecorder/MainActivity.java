@@ -34,7 +34,7 @@ import android.widget.LinearLayout;
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class MainActivity extends AppCompatActivity {
-    RecorderApp app = null; //new RecorderApp();
+    RecorderApp app = null;
     ScoreView score = null;
     GripView grip = null;
 
@@ -99,6 +99,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_playrecorder, menu);
+
+        // show hide fingering for recorder
+        MenuItem item = menu.findItem(R.id.actionFingering);
+        item.setVisible(Constants.isRecorder(app.instrumentType()));
         return true;
     }
 
@@ -109,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.actionFingering:
                 onFingering();
                 return true;
-            case R.id.actionTuning:
-                onTuning();
+            case R.id.actionInstrument:
+                onInstrument();
                 return true;
             case R.id.actionClef:
                 onClef();
@@ -161,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("score-signature", app.signature());
         editor.putInt("score-clef", app.clefAsInt());
         editor.putInt("instrument-type", app.instrumentType());
-        editor.putInt("instrument-tuning", app.instrumentTuning());
+        editor.putInt("recorder-fingering", app.lastRecorderFingering());
         editor.putInt("note-value", app.noteValue());
         editor.putInt("note-accidentals", app.noteAccidentalsAsInt());
         editor.putInt("grip-orientation", grip.orientation());
@@ -174,9 +178,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         app.signature(sharedPref.getInt("score-signature", 0));
         app.clef(sharedPref.getInt("score-clef", 0));
-        app.instrument(
-                sharedPref.getInt("instrument-type", Recorder.BAROQUE),
-                sharedPref.getInt("instrument-tuning", Note.C));
+        app.instrument(sharedPref.getInt("instrument-type", Constants.RECORDER_SOPRANO_BAROQUE));
+        app.lastRecorderFingering(sharedPref.getInt("recorder-fingering", Recorder.BAROQUE));
         app.note(
             sharedPref.getInt("note-value", 0),
             sharedPref.getInt("note-accidentals", 0)
@@ -186,33 +189,66 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateTitle() {
         String type = "";
-        String tuning = "";
+        String name = "";
         String [] fingering = getResources().getStringArray(R.array.fingering_items);
-        String [] noteNames = getResources().getStringArray(R.array.note_names);
+        String [] instruments = getResources().getStringArray(R.array.instrument_items);
 
         if (app == null) {
             return;
         }
 
-        switch (app.instrumentType()) {
-            case Recorder.BAROQUE:
-                type = fingering[0];
-                break;
-            case Recorder.GERMAN:
-                type = fingering[1];
-                break;
+        if (Constants.isRecorder(app.instrumentType())) {
+            switch (app.instrumentType()) {
+                case Constants.RECORDER_SOPRANINO_BAROQUE:
+                    type = fingering[0];
+                    name = instruments[0];
+                    break;
+                case Constants.RECORDER_SOPRANO_BAROQUE:
+                    type = fingering[0];
+                    name = instruments[1];
+                    break;
+                case Constants.RECORDER_ALT_BAROQUE:
+                    type = fingering[0];
+                    name = instruments[2];
+                    break;
+                case Constants.RECORDER_TENOR_BAROQUE:
+                    type = fingering[0];
+                    name = instruments[3];
+                    break;
+                case Constants.RECORDER_BASS_BAROQUE:
+                    type = fingering[0];
+                    name = instruments[4];
+                    break;
+                case Constants.RECORDER_SOPRANINO_GERMAN:
+                    type = fingering[1];
+                    name = instruments[0];
+                    break;
+                case Constants.RECORDER_SOPRANO_GERMAN:
+                    type = fingering[1];
+                    name = instruments[1];
+                    break;
+                case Constants.RECORDER_ALT_GERMAN:
+                    type = fingering[1];
+                    name = instruments[2];
+                    break;
+                case Constants.RECORDER_TENOR_GERMAN:
+                    type = fingering[1];
+                    name = instruments[3];
+                    break;
+                case Constants.RECORDER_BASS_GERMAN:
+                    type = fingering[1];
+                    name = instruments[4];
+                    break;
+            }
+            setTitle(getString(R.string.recorder_app_title, name, type));
+            return;
         }
 
-        switch (app.instrumentTuning()) {
-            case Note.C:
-                tuning = noteNames[0];
-                break;
-            case Note.F:
-                tuning = noteNames[5];
-                break;
+        if (Constants.isTinWhistle(app.instrumentType())) {
+            setTitle(instruments[5]);
+            return;
         }
-
-        setTitle("Play Recorder / " + getString(R.string.app_title, type, tuning));
+        setTitle("Play Recorder");
     }
 
     private void onFingering()
@@ -221,18 +257,25 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle(R.string.fingering_title);
         builder.setItems(R.array.fingering_items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                int currentType = app.instrumentType();
                 switch (which) {
                     case 0:
-                        app.instrument(Recorder.BAROQUE, app.instrumentTuning());
-                        grip.invalidate();
-                        score.invalidate();
-                        updateTitle();
+                        if (Constants.isGermanRecorder(currentType)) {
+                            // switch german type to baroque
+                            app.instrument(currentType - 8);
+                            grip.invalidate();
+                            score.invalidate();
+                            updateTitle();
+                        }
                         break;
                     case 1:
-                        app.instrument(Recorder.GERMAN, app.instrumentTuning());
-                        grip.invalidate();
-                        score.invalidate();
-                        updateTitle();
+                        if (Constants.isBaroqueRecorder(currentType)) {
+                            // switch baroque german type to baroque
+                            app.instrument(currentType + 8);
+                            grip.invalidate();
+                            score.invalidate();
+                            updateTitle();
+                        }
                         break;
                 }
             }
@@ -240,26 +283,46 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void onTuning()
+    private void onInstrument()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.tuning_title);
-        builder.setItems(R.array.tuning_items, new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.instrument_title);
+        builder.setItems(R.array.instrument_items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        app.instrument(app.instrumentType(), Note.C);
-                        grip.invalidate();
-                        score.invalidate();
-                        updateTitle();
+                        app.instrument(app.lastRecorderFingering() == Recorder.BAROQUE ?
+                                Constants.RECORDER_SOPRANINO_BAROQUE :
+                                Constants.RECORDER_SOPRANINO_GERMAN);
                         break;
                     case 1:
-                        app.instrument(app.instrumentType(), Note.F);
-                        grip.invalidate();
-                        score.invalidate();
-                        updateTitle();
+                        app.instrument(app.lastRecorderFingering() == Recorder.BAROQUE ?
+                                Constants.RECORDER_SOPRANO_BAROQUE :
+                                Constants.RECORDER_SOPRANO_GERMAN);
+                        break;
+                    case 2:
+                        app.instrument(app.lastRecorderFingering() == Recorder.BAROQUE ?
+                                Constants.RECORDER_ALT_BAROQUE :
+                                Constants.RECORDER_ALT_GERMAN);
+                        break;
+                    case 3:
+                        app.instrument(app.lastRecorderFingering() == Recorder.BAROQUE ?
+                                Constants.RECORDER_TENOR_BAROQUE :
+                                Constants.RECORDER_TENOR_GERMAN);
+                        break;
+                    case 4:
+                        app.instrument(app.lastRecorderFingering() == Recorder.BAROQUE ?
+                                Constants.RECORDER_BASS_BAROQUE :
+                                Constants.RECORDER_BASS_GERMAN);
+                        break;
+                    case 5:
+                        app.instrument(Constants.TIN_WHISTLE_D);
                         break;
                 }
+                grip.invalidate();
+                score.invalidate();
+                invalidateOptionsMenu();
+                updateTitle();
             }
         });
         builder.show();

@@ -26,6 +26,7 @@ public class RecorderApp {
     public Scale scale = new Scale(0);
     public Note note = new Note(Note.c4, Note.Accidentals.NONE);
     private MusicalInstrument musical_instrument = new Recorder();
+    private int last_recorder_fingering = Recorder.BAROQUE;
 
     int notePosition()
     {
@@ -48,19 +49,38 @@ public class RecorderApp {
     {
         if (Constants.isRecorder(type)) {
             musical_instrument = new Recorder(type);
+            lastRecorderFingering((Constants.isBaroqueRecorder(type) ? Recorder.BAROQUE : Recorder.GERMAN));
+            return;
+        }
+        if (Constants.isTinWhistle(type)) {
+            musical_instrument = new TinWhistle(type);
             return;
         }
         musical_instrument = new Recorder(Constants.RECORDER_SOPRANO_BAROQUE);
+        lastRecorderFingering(Recorder.BAROQUE);
     }
 
     void lowestNote()
     {
-        note.set(musical_instrument.lowestNote());
+        Note lowest = musical_instrument.lowestNote();
+        Note tmp = new Note(lowest.value(), Note.Accidentals.NONE);
+        if (scale.noteAbsoluteValue(tmp) == scale.noteAbsoluteValue(lowest)) {
+            note.set(tmp);
+        } else {
+            note.set(lowest);
+        }
     }
 
     void highestNote()
     {
         note.set(musical_instrument.highestNote());
+        Note highest = musical_instrument.highestNote();
+        Note tmp = new Note(highest.value(), Note.Accidentals.NONE);
+        if (scale.noteAbsoluteValue(tmp) == scale.noteAbsoluteValue(highest)) {
+            note.set(tmp);
+        } else {
+            note.set(highest);
+        }
     }
 
     void noteUp()
@@ -213,5 +233,13 @@ public class RecorderApp {
     Hole getHole(int orientation, int index)
     {
         return musical_instrument.hole(orientation, index);
+    }
+
+    int lastRecorderFingering() {
+        return last_recorder_fingering;
+    }
+
+    void lastRecorderFingering(int fingering) {
+        last_recorder_fingering = fingering;
     }
 }
