@@ -42,6 +42,14 @@ public class Note {
     static final int a4 = 9;
     static final int b4 = 11;
 
+    static final int c3 = c4 - 12;
+    static final int d3 = d4 - 12;
+    static final int e3 = e4 - 12;
+    static final int f3 = f4 - 12;
+    static final int g3 = g4 - 12;
+    static final int a3 = a4 - 12;
+    static final int b3 = b4 - 12;
+
     static final int c5 = c4 + 12;
     static final int d5 = d4 + 12;
     static final int e5 = e4 + 12;
@@ -59,6 +67,10 @@ public class Note {
     static final int b6 = b4 + 24;
 
     static final int c7 = c4 + 36;
+    static final int d7 = d4 + 36;
+    static final int e7 = e4 + 36;
+    static final int f7 = f4 + 36;
+    static final int g7 = g4 + 36;
 
     private int value = 0;
     private Accidentals accidentals = Accidentals.NONE;
