@@ -130,7 +130,7 @@ public class Scale {
 
     public Note noteByPosition (int position)
     {
-        Note note = new Note(Note.c1, NONE);
+        Note note = new Note(Note.c4, NONE);
         int pos = notePosition(note);
 
         while (pos < position) {
