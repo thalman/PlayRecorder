@@ -24,7 +24,7 @@ import static net.halman.playrecorder.Scale.Clefs.G;
 
 public class RecorderApp {
     public Scale scale = new Scale(0);
-    public Note note = new Note(Note.c1, Note.Accidentals.NONE);
+    public Note note = new Note(Note.c4, Note.Accidentals.NONE);
     private MusicalInstrument musical_instrument = new Recorder();
 
     int notePosition()
@@ -44,38 +44,23 @@ public class RecorderApp {
         }
     }
 
-    void instrument(int type, int tuning)
+    void instrument(int type)
     {
-        switch (type) {
-            default:
-            case Recorder.BAROQUE:
-                musical_instrument = new Recorder(type, tuning);
-                break;
+        if (Constants.isRecorder(type)) {
+            musical_instrument = new Recorder(type);
+            return;
         }
+        musical_instrument = new Recorder(Constants.RECORDER_SOPRANO_BAROQUE);
     }
 
     void lowestNote()
     {
-        switch(musical_instrument.tuning()) {
-            case Note.C:
-                note.set(Note.c1,Note.Accidentals.NONE);
-                break;
-            case Note.F:
-                note.set(Note.f1,Note.Accidentals.NONE);
-                break;
-        }
+        note.set(musical_instrument.lowestNote());
     }
 
     void highestNote()
     {
-        switch(musical_instrument.tuning()) {
-            case Note.C:
-                note.set(Note.g3, Note.Accidentals.NONE);
-                break;
-            case Note.F:
-                note.set(Note.c4, Note.Accidentals.NONE);
-                break;
-        }
+        note.set(musical_instrument.highestNote());
     }
 
     void noteUp()
@@ -170,11 +155,6 @@ public class RecorderApp {
     public void clef(int c)
     {
         scale.clef( c == 0 ? Clefs.G : Clefs.F);
-    }
-
-    public int instrumentTuning()
-    {
-        return musical_instrument.tuning();
     }
 
     public int instrumentType()
