@@ -34,35 +34,34 @@ public class Note {
     static final int A = 9;
     static final int B = 11;
 
-    static int c1 = 0;
-    static int d1 = 2;
-    static int e1 = 4;
-    static int f1 = 5;
-    static int g1 = 7;
-    static int a1 = 9;
-    static int b1 = 11;
+    static final int c4 = 0;
+    static final int d4 = 2;
+    static final int e4 = 4;
+    static final int f4 = 5;
+    static final int g4 = 7;
+    static final int a4 = 9;
+    static final int b4 = 11;
 
-    static int c2 = c1 + 12;
-    static int d2 = d1 + 12;
-    static int e2 = e1 + 12;
-    static int f2 = f1 + 12;
-    static int g2 = g1 + 12;
-    static int a2 = a1 + 12;
-    static int b2 = b1 + 12;
+    static final int c5 = c4 + 12;
+    static final int d5 = d4 + 12;
+    static final int e5 = e4 + 12;
+    static final int f5 = f4 + 12;
+    static final int g5 = g4 + 12;
+    static final int a5 = a4 + 12;
+    static final int b5 = b4 + 12;
 
-    static int c3 = c1 + 24;
-    static int d3 = d1 + 24;
-    static int e3 = e1 + 24;
-    static int f3 = f1 + 24;
-    static int g3 = g1 + 24;
-    static int a3 = a1 + 24;
-    static int b3 = b1 + 24;
+    static final int c6 = c4 + 24;
+    static final int d6 = d4 + 24;
+    static final int e6 = e4 + 24;
+    static final int f6 = f4 + 24;
+    static final int g6 = g4 + 24;
+    static final int a6 = a4 + 24;
+    static final int b6 = b4 + 24;
 
-    static int c4 = c1 + 36;
+    static final int c7 = c4 + 36;
 
     private int value = 0;
     private Accidentals accidentals = Accidentals.NONE;
-
 
     public Note(int value, Accidentals accidentals)
     {
@@ -109,4 +108,5 @@ public class Note {
     {
         this.accidentals = accidentals;
     }
+
 }
