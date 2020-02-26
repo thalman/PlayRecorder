@@ -37,20 +37,26 @@ public class Recorder extends MusicalInstrument {
     private Note recorder_tuning;
     private ArrayList<ArrayList<Grip>> grips = null;
 
-    public Recorder(int type, int tuning)
+    public Recorder(int type)
     {
-        super(type, tuning);
+        super(type);
+        if (type < Constants.RECORDER_SOPRANINO_BAROQUE || type > Constants.RECORDER_BASS_GERMAN) {
+            instrument_type = Constants.RECORDER_SOPRANO_BAROQUE;
+        }
+
         number_of_holes = 11;
         fingering();
         setHoles();
+        setLimits();
     }
 
     public Recorder()
     {
-        super(BAROQUE, Note.C);
+        super(Constants.RECORDER_SOPRANO_BAROQUE);
         number_of_holes = 11;
         fingering();
         setHoles();
+        setLimits();
     }
 
     private void setHoles() {
@@ -79,8 +85,48 @@ public class Recorder extends MusicalInstrument {
         hole(DOWN, 0, 100, 2.0  );
     }
 
+    private void setLimits() {
+        switch (instrument_type) {
+            case Constants.RECORDER_SOPRANINO_BAROQUE:
+            case Constants.RECORDER_SOPRANINO_GERMAN:
+                lowest_note = new Note(Note.f5, Note.Accidentals.RELEASE);
+                highest_note = new Note(Note.g7, Note.Accidentals.RELEASE);
+                score_offset = 0;
+                break;
+            case Constants.RECORDER_SOPRANO_BAROQUE:
+            case Constants.RECORDER_SOPRANO_GERMAN:
+                lowest_note = new Note(Note.c5, Note.Accidentals.RELEASE);
+                highest_note = new Note(Note.d7, Note.Accidentals.RELEASE);
+                score_offset = 0;
+                break;
+            case Constants.RECORDER_ALT_BAROQUE:
+            case Constants.RECORDER_ALT_GERMAN:
+                lowest_note = new Note(Note.f4, Note.Accidentals.RELEASE);
+                highest_note = new Note(Note.g6, Note.Accidentals.RELEASE);
+                score_offset = 0;
+                break;
+            case Constants.RECORDER_TENOR_BAROQUE:
+            case Constants.RECORDER_TENOR_GERMAN:
+                lowest_note = new Note(Note.c4, Note.Accidentals.RELEASE);
+                highest_note = new Note(Note.d6, Note.Accidentals.RELEASE);
+                score_offset = 0;
+                break;
+            case Constants.RECORDER_BASS_BAROQUE:
+            case Constants.RECORDER_BASS_GERMAN:
+                lowest_note = new Note(Note.f3, Note.Accidentals.RELEASE);
+                highest_note = new Note(Note.g5, Note.Accidentals.RELEASE);
+                score_offset = 0;
+                break;
+        }
+    }
+
     private void fingering()
     {
+        if (instrument_type <= Constants.RECORDER_BASS_BAROQUE ) {
+            recorder_fingering = BAROQUE;
+        } else {
+            recorder_fingering = GERMAN;
+        }
         switch (recorder_fingering) {
             case BAROQUE:
                 setBaroqueGrips();
@@ -465,7 +511,7 @@ public class Recorder extends MusicalInstrument {
     public ArrayList<Grip> grips(Scale scale, Note note)
     {
         int idx = scale.noteAbsoluteValue(note);
-        if (tuning() == Note.F) {
+        if (instrument_type % 2 == 0) {
             idx = idx - 5;
         }
 

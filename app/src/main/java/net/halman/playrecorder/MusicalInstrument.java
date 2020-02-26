@@ -23,27 +23,26 @@ public abstract class MusicalInstrument {
 
     protected int number_of_holes;
     protected int instrument_type;
-    protected int instrument_tuning;
+    protected Note lowest_note;
+    protected Note highest_note;
+    protected int score_offset;
 
     protected ArrayList<ArrayList<Hole>> holesPositions = null;
 
-    public MusicalInstrument(int type, int tunning)
+    public MusicalInstrument(int type)
     {
         instrument_type = type;
-        instrument_tuning = tunning;
         number_of_holes = 0;
         holesPositions = new ArrayList<ArrayList<Hole>>();
         holesPositions.add(new ArrayList<Hole>());
         holesPositions.add(new ArrayList<Hole>());
+        lowest_note = null;
+        highest_note = null;
+        score_offset = 0;
     }
 
     public int holes() {
         return number_of_holes;
-    }
-
-
-    public int tuning() {
-        return instrument_tuning;
     }
 
     public int type() {
@@ -69,5 +68,13 @@ public abstract class MusicalInstrument {
         if (list != null) {
             list.add(new Hole(x, y, zoom));
         }
+    }
+
+    Note lowestNote () {
+        return lowest_note;
+    }
+
+    Note highestNote () {
+        return highest_note;
     }
 }
