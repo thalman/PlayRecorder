@@ -36,6 +36,7 @@ public class Scale {
     private int scaleSignature;
     private Clefs scaleClef;
     private Note[] scale;
+    private int[] frequencies = {26163, 27718, 29366, 31113, 32963, 34923, 36999, 39200, 41530, 44000, 46616, 49388};
 
     Scale(int asignature) {
         signature(asignature);
@@ -327,5 +328,61 @@ public class Scale {
     Note.Accidentals noteAccidentals(Note note)
     {
         return Note.Accidentals.NONE;
+    }
+
+    int noteToFrequency(Note note) {
+        int idx = noteNameIndex(note);
+        int freq100 = frequencies[idx];
+        idx = noteAbsoluteValue(note);
+        while (idx >= 12) {
+            freq100 *= 2;
+            idx -= 12;
+        }
+
+        while (idx < 0) {
+            freq100 /= 2;
+            idx += 12;
+        }
+        return freq100;
+    }
+
+    Note frequencyNearestNote(int freq100)
+    {
+        int octave = 0;
+        int abs_value = 0;
+        int temp_freq = freq100;
+
+        while (temp_freq < frequencies[0]) {
+            temp_freq *= 2;
+            --octave;
+        }
+        while (temp_freq > frequencies[11]) {
+            temp_freq /= 2;
+            ++octave;
+        }
+
+        if (temp_freq < frequencies[0]) {
+            abs_value = 0;
+        } else if (temp_freq > frequencies[11]) {
+            abs_value = 11;
+        } else {
+            for (int i = 0; i < 11; i++) {
+                if (temp_freq >= frequencies[i] && temp_freq <= frequencies[i + 1]) {
+                    int d1 = temp_freq - frequencies[i];
+                    int d2 = frequencies[i + 1] - temp_freq;
+                    abs_value = (d1 < d2) ? i : i + 1;
+                    break;
+                }
+            }
+        }
+        abs_value += 12 * octave;
+        Note n = new Note(Note.c4 + 12 * octave, NONE);
+        while (noteAbsoluteValue(n) < abs_value) {
+            noteUpHalf(n);
+        }
+        while (noteAbsoluteValue(n) > abs_value) {
+            noteDownHalf(n);
+        }
+        return n;
     }
 }

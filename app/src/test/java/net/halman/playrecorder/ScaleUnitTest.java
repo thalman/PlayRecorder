@@ -120,17 +120,58 @@ public class ScaleUnitTest {
     public void noteAbsoluteValue() {
         Scale s = new Scale (-1);
 
-        Note n = new Note (Note.b1, Note.Accidentals.NONE);
+        Note n = new Note (Note.b4, Note.Accidentals.NONE);
         assertEquals(10, s.noteAbsoluteValue(n));
 
-        n.set(Note.b1, Note.Accidentals.FLAT);
+        n.set(Note.b4, Note.Accidentals.FLAT);
         assertEquals(10, s.noteAbsoluteValue(n));
 
-        n.set(Note.b1, Note.Accidentals.RELEASE);
+        n.set(Note.b4, Note.Accidentals.RELEASE);
         assertEquals(11, s.noteAbsoluteValue(n));
 
-        n.set(Note.b1, Note.Accidentals.SHARP);
+        n.set(Note.b4, Note.Accidentals.SHARP);
         assertEquals(12, s.noteAbsoluteValue(n));
+    }
+
+    @Test
+    public void noteToFrequencyTest()
+    {
+        Scale s = new Scale (0);
+
+        Note n = new Note (Note.a4, Note.Accidentals.NONE);
+        assertEquals(44000, s.noteToFrequency(n));
+
+        n.set(Note.a3, Note.Accidentals.NONE);
+        assertEquals(22000, s.noteToFrequency(n));
+
+        n.set(Note.a5, Note.Accidentals.NONE);
+        assertEquals(88000, s.noteToFrequency(n));
+
+        n.set(Note.c5, Note.Accidentals.NONE);
+        assertEquals(26163 * 2, s.noteToFrequency(n));
+
+        s = new Scale(1);
+
+        n.set(Note.f5, Note.Accidentals.NONE);
+        assertEquals(36999 * 2, s.noteToFrequency(n));
+
+        n.set(Note.f3, Note.Accidentals.NONE);
+        assertEquals(36999 / 2, s.noteToFrequency(n));
+    }
+
+    @Test
+    public void frequencyToTest()
+    {
+        Scale s = new Scale (0);
+
+        Note n = s.frequencyNearestNote (44000);
+        assertEquals(n.value(), Note.a4);
+
+        n = s.frequencyNearestNote (44000*2);
+        assertEquals(n.value(), Note.a5);
+
+        n = s.frequencyNearestNote (44400*2);
+        assertEquals(n.value(), Note.a5);
     }
 }
 
