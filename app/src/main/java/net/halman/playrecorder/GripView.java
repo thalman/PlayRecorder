@@ -39,6 +39,7 @@ public class GripView extends View {
 
     private enum Buttons {
         SWITCH,
+        MEASURE
     }
 
     private MainActivity activity = null;
@@ -50,6 +51,11 @@ public class GripView extends View {
     private Drawable sharp = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp, null);
     private Drawable flat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat, null);
     private Drawable switch_direction = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_switch_direction, null);
+    private Drawable measure = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_measure, null);
+    private Drawable pointer_ok = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pointer_ok, null);
+    private Drawable pointer_near = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pointer_near, null);
+    private Drawable pointer_far = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pointer_far, null);
+    private Drawable pointer_no_signal = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pointer, null);
 
     private double scalefactor = 1;
     private int grip_width = 610;
@@ -58,9 +64,13 @@ public class GripView extends View {
     private int grip_center_y = 0;
     private String noteNames[] = null;
     private int current_orientation = Orientation.UP;
+    private boolean listening = false;
+    private int delta100 = 0;
+    private boolean signal_detected;
 
     private Map<GripView.Buttons, Rect> buttonPositions = new HashMap<GripView.Buttons, Rect>() {{
-        put(GripView.Buttons.SWITCH, new Rect(0, grip_height - 80, 70, grip_height - 10));
+        put(Buttons.SWITCH, new Rect(0, grip_height - 80, 70, grip_height - 10));
+        put(Buttons.MEASURE, new Rect(grip_width - 90, grip_height - 80, grip_width - 20, grip_height - 10));
     }};
 
     public GripView(Context context, AttributeSet attrs) {
@@ -113,7 +123,8 @@ public class GripView extends View {
         invalidate();
     }
 
-    void changeOrientation() {
+    void changeOrientation()
+    {
         if (current_orientation == Orientation.UP) {
             current_orientation = Orientation.DOWN;
         } else {
@@ -133,6 +144,9 @@ public class GripView extends View {
                 switch (item.getKey()) {
                     case SWITCH:
                         changeOrientation();
+                        return;
+                    case MEASURE:
+                        if (activity != null) { activity.onListen(); }
                         return;
                 }
             }
@@ -172,6 +186,7 @@ public class GripView extends View {
     private void drawButtons(Canvas canvas)
     {
         putDrawable(buttonPositions.get(Buttons.SWITCH).centerX(), buttonPositions.get(Buttons.SWITCH).centerY(), switch_direction, canvas, 1.6);
+        putDrawable(buttonPositions.get(Buttons.MEASURE).centerX(), buttonPositions.get(Buttons.MEASURE).centerY(), measure, canvas, 1.0);
     }
 
     private void drawText(int x, int y, String txt, Canvas c)
@@ -214,6 +229,33 @@ public class GripView extends View {
         }
     }
 
+    private void drawPointer(Canvas canvas)
+    {
+        Drawable pointer;
+
+        if (! listening) {
+            return;
+        }
+
+        Rect pos = buttonPositions.get(Buttons.MEASURE);
+        // TODO use logarithmic scale here
+        int x = pos.centerX() + delta100 / 100;
+
+        if (signal_detected) {
+            pointer = pointer_far;
+            if (delta100 < 1000 && delta100 > -1000) {
+                pointer = pointer_near;
+            }
+            if (delta100 < 500 && delta100 > -500) {
+                pointer = pointer_ok;
+            }
+        } else {
+            pointer = pointer_no_signal;
+        }
+
+        putDrawable(x, pos.top, pointer, canvas, 1.0);
+    }
+
     private void drawGrip(ArrayList<Grip> grips, Canvas canvas)
     {
         if ((grips == null) || (grips.size() == 0)) {
@@ -243,7 +285,6 @@ public class GripView extends View {
                         putDrawable(x + h.x, h.y, hole_bell, canvas, h.zoom);
                         break;
                 }
-
             }
         }
     }
@@ -255,8 +296,27 @@ public class GripView extends View {
 
             drawButtons(canvas);
             drawGrip(grips, canvas);
+            drawPointer(canvas);
             drawText(grip_width / 2, 90, noteNames[activity.app.noteNameIndex()], canvas);
         }
     }
 
+    public void onFrequency(boolean signal_detected, int freq100, int delta100)
+    {
+        this.signal_detected = signal_detected;
+        if (signal_detected) {
+            this.delta100 = delta100;
+        } else {
+            this.delta100 /= 2;
+        }
+        invalidate();
+    }
+
+    void listen(boolean l)
+    {
+        if (listening != l) {
+            listening = l;
+            invalidate();
+        }
+    }
 }

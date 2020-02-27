@@ -4,6 +4,8 @@
     <string name="instrument">Instrument</string>
     <string name="fingering">Fingering</string>
     <string name="clef">Clef</string>
+    <string name="listen">Listen</string>
+    <string name="stopListening">Stop listening</string>
     <string name="instrument_title">Select instrument</string>
     <string-array name="instrument_items">
         <item>Sopranino recorder</item>

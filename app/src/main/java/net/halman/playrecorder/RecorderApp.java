@@ -157,6 +157,11 @@ public class RecorderApp {
         return musical_instrument.canPlay(scale, note);
     }
 
+    boolean canPlay(Note n)
+    {
+        return musical_instrument.canPlay(scale, n);
+    }
+
     public Clefs clef()
     {
         return scale.clef();
@@ -201,6 +206,11 @@ public class RecorderApp {
             default:
                 return -1;
         }
+    }
+
+    void note(Note n)
+    {
+        note.set(n);
     }
 
     void note(int value, int acc)

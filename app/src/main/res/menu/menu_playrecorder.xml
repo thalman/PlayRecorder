@@ -12,4 +12,12 @@
         android:id="@+id/actionClef"
         android:orderInCategory="120"
         android:title="@string/clef" />
+    <item
+        android:id="@+id/actionListen"
+        android:orderInCategory="130"
+        android:title="@string/listen" />
+    <item
+        android:id="@+id/actionStopListening"
+        android:orderInCategory="140"
+        android:title="@string/stopListening" />
 </menu>

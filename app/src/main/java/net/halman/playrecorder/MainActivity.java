@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -93,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message inputMessage) {
             if (inputMessage.what == Frequency.MSG_FREQUENCY) {
                 int freq100 = inputMessage.arg1;
-                // do something with frequency
+                Log.d("FREQUENCY", "Frequency update: " + freq100);
+                onFrequency(freq100);
             }
         }
     };
@@ -119,6 +121,13 @@ public class MainActivity extends AppCompatActivity {
         // show hide fingering for recorder
         MenuItem item = menu.findItem(R.id.actionFingering);
         item.setVisible(Constants.isRecorder(app.instrumentType()));
+
+        item = menu.findItem(R.id.actionListen);
+        item.setVisible(frequencyAnalyzer == null);
+
+        item = menu.findItem(R.id.actionStopListening);
+        item.setVisible(frequencyAnalyzer != null);
+
         return true;
     }
 
@@ -134,6 +143,16 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.actionClef:
                 onClef();
+                return true;
+            case R.id.actionListen:
+                if (frequencyAnalyzer == null) {
+                    onListen();
+                }
+                return true;
+            case R.id.actionStopListening:
+                if (frequencyAnalyzer != null) {
+                    onListen();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -154,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
         if (frequencyAnalyzer != null) {
             frequencyAnalyzer.interrupt();
             frequencyAnalyzer = null;
+            grip.listen(false);
         }
         saveState();
     }
@@ -393,10 +413,36 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 frequencyAnalyzer = new Thread(new Frequency(freqHandler));
                 frequencyAnalyzer.start();
+                grip.listen(true);
+                invalidateOptionsMenu();
             }
         } else {
             frequencyAnalyzer.interrupt();
             frequencyAnalyzer = null;
+            grip.listen(false);
+            invalidateOptionsMenu();
         }
+    }
+
+    public void onFrequency(int freq100)
+    {
+        if (freq100 < 2000) {
+            Log.d("FREQUENCY", "too deep frequency");
+            grip.onFrequency(false, 0, 0);
+            return;
+        }
+
+        Note n = app.scale.frequencyNearestNote(freq100);
+        if (! app.canPlay(n)) {
+            Log.d("FREQUENCY", "this sound can't be played on the instrument");
+            grip.onFrequency(false, 0, 0);
+            return;
+        }
+
+        app.note(n);
+        Log.d("FREQUENCY", "Note: " + n.value() + " " + n.accidentals());
+        grip.onFrequency(true, freq100, freq100 - app.scale.noteToFrequency(n));
+        grip.invalidate();
+        score.invalidate();
     }
 }

@@ -198,13 +198,11 @@ public class Frequency implements Runnable {
                 lowPass();
                 applyWindow();
                 applyFFT();
-                int newFreq100 = (int)(peak()*100);
+                int newFreq100 = (int) (peak() * 100);
 
-                if (freq100 != newFreq100) {
-                    freq100 = newFreq100;
-                    if (messageHandler != null) {
-                        messageHandler.sendMessage(messageHandler.obtainMessage(MSG_FREQUENCY, freq100, 0));
-                    }
+                freq100 = newFreq100;
+                if (messageHandler != null) {
+                    messageHandler.sendMessage(messageHandler.obtainMessage(MSG_FREQUENCY, freq100, 0));
                 }
             }
         } catch (Exception e) {
