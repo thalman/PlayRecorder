@@ -148,7 +148,7 @@ public class Scale {
     void noteUp (Note note)
     {
         int octave = note.value() / 12;
-        if (note.value() < 0) {
+        if (note.value() < 0 && note.value() % 12 != 0) {
             octave--;
         }
 
@@ -165,7 +165,7 @@ public class Scale {
     void noteDown(Note note)
     {
         int octave = note.value() / 12;
-        if (note.value() < 0) {
+        if (note.value() < 0 && note.value() % 12 != 0) {
             octave--;
         }
 
