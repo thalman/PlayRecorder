@@ -5,6 +5,8 @@
 <string name="fingering">Griffweise</string>
 <string name="clef">Notenschlüssel</string>
 <string name="instrument_title">Wählen Sie die Musikinstrument</string>
+<string name="listen">Zuhören</string>
+<string name="stopListening">Nicht zuhören</string>
 <string-array name="instrument_items">
     <item>Sopraninoblockflöte</item>
     <item>Sopranblockflöte</item>
@@ -12,6 +14,7 @@
     <item>Tenorblockflöte</item>
     <item>Bassblockflöte</item>
     <item>Tin Whistle in D</item>
+    <item>Tin Whistle in G</item>
 </string-array>
 <string name="fingering_title">Wählen Sie die Blockflötengriffe</string>
 <string-array name="fingering_items">

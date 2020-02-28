@@ -13,7 +13,8 @@
         <item>Alto recorder</item>
         <item>Tenor recorder</item>
         <item>Bass recorder</item>
-        <item>Tin Whistle in D</item>
+        <item>Tin whistle in D</item>
+        <item>Tin whistle in G</item>
     </string-array>
     <string name="fingering_title">Select recorder fingering</string>
     <string-array name="fingering_items">

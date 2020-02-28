@@ -5,6 +5,8 @@
     <string name="fingering">Doigté</string>
     <string name="clef">Clé</string>
     <string name="instrument_title">Sélectionner l\'instrument</string>
+    <string name="listen">Écouter</string>
+    <string name="stopListening">Ne pas écouter</string>
     <string-array name="instrument_items">
         <item>Sopranino flûte</item>
         <item>Soprano flûte</item>
@@ -12,6 +14,7 @@
         <item>Tenor flûte</item>
         <item>Basse flûte</item>
         <item>Tin whistle en ré</item>
+        <item>Tin whistle en sol</item>
     </string-array>
     <string name="fingering_title">Sélectionner le doigté de la flûte</string>
     <string-array name="fingering_items">

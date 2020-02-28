@@ -4,6 +4,8 @@
     <string name="instrument">Nástroj</string>
     <string name="fingering">Prstoklad</string>
     <string name="clef">Klíč</string>
+    <string name="listen">Naslouchat</string>
+    <string name="stopListening">Nenaslouchat</string>
     <string name="instrument_title">Vyberte typ flétny</string>
     <string-array name="instrument_items">
         <item>Sopraninová flétna</item>
@@ -11,7 +13,8 @@
         <item>Altová flétna</item>
         <item>Tenorová flétna</item>
         <item>Basová flétna</item>
-        <item>Irská flétna v D</item>
+        <item>Irská píšťalka v D</item>
+        <item>Irská píšťalka v G</item>
     </string-array>
     <string name="fingering_title">Vyberte typ vaší flétny</string>
     <string-array name="fingering_items">
