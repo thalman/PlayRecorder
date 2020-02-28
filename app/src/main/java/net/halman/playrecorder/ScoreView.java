@@ -58,7 +58,7 @@ public class ScoreView extends View {
 
     private double scalefactor = 1.0;
     private int score_offset_x = 0;
-    private int score_offset_y = 180;
+    private int score_offset_y = 200;
     private int score_height = 450;
     private int score_width = 450;
     private int note_position = 350;
