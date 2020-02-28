@@ -143,7 +143,7 @@ public class RecorderApp {
     }
 
     ArrayList<Grip> grips() {
-        return musical_instrument.grips(scale, apparent_note);
+        return musical_instrument.grips(scale, musical_instrument.apparentNoteToRealNote(apparent_note));
     }
 
     int noteNameIndex()

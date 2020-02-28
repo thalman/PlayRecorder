@@ -49,11 +49,11 @@ public abstract class MusicalInstrument {
         return instrument_type;
     }
 
-    public boolean canPlay(Scale scale, Note note) {
-        return (grips(scale, note) != null);
+    public boolean canPlay(Scale scale, Note realNote) {
+        return (grips(scale, realNote) != null);
     }
 
-    abstract public ArrayList<Grip> grips(Scale scale, Note note);
+    abstract public ArrayList<Grip> grips(Scale scale, Note realNote);
 
     Hole hole(int orientation, int index) {
         if (orientation < 0 || orientation > 1) {

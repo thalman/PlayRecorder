@@ -20,8 +20,9 @@ public class TinWhistle extends MusicalInstrument {
         }
 
         number_of_holes = 6;
-        realLowestNote(new Note(Note.d4, Note.Accidentals.RELEASE));
-        realHighestNote(new Note(Note.e6, Note.Accidentals.RELEASE));
+        realLowestNote(new Note(Note.d5, Note.Accidentals.RELEASE));
+        realHighestNote(new Note(Note.e7, Note.Accidentals.RELEASE));
+        scoreOffset(-12);
         setFingering();
         setHoles();
     }
@@ -196,10 +197,9 @@ public class TinWhistle extends MusicalInstrument {
     }
 
     @Override
-    public ArrayList<Grip> grips(Scale scale, Note apparentNote)
+    public ArrayList<Grip> grips(Scale scale, Note realNote)
     {
-        Note tmp = apparentNoteToRealNote(apparentNote);
-        int idx = scale.noteAbsoluteValue(tmp) - scale.noteAbsoluteValue(realLowestNote());
+        int idx = scale.noteAbsoluteValue(realNote) - scale.noteAbsoluteValue(realLowestNote());
         if ((idx >= 0) && (idx < grips.size())) {
             return grips.get(idx);
         }

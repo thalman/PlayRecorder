@@ -507,10 +507,9 @@ public class Recorder extends MusicalInstrument {
     }
 
     @Override
-    public ArrayList<Grip> grips(Scale scale, Note apparentNote)
+    public ArrayList<Grip> grips(Scale scale, Note realNote)
     {
-        Note tmp = apparentNoteToRealNote(apparentNote);
-        int idx = scale.noteAbsoluteValue(tmp) - scale.noteAbsoluteValue(realLowestNote());
+        int idx = scale.noteAbsoluteValue(realNote) - scale.noteAbsoluteValue(realLowestNote());
         if ((idx >= 0) && (idx < grips.size())) {
             return grips.get(idx);
         }
