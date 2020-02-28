@@ -23,9 +23,9 @@ public abstract class MusicalInstrument {
 
     protected int number_of_holes;
     protected int instrument_type;
-    protected Note lowest_note;
-    protected Note highest_note;
-    protected int score_offset;
+    private Note lowest_note;
+    private Note highest_note;
+    private int score_offset;
 
     protected ArrayList<ArrayList<Hole>> holesPositions = null;
 
@@ -70,17 +70,53 @@ public abstract class MusicalInstrument {
         }
     }
 
-    Note lowestNote () {
+    Note realLowestNote() {
+        return lowest_note;
+    }
+
+    void realLowestNote(Note n) {
+        lowest_note = new Note(n);
+    }
+
+    Note realHighestNote() {
+        return lowest_note;
+    }
+
+    void realHighestNote(Note n) {
+        highest_note = new Note(n);
+    }
+
+    Note apparentLowestNote () {
         if (lowest_note == null) {
             return null;
         }
         return new Note(lowest_note.value() + score_offset, lowest_note.accidentals());
     }
 
-    Note highestNote () {
+    Note apparentHighestNote () {
         if (highest_note == null) {
             return null;
         }
         return new Note(highest_note.value() + score_offset, highest_note.accidentals());
+    }
+
+    int scoreOffset()
+    {
+        return score_offset;
+    }
+
+    void scoreOffset(int offset)
+    {
+        score_offset = offset;
+    }
+
+    Note apparentNoteToRealNote(Note n)
+    {
+        return new Note(n.value() - score_offset, n.accidentals());
+    }
+
+    Note realNoteToApparentNote(Note n)
+    {
+        return new Note(n.value() + score_offset, n.accidentals());
     }
 }

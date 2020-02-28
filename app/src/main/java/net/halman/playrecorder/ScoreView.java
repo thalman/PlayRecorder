@@ -236,7 +236,7 @@ public class ScoreView extends View {
         // debug("pos " + Integer.toString(position) + " sh" + Integer.toString(score_height), canvas);
         int y = score_offset_y + 2 + 5 * 20 - position * 10;
         putDrawable(note_position, y, note, canvas);
-        switch (activity.app.note.accidentals()) {
+        switch (activity.app.apparent_note.accidentals()) {
             case SHARP:
                 putDrawable(note_position - 40, y, sharp, canvas);
                 break;

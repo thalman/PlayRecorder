@@ -88,33 +88,33 @@ public class Recorder extends MusicalInstrument {
         switch (instrument_type) {
             case Constants.RECORDER_SOPRANINO_BAROQUE:
             case Constants.RECORDER_SOPRANINO_GERMAN:
-                lowest_note = new Note(Note.f5, Note.Accidentals.RELEASE);
-                highest_note = new Note(Note.c7, Note.Accidentals.RELEASE);
-                score_offset = -12;
+                realLowestNote(new Note(Note.f5, Note.Accidentals.RELEASE));
+                realHighestNote(new Note(Note.c7, Note.Accidentals.RELEASE));
+                scoreOffset(-12);
                 break;
             case Constants.RECORDER_SOPRANO_BAROQUE:
             case Constants.RECORDER_SOPRANO_GERMAN:
-                lowest_note = new Note(Note.c5, Note.Accidentals.RELEASE);
-                highest_note = new Note(Note.g7, Note.Accidentals.RELEASE);
-                score_offset = -12;
+                realLowestNote(new Note(Note.c5, Note.Accidentals.RELEASE));
+                realHighestNote(new Note(Note.g7, Note.Accidentals.RELEASE));
+                scoreOffset(-12);
                 break;
             case Constants.RECORDER_ALT_BAROQUE:
             case Constants.RECORDER_ALT_GERMAN:
-                lowest_note = new Note(Note.f4, Note.Accidentals.RELEASE);
-                highest_note = new Note(Note.c6, Note.Accidentals.RELEASE);
-                score_offset = 0;
+                realLowestNote(new Note(Note.f4, Note.Accidentals.RELEASE));
+                realHighestNote(new Note(Note.c6, Note.Accidentals.RELEASE));
+                scoreOffset(0);
                 break;
             case Constants.RECORDER_TENOR_BAROQUE:
             case Constants.RECORDER_TENOR_GERMAN:
-                lowest_note = new Note(Note.c4, Note.Accidentals.RELEASE);
-                highest_note = new Note(Note.g6, Note.Accidentals.RELEASE);
-                score_offset = 0;
+                realLowestNote(new Note(Note.c4, Note.Accidentals.RELEASE));
+                realHighestNote(new Note(Note.g6, Note.Accidentals.RELEASE));
+                scoreOffset(0);
                 break;
             case Constants.RECORDER_BASS_BAROQUE:
             case Constants.RECORDER_BASS_GERMAN:
-                lowest_note = new Note(Note.f3, Note.Accidentals.RELEASE);
-                highest_note = new Note(Note.c5, Note.Accidentals.RELEASE);
-                score_offset = 12;
+                realLowestNote(new Note(Note.f3, Note.Accidentals.RELEASE));
+                realHighestNote(new Note(Note.c5, Note.Accidentals.RELEASE));
+                scoreOffset(12);
                 break;
         }
     }
@@ -507,10 +507,10 @@ public class Recorder extends MusicalInstrument {
     }
 
     @Override
-    public ArrayList<Grip> grips(Scale scale, Note note)
+    public ArrayList<Grip> grips(Scale scale, Note apparentNote)
     {
-        Note tmp = new Note(note.value() - score_offset, note.accidentals());
-        int idx = scale.noteAbsoluteValue(tmp) - scale.noteAbsoluteValue(lowest_note);
+        Note tmp = apparentNoteToRealNote(apparentNote);
+        int idx = scale.noteAbsoluteValue(tmp) - scale.noteAbsoluteValue(realLowestNote());
         if ((idx >= 0) && (idx < grips.size())) {
             return grips.get(idx);
         }

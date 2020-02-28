@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         app.clef(sharedPref.getInt("score-clef", 0));
         app.instrument(sharedPref.getInt("instrument-type", Constants.RECORDER_SOPRANO_BAROQUE));
         app.lastRecorderFingering(sharedPref.getInt("recorder-fingering", Recorder.BAROQUE));
-        app.note(
+        app.apparentNote(
             sharedPref.getInt("note-value", 0),
             sharedPref.getInt("note-accidentals", 0)
         );
@@ -439,7 +439,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        app.note(n);
+        app.realNote(n);
         Log.d("FREQUENCY", "Note: " + n.value() + " " + n.accidentals());
         grip.onFrequency(true, freq100, freq100 - app.scale.noteToFrequency(n));
         grip.invalidate();

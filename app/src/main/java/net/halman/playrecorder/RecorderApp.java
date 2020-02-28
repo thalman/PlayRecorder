@@ -24,23 +24,23 @@ import static net.halman.playrecorder.Scale.Clefs.G;
 
 public class RecorderApp {
     public Scale scale = new Scale(0);
-    public Note note = new Note(Note.c4, Note.Accidentals.NONE);
+    public Note apparent_note = new Note(Note.c4, Note.Accidentals.NONE);
     private MusicalInstrument musical_instrument = new Recorder();
     private int last_recorder_fingering = Recorder.BAROQUE;
 
     int notePosition()
     {
-        return scale.notePosition(note);
+        return scale.notePosition(apparent_note);
     }
 
     void noteByPosition(int position)
     {
-        note = scale.noteByPosition(position);
+        apparent_note = scale.noteByPosition(position);
         if (! canPlay()) {
             if (position < 5) {
-                lowestNote();
+                apparentLowestNote();
             } else {
-                highestNote();
+                apparentHighestNote();
             }
         }
     }
@@ -60,58 +60,57 @@ public class RecorderApp {
         lastRecorderFingering(Recorder.BAROQUE);
     }
 
-    void lowestNote()
+    void apparentLowestNote()
     {
-        Note lowest = musical_instrument.lowestNote();
+        Note lowest = musical_instrument.apparentLowestNote();
         Note tmp = new Note(lowest.value(), Note.Accidentals.NONE);
         if (scale.noteAbsoluteValue(tmp) == scale.noteAbsoluteValue(lowest)) {
-            note.set(tmp);
+            apparent_note.set(tmp);
         } else {
-            note.set(lowest);
+            apparent_note.set(lowest);
         }
     }
 
-    void highestNote()
+    void apparentHighestNote()
     {
-        note.set(musical_instrument.highestNote());
-        Note highest = musical_instrument.highestNote();
+        Note highest = musical_instrument.apparentHighestNote();
         Note tmp = new Note(highest.value(), Note.Accidentals.NONE);
         if (scale.noteAbsoluteValue(tmp) == scale.noteAbsoluteValue(highest)) {
-            note.set(tmp);
+            apparent_note.set(tmp);
         } else {
-            note.set(highest);
+            apparent_note.set(highest);
         }
     }
 
     void noteUp()
     {
-        scale.noteUp(note);
+        scale.noteUp(apparent_note);
         if (!canPlay()) {
-            lowestNote();
+            apparentLowestNote();
         }
     }
 
     void noteDown()
     {
-        scale.noteDown(note);
+        scale.noteDown(apparent_note);
         if (!canPlay()) {
-            highestNote();
+            apparentHighestNote();
         }
     }
 
     void noteUpHalf()
     {
-        scale.noteUpHalf(note);
+        scale.noteUpHalf(apparent_note);
         if (!canPlay()) {
-            lowestNote();
+            apparentLowestNote();
         }
     }
 
     void noteDownHalf()
     {
-        scale.noteDownHalf(note);
+        scale.noteDownHalf(apparent_note);
         if (!canPlay()) {
-            highestNote();
+            apparentHighestNote();
         }
     }
 
@@ -144,17 +143,17 @@ public class RecorderApp {
     }
 
     ArrayList<Grip> grips() {
-        return musical_instrument.grips(scale, note);
+        return musical_instrument.grips(scale, apparent_note);
     }
 
     int noteNameIndex()
     {
-        return scale.noteNameIndex(note);
+        return scale.noteNameIndex(apparent_note);
     }
 
     boolean canPlay()
     {
-        return musical_instrument.canPlay(scale, note);
+        return musical_instrument.canPlay(scale, musical_instrument.apparentNoteToRealNote(apparent_note));
     }
 
     boolean canPlay(Note n)
@@ -189,12 +188,12 @@ public class RecorderApp {
 
     int noteValue()
     {
-        return note.value();
+        return apparent_note.value();
     }
 
     int noteAccidentalsAsInt()
     {
-        switch(note.accidentals()) {
+        switch(apparent_note.accidentals()) {
             case NONE:
                 return 0;
             case RELEASE:
@@ -208,12 +207,17 @@ public class RecorderApp {
         }
     }
 
-    void note(Note n)
+    void realNote(Note real)
     {
-        note.set(n);
+        apparent_note.set(musical_instrument.realNoteToApparentNote(real));
     }
 
-    void note(int value, int acc)
+    void apparentNote(Note apparent)
+    {
+        apparent_note.set(apparent);
+    }
+
+    void apparentNote(int value, int acc)
     {
         Note.Accidentals a;
 
@@ -232,7 +236,13 @@ public class RecorderApp {
                 a = Note.Accidentals.FLAT;
                 break;
         }
-        note.set(value, a);
+        apparent_note.set(value, a);
+    }
+
+    void realNote(int value, int acc)
+    {
+        apparentNote(value, acc);
+        apparent_note = musical_instrument.realNoteToApparentNote(apparent_note);
     }
 
     int numberOfHoles()
