@@ -66,7 +66,7 @@ public class GripView extends View {
     private int current_orientation = Orientation.UP;
     private boolean listening = false;
     private int delta100 = 0;
-    private boolean signal_detected;
+    private int signal_detected = 0;
 
     private Map<GripView.Buttons, Rect> buttonPositions = new HashMap<GripView.Buttons, Rect>() {{
         put(Buttons.SWITCH, new Rect(0, grip_height - 80, 70, grip_height - 10));
@@ -241,7 +241,7 @@ public class GripView extends View {
         // TODO use logarithmic scale here
         int x = pos.centerX() + delta100 / 100;
 
-        if (signal_detected) {
+        if (signal_detected > 0) {
             pointer = pointer_far;
             if (delta100 < 1000 && delta100 > -1000) {
                 pointer = pointer_near;
@@ -303,11 +303,18 @@ public class GripView extends View {
 
     public void onFrequency(boolean signal_detected, int freq100, int delta100)
     {
-        this.signal_detected = signal_detected;
+        if (signal_detected) {
+            this.signal_detected = 3;
+        }
+
         if (signal_detected) {
             this.delta100 = delta100;
         } else {
-            this.delta100 /= 2;
+            if (this.signal_detected > 0) {
+                this.signal_detected--;
+            } else {
+                this.delta100 /= 2;
+            }
         }
         invalidate();
     }
