@@ -182,10 +182,7 @@ public class Frequency implements Runnable {
                 maxIndex = j;
             }
         }
-        if (maxVal < 1500*1500) {
-            // weak signal, return 0
-            return 0.0;
-        }
+
         return (sampleRate * maxIndex) / (double)( FFT_SIZE );
     }
 
