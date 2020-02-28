@@ -358,6 +358,9 @@ public class MainActivity extends AppCompatActivity {
                     case 5:
                         app.instrument(Constants.TIN_WHISTLE_D);
                         break;
+                    case 6:
+                        app.instrument(Constants.TIN_WHISTLE_G);
+                        break;
                 }
                 grip.invalidate();
                 score.invalidate();

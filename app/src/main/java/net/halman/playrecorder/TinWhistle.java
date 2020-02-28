@@ -15,13 +15,24 @@ public class TinWhistle extends MusicalInstrument {
     public TinWhistle(int type)
     {
         super(type);
-        if (type != Constants.TIN_WHISTLE_D) {
+        if (!Constants.isTinWhistle(type)) {
             instrument_type = Constants.TIN_WHISTLE_D;
         }
 
         number_of_holes = 6;
-        realLowestNote(new Note(Note.d5, Note.Accidentals.RELEASE));
-        realHighestNote(new Note(Note.e7, Note.Accidentals.RELEASE));
+        switch (type) {
+            default:
+            case Constants.TIN_WHISTLE_D:
+                realLowestNote(new Note(Note.d5, Note.Accidentals.RELEASE));
+                realHighestNote(new Note(Note.e7, Note.Accidentals.RELEASE));
+                break;
+            case Constants.TIN_WHISTLE_G:
+                realLowestNote(new Note(Note.g5, Note.Accidentals.RELEASE));
+                realHighestNote(new Note(Note.a6 + 12, Note.Accidentals.RELEASE));
+                break;
+
+        }
+
         scoreOffset(-12);
         setFingering();
         setHoles();
