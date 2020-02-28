@@ -285,7 +285,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (Constants.isTinWhistle(app.instrumentType())) {
-            setTitle(instruments[5]);
+            switch (app.instrumentType()) {
+                case Constants.TIN_WHISTLE_D:
+                    setTitle(instruments[5]);
+                    break;
+                case Constants.TIN_WHISTLE_G:
+                    setTitle(instruments[6]);
+                    break;
+            }
             return;
         }
         setTitle("Play Recorder");
