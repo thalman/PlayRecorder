@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Play Recorder</string>
+    <string name="instrument">Instrumento</string>
+    <string name="fingering">Digitación</string>
+    <string name="clef">Clave</string>
+    <string name="listen">Grabar</string>
+    <string name="stopListening">Parar grabación</string>
+    <string name="instrument_title">Seleccionar instrumento</string>
+    <string-array name="instrument_items">
+        <item>Flauta sopranino</item>
+        <item>Flauta soprano</item>
+        <item>Flauta alta</item>
+        <item>Flauta tenor</item>
+        <item>Flauta baja</item>
+        <item>Silbato de estaño en re</item>
+        <item>Silbato de estaño en sol</item>
+    </string-array>
+    <string name="fingering_title">Seleccionar la digitación de la flauta</string>
+    <string-array name="fingering_items">
+        <item>Barroca</item>
+        <item>Alemana</item>
+    </string-array>
+    <string name="clef_title">Seleccionar la clave</string>
+    <string-array name="clef_items">
+        <item>sol</item>
+        <item>fa</item>
+    </string-array>
+    <string name="app_title">%1$s (%2$s)</string>
+    <string-array name="note_names">
+        <item>do</item>
+        <item>do♯/re♭</item>
+        <item>re</item>
+        <item>re♯/mi♭</item>
+        <item>mi</item>
+        <item>fa</item>
+        <item>fa♯/sol♭</item>
+        <item>sol</item>
+        <item>sol♯/la♭</item>
+        <item>la</item>
+        <item>la♯/si♭</item>
+        <item>si</item>
+    </string-array>
+</resources>
