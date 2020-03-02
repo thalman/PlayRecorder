@@ -36,6 +36,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     ScoreView score = null;
     GripView grip = null;
     Thread frequencyAnalyzer = null;
+    boolean keepScreenOn = false;
     PointF lastTouch = new PointF();
 
     View.OnTouchListener scoreOnTouchListener = new View.OnTouchListener() {
@@ -123,10 +125,10 @@ public class MainActivity extends AppCompatActivity {
         item.setVisible(Constants.isRecorder(app.instrumentType()));
 
         item = menu.findItem(R.id.actionListen);
-        item.setVisible(frequencyAnalyzer == null);
+        item.setChecked(frequencyAnalyzer != null);
 
-        item = menu.findItem(R.id.actionStopListening);
-        item.setVisible(frequencyAnalyzer != null);
+        item = menu.findItem(R.id.actionKeepScreenOn);
+        item.setChecked(keepScreenOn);
 
         return true;
     }
@@ -145,14 +147,12 @@ public class MainActivity extends AppCompatActivity {
                 onClef();
                 return true;
             case R.id.actionListen:
-                if (frequencyAnalyzer == null) {
-                    onListen();
-                }
+                item.setChecked(!item.isChecked());
+                onListen(item.isChecked());
                 return true;
-            case R.id.actionStopListening:
-                if (frequencyAnalyzer != null) {
-                    onListen();
-                }
+            case R.id.actionKeepScreenOn:
+                item.setChecked(!item.isChecked());
+                onKeepScreenOn(item.isChecked());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -209,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("note-value", app.noteValue());
         editor.putInt("note-accidentals", app.noteAccidentalsAsInt());
         editor.putInt("grip-orientation", grip.orientation());
+        editor.putBoolean("keep-screen-on", keepScreenOn);
         editor.apply();
     }
 
@@ -225,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
             sharedPref.getInt("note-accidentals", 0)
         );
         grip.orientation(sharedPref.getInt("grip-orientation", Orientation.UP));
+        onKeepScreenOn(sharedPref.getBoolean("keep-screen-on", false));
     }
 
     public void updateTitle() {
@@ -409,27 +411,29 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case 42:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    onListen();
+                    onListen(true);
                 }
         }
     }
 
-    public void onListen()
+    public void onListen(boolean listen)
     {
-        if (frequencyAnalyzer == null) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 42);
-            } else {
-                frequencyAnalyzer = new Thread(new Frequency(freqHandler));
-                frequencyAnalyzer.start();
-                grip.listen(true);
-                invalidateOptionsMenu();
+        if (!listen) {
+            if (frequencyAnalyzer != null) {
+                frequencyAnalyzer.interrupt();
+                frequencyAnalyzer = null;
             }
-        } else {
-            frequencyAnalyzer.interrupt();
-            frequencyAnalyzer = null;
             grip.listen(false);
+            invalidateOptionsMenu();
+            return;
+        }
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 42);
+        } else {
+            frequencyAnalyzer = new Thread(new Frequency(freqHandler));
+            frequencyAnalyzer.start();
+            grip.listen(true);
             invalidateOptionsMenu();
         }
     }
@@ -454,5 +458,17 @@ public class MainActivity extends AppCompatActivity {
         grip.onFrequency(true, freq100, freq100 - app.scale.noteToFrequency(n));
         grip.invalidate();
         score.invalidate();
+    }
+
+    private void onKeepScreenOn(boolean keep)
+    {
+        keepScreenOn = keep;
+        if (keep) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+
+        invalidateOptionsMenu();
     }
 }

@@ -14,10 +14,12 @@
         android:title="@string/clef" />
     <item
         android:id="@+id/actionListen"
+        android:checkable="true"
         android:orderInCategory="130"
         android:title="@string/listen" />
     <item
-        android:id="@+id/actionStopListening"
+        android:id="@+id/actionKeepScreenOn"
+        android:checkable="true"
         android:orderInCategory="140"
-        android:title="@string/stopListening" />
+        android:title="@string/keepScreenOn" />
 </menu>

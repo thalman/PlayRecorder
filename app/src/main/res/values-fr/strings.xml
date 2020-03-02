@@ -6,7 +6,7 @@
     <string name="clef">Clé</string>
     <string name="instrument_title">Sélectionner l\'instrument</string>
     <string name="listen">Écouter</string>
-    <string name="stopListening">Ne pas écouter</string>
+    <string name="keepScreenOn">Maintenir l\'écran allumé</string>
     <string-array name="instrument_items">
         <item>Sopranino flûte</item>
         <item>Soprano flûte</item>

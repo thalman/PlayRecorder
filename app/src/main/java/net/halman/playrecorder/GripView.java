@@ -146,7 +146,7 @@ public class GripView extends View {
                         changeOrientation();
                         return;
                     case MEASURE:
-                        if (activity != null) { activity.onListen(); }
+                        if (activity != null) { activity.onListen(!listening); }
                         return;
                 }
             }
