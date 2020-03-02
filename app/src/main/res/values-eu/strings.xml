@@ -5,7 +5,7 @@
     <string name="fingering">Digitazioa</string>
     <string name="clef">Ikurra</string>
     <string name="listen">Grabatu</string>
-    <string name="stopListening">Grabaketa gelditu</string>
+    <string name="keepScreenOn">Mantendu pantaila piztuta</string>
     <string name="instrument_title">Instrumentua aukeratu</string>
     <string-array name="instrument_items">
         <item>Txirula sopraninoa</item>
@@ -26,7 +26,7 @@
         <item>sol</item>
         <item>fa</item>
     </string-array>
-    <string name="app_title">%1$s (%2$s)</string>
+    <string name="recorder_app_title">%1$s (%2$s)</string>
     <string-array name="note_names">
         <item>do</item>
         <item>do♯/re♭</item>
