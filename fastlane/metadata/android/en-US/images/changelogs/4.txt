@@ -1,0 +1,2 @@
+* Ability to rotate the grip
+* Saving/loading app state improved

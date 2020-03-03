@@ -1,0 +1,4 @@
+* The app can listen to the player and show the note/grip
+* Tin whistle grips
+* Translation into German, Spanish & Basque
+* The app can keep the screen on
