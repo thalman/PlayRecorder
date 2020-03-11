@@ -59,29 +59,29 @@ public class Recorder extends MusicalInstrument {
     }
 
     private void setHoles() {
-        hole(UP, 0, 150, 1.5);
-        hole(UP, 0, 220, 1.5);
-        hole(UP, 0, 270, 1.5);
-        hole(UP, 0, 320, 1.5);
-        hole(UP, 0, 390, 1.5);
-        hole(UP, 0, 440, 1.5);
-        hole(UP, -15, 490, 1.0);
-        hole(UP, +15, 490, 1.0);
-        hole(UP, -15, 530, 1.0);
-        hole(UP, +15, 530, 1.0);
-        hole(UP, 0, 580, 2.0);
+        hole(UP, 0, 100, 1.0);
+        hole(UP, 0, 150, 1.0);
+        hole(UP, 0, 180, 1.0);
+        hole(UP, 0, 210, 1.0);
+        hole(UP, 0, 260, 1.0);
+        hole(UP, 0, 290, 1.0);
+        hole(UP, -12, 320, 0.9);
+        hole(UP, +12, 320, 0.9);
+        hole(UP, -12, 350, 0.9);
+        hole(UP, +12, 350, 0.9);
+        hole(UP, 0, 380, 1.0);
 
-        hole(DOWN, 0, 530, 1.5);
-        hole(DOWN, 0, 460, 1.5);
-        hole(DOWN, 0, 410, 1.5);
-        hole(DOWN, 0, 360, 1.5);
-        hole(DOWN, 0, 290, 1.5);
-        hole(DOWN, 0, 240, 1.5);
-        hole(DOWN, +15, 190, 1.0);
-        hole(DOWN, -15, 190, 1.0);
-        hole(DOWN, +15, 150, 1.0);
-        hole(DOWN, -15, 150, 1.0);
-        hole(DOWN, 0, 100, 2.0  );
+        hole(DOWN, 0, 350, 1.0);
+        hole(DOWN, 0, 300, 1.0);
+        hole(DOWN, 0, 270, 1.0);
+        hole(DOWN, 0, 240, 1.0);
+        hole(DOWN, 0, 190, 1.0);
+        hole(DOWN, 0, 160, 1.0);
+        hole(DOWN, +12, 130, 0.9);
+        hole(DOWN, -12, 130, 0.9);
+        hole(DOWN, +12, 100, 0.9);
+        hole(DOWN, -12, 100, 0.9);
+        hole(DOWN, 0, 70, 1.0  );
     }
 
     private void setLimits() {

@@ -38,7 +38,11 @@ public class ScoreView extends View {
     private Drawable fclef = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_f_clef, null);
     private Drawable note = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_whole_note, null);
     private Drawable arrowUp = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_up, null);
+    private Drawable arrowUp05 = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_up05, null);
     private Drawable arrowDown = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_down, null);
+    private Drawable arrowDown05 = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_down05, null);
+    private Drawable sharpPlus = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp_plus, null);
+    private Drawable flatPlus = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat_plus, null);
     private Drawable sharp = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp, null);
     private Drawable flat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat, null);
     private Drawable natural = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_natural, null);
@@ -267,12 +271,12 @@ public class ScoreView extends View {
 
     void drawButtons(Canvas canvas)
     {
-        putDrawable(buttonPositions.get(Buttons.UP).centerX(), buttonPositions.get(Buttons.UP).centerY(), arrowUp, canvas, 1.3);
-        putDrawable(buttonPositions.get(Buttons.DOWN).centerX(), buttonPositions.get(Buttons.DOWN).centerY(), arrowDown, canvas, 1.3);
-        putDrawable(buttonPositions.get(Buttons.HALFUP).centerX(), buttonPositions.get(Buttons.UP).centerY(), arrowUp, canvas, 1.0);
-        putDrawable(buttonPositions.get(Buttons.HALFDOWN).centerX(), buttonPositions.get(Buttons.DOWN).centerY(), arrowDown, canvas, 1.0);
-        putDrawable(buttonPositions.get(Buttons.SCALEUP).centerX(), buttonPositions.get(Buttons.UP).centerY(), arrowUp, canvas, 1.3);
-        putDrawable(buttonPositions.get(Buttons.SCALEDOWN).centerX(), buttonPositions.get(Buttons.DOWN).centerY(), arrowDown, canvas, 1.3);
+        putDrawable(buttonPositions.get(Buttons.UP).centerX(), buttonPositions.get(Buttons.UP).centerY(), arrowUp, canvas);
+        putDrawable(buttonPositions.get(Buttons.DOWN).centerX(), buttonPositions.get(Buttons.DOWN).centerY(), arrowDown, canvas);
+        putDrawable(buttonPositions.get(Buttons.HALFUP).centerX(), buttonPositions.get(Buttons.UP).centerY(), arrowUp05, canvas);
+        putDrawable(buttonPositions.get(Buttons.HALFDOWN).centerX(), buttonPositions.get(Buttons.DOWN).centerY(), arrowDown05, canvas);
+        putDrawable(buttonPositions.get(Buttons.SCALEUP).centerX(), buttonPositions.get(Buttons.UP).centerY(), sharpPlus, canvas);
+        putDrawable(buttonPositions.get(Buttons.SCALEDOWN).centerX(), buttonPositions.get(Buttons.DOWN).centerY(), flatPlus, canvas);
     }
 
     private void calculateScale() {

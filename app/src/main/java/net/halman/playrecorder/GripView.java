@@ -58,7 +58,7 @@ public class GripView extends View {
     private Drawable pointer_no_signal = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pointer, null);
 
     private double scalefactor = 1;
-    private int grip_width = 610;
+    private int grip_width = 450;
     private int grip_height = grip_width;
     private int grip_center_x = 0;
     private int grip_center_y = 0;
@@ -185,7 +185,7 @@ public class GripView extends View {
 
     private void drawButtons(Canvas canvas)
     {
-        putDrawable(buttonPositions.get(Buttons.SWITCH).centerX(), buttonPositions.get(Buttons.SWITCH).centerY(), switch_direction, canvas, 1.6);
+        putDrawable(buttonPositions.get(Buttons.SWITCH).centerX(), buttonPositions.get(Buttons.SWITCH).centerY(), switch_direction, canvas, 1.0);
         putDrawable(buttonPositions.get(Buttons.MEASURE).centerX(), buttonPositions.get(Buttons.MEASURE).centerY(), measure, canvas, 1.0);
     }
 
@@ -194,7 +194,7 @@ public class GripView extends View {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
-        int height = (int)scale(50);
+        int height = (int)scale(30);
         paint.setTextSize(height);
 
         String txt_space = txt.replace("♯", " ").replace("♭"," ");
@@ -203,7 +203,7 @@ public class GripView extends View {
         int ypos = scale(y) - height / 2 + grip_center_y;
         c.drawText(txt_space, xpos, ypos, paint);
 
-        double zoom = scale(100) * 0.01;
+        double zoom = scale(60) * 0.01;
         int idx = txt.indexOf("♯");
         if (idx > 0) {
             String tmp = txt_space.substring(0, idx);
@@ -239,7 +239,7 @@ public class GripView extends View {
 
         Rect pos = buttonPositions.get(Buttons.MEASURE);
         // TODO use logarithmic scale here
-        int x = pos.centerX() + delta100 / 100;
+        int x = pos.centerX() + delta100 / 75;
 
         if (signal_detected > 0) {
             pointer = pointer_far;
@@ -253,7 +253,7 @@ public class GripView extends View {
             pointer = pointer_no_signal;
         }
 
-        putDrawable(x, pos.top, pointer, canvas, 1.0);
+        putDrawable(x, pos.top + 10, pointer, canvas, 1.0);
     }
 
     private void drawGrip(ArrayList<Grip> grips, Canvas canvas)
@@ -297,7 +297,7 @@ public class GripView extends View {
             drawButtons(canvas);
             drawGrip(grips, canvas);
             drawPointer(canvas);
-            drawText(grip_width / 2, 90, noteNames[activity.app.noteNameIndex()], canvas);
+            drawText(grip_width / 2, 50, noteNames[activity.app.noteNameIndex()], canvas);
         }
     }
 

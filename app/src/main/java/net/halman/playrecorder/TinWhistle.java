@@ -39,19 +39,19 @@ public class TinWhistle extends MusicalInstrument {
     }
 
     private void setHoles() {
-        hole(UP, 0, 170, 1.5);
-        hole(UP, 0, 220, 1.5);
-        hole(UP, 0, 270, 1.5);
-        hole(UP, 0, 340, 1.5);
-        hole(UP, 0, 390, 1.5);
-        hole(UP, 0, 440, 1.5);
+        hole(UP, 0, 130, 1.2);
+        hole(UP, 0, 165, 1.2);
+        hole(UP, 0, 200, 1.2);
+        hole(UP, 0, 250, 1.2);
+        hole(UP, 0, 285, 1.2);
+        hole(UP, 0, 320, 1.2);
 
-        hole(DOWN, 0, 440, 1.5);
-        hole(DOWN, 0, 390, 1.5);
-        hole(DOWN, 0, 340, 1.5);
-        hole(DOWN, 0, 270, 1.5);
-        hole(DOWN, 0, 220, 1.5);
-        hole(DOWN, 0, 170, 1.5);
+        hole(DOWN, 0, 320, 1.2);
+        hole(DOWN, 0, 285, 1.2);
+        hole(DOWN, 0, 250, 1.2);
+        hole(DOWN, 0, 200, 1.2);
+        hole(DOWN, 0, 165, 1.2);
+        hole(DOWN, 0, 130, 1.2);
     }
 
     private Grip tinWhistleGrip(int h0, int h1, int h2, int h3,
