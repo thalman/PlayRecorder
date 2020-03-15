@@ -29,15 +29,15 @@ public abstract class MusicalInstrument {
     private int score_offset;
     private HashMap<Integer, ArrayList<Grip>> trill_grips = null;
 
-    protected ArrayList<ArrayList<Hole>> holesPositions = null;
+    protected ArrayList<ArrayList<Hole>> holes_positions = null;
 
     public MusicalInstrument(int type)
     {
         instrument_type = type;
         number_of_holes = 0;
-        holesPositions = new ArrayList<ArrayList<Hole>>();
-        holesPositions.add(new ArrayList<Hole>());
-        holesPositions.add(new ArrayList<Hole>());
+        holes_positions = new ArrayList<ArrayList<Hole>>();
+        holes_positions.add(new ArrayList<Hole>());
+        holes_positions.add(new ArrayList<Hole>());
         lowest_note = null;
         highest_note = null;
         score_offset = 0;
@@ -61,12 +61,12 @@ public abstract class MusicalInstrument {
         if (orientation < 0 || orientation > 1) {
             return null;
         }
-        return holesPositions.get(orientation).get(index);
+        return holes_positions.get(orientation).get(index);
     }
 
     void hole(int orientation, int x, int y, double zoom)
     {
-        ArrayList<Hole> list = holesPositions.get(orientation);
+        ArrayList<Hole> list = holes_positions.get(orientation);
         if (list != null) {
             list.add(new Hole(x, y, zoom));
         }
