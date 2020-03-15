@@ -27,7 +27,8 @@ public abstract class MusicalInstrument {
     private Note lowest_note;
     private Note highest_note;
     private int score_offset;
-    private SparseArray<ArrayList<Grip>> trill_grips = null;
+    private SparseArray<ArrayList<Grip>> instrument_grips = null;
+    private SparseArray<ArrayList<Grip>> instrument_trill_grips = null;
     private ArrayList<ArrayList<Hole>> holes_positions = null;
 
     public MusicalInstrument(int type)
@@ -53,8 +54,6 @@ public abstract class MusicalInstrument {
     public boolean canPlay(Scale scale, Note realNote) {
         return (grips(scale, realNote) != null);
     }
-
-    abstract public ArrayList<Grip> grips(Scale scale, Note realNote);
 
     Hole hole(int orientation, int index) {
         if (orientation < 0 || orientation > 1) {
@@ -121,32 +120,69 @@ public abstract class MusicalInstrument {
         return new Note(n.value() + score_offset, n.accidentals());
     }
 
+    void addGrip(int noteValue, Grip grip)
+    {
+        if (grip == null) {
+            return;
+        }
+
+        if (instrument_grips == null) {
+            instrument_grips = new SparseArray<>();
+        }
+
+        ArrayList<Grip> grips = instrument_grips.get(noteValue);
+        if (grips == null) {
+            grips = new ArrayList<>();
+            instrument_grips.put(noteValue, grips);
+        }
+
+        grips.add(grip);
+    }
+
+    ArrayList<Grip> getGrips(int noteValue) {
+        return instrument_grips.get(noteValue);
+    }
+
+    public ArrayList<Grip> grips(Scale scale, Note realNote)
+    {
+        int idx = scale.noteAbsoluteValue(realNote);
+        return getGrips(idx);
+    }
+
+    void grips(SparseArray<ArrayList<Grip>> array_of_grips)
+    {
+        instrument_grips = array_of_grips;
+    }
+
     boolean hasTrills()
     {
-        return trill_grips != null;
+        return instrument_trill_grips != null;
     }
 
     void addTrillGrip(int baseNoteValue, int higherNoteValue, Grip grip)
     {
-        if (trill_grips == null) {
-            trill_grips = new SparseArray<>();
+        if (instrument_trill_grips == null) {
+            instrument_trill_grips = new SparseArray<>();
         }
+
         int key = baseNoteValue + 100 * higherNoteValue;
-        ArrayList<Grip> grips = trill_grips.get(key);
+        ArrayList<Grip> grips = instrument_trill_grips.get(key);
+
         if (grips == null) {
             grips = new ArrayList<>();
-            trill_grips.put(key, grips);
+            instrument_trill_grips.put(key, grips);
         }
+
         grips.add(grip);
     }
 
     ArrayList<Grip> getTrillGrip(int baseNoteValue, int higherNoteValue) {
         int key = baseNoteValue + 100 * higherNoteValue;
-        return trill_grips.get(key);
+        return instrument_trill_grips.get(key);
     }
 
-    void clearTrillGrips()
+    void trillGrips(SparseArray<ArrayList<Grip>> array_of_grips)
     {
-        trill_grips = null;
+        instrument_trill_grips = array_of_grips;
     }
 }
