@@ -18,6 +18,7 @@
 package net.halman.playrecorder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class MusicalInstrument {
 
@@ -26,6 +27,7 @@ public abstract class MusicalInstrument {
     private Note lowest_note;
     private Note highest_note;
     private int score_offset;
+    private HashMap<Integer, ArrayList<Grip>> trill_grips = null;
 
     protected ArrayList<ArrayList<Hole>> holesPositions = null;
 
@@ -118,5 +120,29 @@ public abstract class MusicalInstrument {
     Note realNoteToApparentNote(Note n)
     {
         return new Note(n.value() + score_offset, n.accidentals());
+    }
+
+    boolean hasTrills()
+    {
+        return trill_grips != null;
+    }
+
+    void addTrillGrip(int baseNoteValue, int higherNoteValue, Grip grip)
+    {
+        if (trill_grips == null) {
+            trill_grips = new HashMap<>();
+        }
+        Integer key = baseNoteValue + 100 * higherNoteValue;
+        ArrayList<Grip> grips = trill_grips.get(key);
+        if (grips == null) {
+            grips = new ArrayList<>();
+            trill_grips.put(key, grips);
+        }
+        grips.add(grip);
+    }
+
+    void clearTrillGrips()
+    {
+        trill_grips = null;
     }
 }
