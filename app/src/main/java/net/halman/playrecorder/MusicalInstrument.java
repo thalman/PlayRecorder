@@ -17,8 +17,8 @@
 
 package net.halman.playrecorder;
 
+import android.util.SparseArray;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public abstract class MusicalInstrument {
 
@@ -27,9 +27,8 @@ public abstract class MusicalInstrument {
     private Note lowest_note;
     private Note highest_note;
     private int score_offset;
-    private HashMap<Integer, ArrayList<Grip>> trill_grips = null;
-
-    protected ArrayList<ArrayList<Hole>> holes_positions = null;
+    private SparseArray<ArrayList<Grip>> trill_grips = null;
+    private ArrayList<ArrayList<Hole>> holes_positions = null;
 
     public MusicalInstrument(int type)
     {
@@ -130,15 +129,20 @@ public abstract class MusicalInstrument {
     void addTrillGrip(int baseNoteValue, int higherNoteValue, Grip grip)
     {
         if (trill_grips == null) {
-            trill_grips = new HashMap<>();
+            trill_grips = new SparseArray<>();
         }
-        Integer key = baseNoteValue + 100 * higherNoteValue;
+        int key = baseNoteValue + 100 * higherNoteValue;
         ArrayList<Grip> grips = trill_grips.get(key);
         if (grips == null) {
             grips = new ArrayList<>();
             trill_grips.put(key, grips);
         }
         grips.add(grip);
+    }
+
+    ArrayList<Grip> getTrillGrip(int baseNoteValue, int higherNoteValue) {
+        int key = baseNoteValue + 100 * higherNoteValue;
+        return trill_grips.get(key);
     }
 
     void clearTrillGrips()
