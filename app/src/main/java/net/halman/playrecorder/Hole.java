@@ -23,6 +23,8 @@ public class Hole {
     public static final int HALFOPEN = 2;
     public static final int BELLOPEN = 3;
     public static final int BELLCLOSE = 4;
+    public static final int TRILL = 5;
+    public static final int TRILLONCE = 6;
 
     int x;
     int y;

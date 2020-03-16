@@ -71,20 +71,28 @@ public class Note {
     static final int e7 = e4 + 36;
     static final int f7 = f4 + 36;
     static final int g7 = g4 + 36;
+    static final int a7 = a4 + 36;
+    static final int b7 = b4 + 36;
+
+    static final int c8 = c4 + 48;
+
 
     private int value = 0;
     private Accidentals accidentals = Accidentals.NONE;
+    private boolean is_trill = false;
 
-    public Note(int value, Accidentals accidentals)
+    public Note(int value, Accidentals accidentals, boolean tr)
     {
         value (value);
         accidentals (accidentals);
+        trill(tr);
     }
 
     public Note(Note note)
     {
         this.value = note.value();
         this.accidentals = note.accidentals();
+        this.is_trill = note.trill();
     }
 
     void set(Note note)
@@ -95,10 +103,11 @@ public class Note {
         }
     }
 
-    void set(int value, Accidentals accidentals)
+    void set(int value, Accidentals accidentals, boolean trill)
     {
         this.value = value;
         this.accidentals = accidentals;
+        this.is_trill = trill;
     }
 
     int value()
@@ -121,4 +130,13 @@ public class Note {
         this.accidentals = accidentals;
     }
 
+    boolean trill()
+    {
+        return is_trill;
+    }
+
+    void trill(boolean t)
+    {
+        is_trill = t;
+    }
 }

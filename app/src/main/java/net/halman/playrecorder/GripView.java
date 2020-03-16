@@ -48,6 +48,8 @@ public class GripView extends View {
     private Drawable hole_open = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_empty, null);
     private Drawable hole_half = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_half, null);
     private Drawable hole_bell = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_bell, null);
+    private Drawable hole_trill = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_trill, null);
+    private Drawable hole_covered_once = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_co, null);
     private Drawable sharp = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp, null);
     private Drawable flat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat, null);
     private Drawable switch_direction = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_switch_direction, null);
@@ -189,12 +191,12 @@ public class GripView extends View {
         putDrawable(buttonPositions.get(Buttons.MEASURE).centerX(), buttonPositions.get(Buttons.MEASURE).centerY(), measure, canvas, 1.0);
     }
 
-    private void drawText(int x, int y, String txt, Canvas c)
+    private void drawText(int x, int y, int size, String txt, Canvas c)
     {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
-        int height = (int)scale(30);
+        int height = (int)scale(size);
         paint.setTextSize(height);
 
         String txt_space = txt.replace("♯", " ").replace("♭"," ");
@@ -259,6 +261,7 @@ public class GripView extends View {
     private void drawGrip(ArrayList<Grip> grips, Canvas canvas)
     {
         if ((grips == null) || (grips.size() == 0)) {
+            drawText(grip_width / 2, grip_height / 2 + 85, 100, "?", canvas);
             return;
         }
 
@@ -284,6 +287,12 @@ public class GripView extends View {
                     case Hole.BELLCLOSE:
                         putDrawable(x + h.x, h.y, hole_bell, canvas, h.zoom);
                         break;
+                    case Hole.TRILL:
+                        putDrawable(x + h.x, h.y, hole_trill, canvas, h.zoom);
+                        break;
+                    case Hole.TRILLONCE:
+                        putDrawable(x + h.x, h.y, hole_covered_once, canvas, h.zoom);
+                        break;
                 }
             }
         }
@@ -297,7 +306,7 @@ public class GripView extends View {
             drawButtons(canvas);
             drawGrip(grips, canvas);
             drawPointer(canvas);
-            drawText(grip_width / 2, 50, noteNames[activity.app.noteNameIndex()], canvas);
+            drawText(grip_width / 2, 50, 30, noteNames[activity.app.noteNameIndex()], canvas);
         }
     }
 
