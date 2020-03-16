@@ -63,10 +63,8 @@ public class TinWhistle extends MusicalInstrument {
 
     private void setFingering() {
         grips(null);
-        int offset = 0;
-        if (instrument_type == Constants.TIN_WHISTLE_G) {
-            offset = 5;
-        }
+        int offset = new Scale(0).noteAbsoluteValue(realLowestNote());
+
         // D
         addGrip(14 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE));
         // D#
