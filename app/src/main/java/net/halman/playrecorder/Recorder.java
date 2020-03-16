@@ -280,7 +280,7 @@ public class Recorder extends MusicalInstrument {
         addTrillGrip(idx + 15, idx + 17, recorderGrip(OPEN, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, CLOSE, CLOSE, OPEN, OPEN, BELLOPEN));
         // E
         addTrillGrip(idx + 16, idx + 17, recorderGrip(HALFOPEN, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, TRILLONCE, TRILLONCE, OPEN, OPEN, BELLOPEN));
-        addTrillGrip(idx + 16, idx + 17, recorderGrip(HALFOPEN, CLOSE, CLOSE, CLOSE, TRILL, CLOSE, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 16, idx + 18, recorderGrip(HALFOPEN, CLOSE, CLOSE, CLOSE, TRILL, CLOSE, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
         // F
         addTrillGrip(idx + 17, idx + 18, recorderGrip(HALFOPEN, CLOSE, CLOSE, CLOSE, OPEN, CLOSE, TRILL, OPEN, OPEN, OPEN, BELLOPEN));
         addTrillGrip(idx + 17, idx + 19, recorderGrip(HALFOPEN, CLOSE, CLOSE, CLOSE, TRILL, OPEN, TRILL, TRILL, OPEN, OPEN, BELLOPEN));
