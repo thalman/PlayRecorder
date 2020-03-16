@@ -78,7 +78,7 @@ public class Scale {
     {
         scale = new Note[7];
         for (int i = 0; i < 7; i++) {
-            scale[i] = new Note(scaleIntervals[i], Note.Accidentals.NONE);
+            scale[i] = new Note(scaleIntervals[i], Note.Accidentals.NONE, false);
         }
         if (scaleSignature > 0) {
             /* # */
@@ -129,7 +129,7 @@ public class Scale {
 
     public Note noteByPosition (int position)
     {
-        Note note = new Note(Note.c4, NONE);
+        Note note = new Note(Note.c4, NONE, false);
         int pos = notePosition(note);
 
         while (pos < position) {
@@ -376,7 +376,7 @@ public class Scale {
             }
         }
         abs_value += 12 * octave;
-        Note n = new Note(Note.c4 + 12 * octave, NONE);
+        Note n = new Note(Note.c4 + 12 * octave, NONE, false);
         while (noteAbsoluteValue(n) < abs_value) {
             noteUpHalf(n);
         }

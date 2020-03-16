@@ -43,9 +43,11 @@ public class ScoreView extends View {
     private Drawable arrowDown05 = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_down05, null);
     private Drawable sharpPlus = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp_plus, null);
     private Drawable flatPlus = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat_plus, null);
+    private Drawable trillBtn = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_trill_set, null);
     private Drawable sharp = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp, null);
     private Drawable flat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat, null);
     private Drawable natural = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_natural, null);
+    private Drawable trill = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_trill, null);
     private ShapeDrawable line = new ShapeDrawable(new RectShape());
     private View grip = null;
 
@@ -58,6 +60,7 @@ public class ScoreView extends View {
         SCALEDOWN,
         SETNOTE,
         CLEF,
+        TRILL
     }
 
     private double scalefactor = 1.0;
@@ -70,14 +73,15 @@ public class ScoreView extends View {
     private int score_center_y = 0;
 
     Map<Buttons, Rect> buttonPositions = new HashMap<Buttons, Rect>() {{
-        put(Buttons.UP,        new Rect(note_position - 80, 10, note_position - 10, 80));
-        put(Buttons.DOWN,      new Rect(note_position - 80, score_height - 80, note_position - 10, score_height - 10));
-        put(Buttons.HALFUP,    new Rect(note_position + 10, 10, note_position + 90, 80));
-        put(Buttons.HALFDOWN,  new Rect(note_position + 10, score_height - 80, note_position + 90, score_height - 10));
+        put(Buttons.UP,        new Rect(270, 10, 340, 80));
+        put(Buttons.DOWN,      new Rect(270, score_height - 80, 340, score_height - 10));
+        put(Buttons.HALFUP,    new Rect(355, 10, 425, 80));
+        put(Buttons.HALFDOWN,  new Rect(355, score_height - 80, 425, score_height - 10));
         put(Buttons.SCALEUP,   new Rect(100, 10, 170, 80));
         put(Buttons.SCALEDOWN, new Rect(100, score_height - 80, 170, score_height - 10));
         put(Buttons.SETNOTE,   new Rect(note_position - 35,80, note_position + 35, score_height - 80));
         put(Buttons.CLEF,      new Rect(score_offset_x + 15,score_offset_y - 15, score_offset_x + 65, score_offset_y + 5 * 20 + 15));
+        put(Buttons.TRILL,     new Rect(185, 10, 255, 80));
     }};
 
     MainActivity activity = null;
@@ -128,6 +132,9 @@ public class ScoreView extends View {
                         return;
                     case CLEF:
                         activity.onClef();
+                        return;
+                    case TRILL:
+                        setTrill();
                         return;
                 }
             }
@@ -261,6 +268,13 @@ public class ScoreView extends View {
             drawLine(note_position - 35, score_offset_y - (a - 11) * 10 - 10 + 1, 70, 2, canvas);
         }
 
+        if (activity.app.apparent_note.trill()) {
+            if (y > score_offset_y) {
+                y = score_offset_y;
+            }
+
+            putDrawable(note_position, y - 30, trill, canvas);
+        }
     }
 
     void drawRect(Rect r, Canvas c)
@@ -273,10 +287,13 @@ public class ScoreView extends View {
     {
         putDrawable(buttonPositions.get(Buttons.UP).centerX(), buttonPositions.get(Buttons.UP).centerY(), arrowUp, canvas);
         putDrawable(buttonPositions.get(Buttons.DOWN).centerX(), buttonPositions.get(Buttons.DOWN).centerY(), arrowDown, canvas);
-        putDrawable(buttonPositions.get(Buttons.HALFUP).centerX(), buttonPositions.get(Buttons.UP).centerY(), arrowUp05, canvas);
-        putDrawable(buttonPositions.get(Buttons.HALFDOWN).centerX(), buttonPositions.get(Buttons.DOWN).centerY(), arrowDown05, canvas);
-        putDrawable(buttonPositions.get(Buttons.SCALEUP).centerX(), buttonPositions.get(Buttons.UP).centerY(), sharpPlus, canvas);
-        putDrawable(buttonPositions.get(Buttons.SCALEDOWN).centerX(), buttonPositions.get(Buttons.DOWN).centerY(), flatPlus, canvas);
+        putDrawable(buttonPositions.get(Buttons.HALFUP).centerX(), buttonPositions.get(Buttons.HALFUP).centerY(), arrowUp05, canvas);
+        putDrawable(buttonPositions.get(Buttons.HALFDOWN).centerX(), buttonPositions.get(Buttons.HALFDOWN).centerY(), arrowDown05, canvas);
+        putDrawable(buttonPositions.get(Buttons.SCALEUP).centerX(), buttonPositions.get(Buttons.SCALEUP).centerY(), sharpPlus, canvas);
+        putDrawable(buttonPositions.get(Buttons.SCALEDOWN).centerX(), buttonPositions.get(Buttons.SCALEDOWN).centerY(), flatPlus, canvas);
+        if (activity != null && activity.app != null && activity.app.canPlayTrills()) {
+            putDrawable(buttonPositions.get(Buttons.TRILL).centerX(), buttonPositions.get(Buttons.TRILL).centerY(), trillBtn, canvas);
+        }
     }
 
     private void calculateScale() {
@@ -376,5 +393,14 @@ public class ScoreView extends View {
         activity.app.noteByPosition(position);
         invalidate();
         invalidateGripView();
+    }
+
+    private  void setTrill()
+    {
+        if (activity != null && activity.app != null) {
+            activity.app.noteTrill(!activity.app.noteTrill());
+            invalidate();
+            invalidateGripView();
+        }
     }
 }

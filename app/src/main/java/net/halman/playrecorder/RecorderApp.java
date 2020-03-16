@@ -24,7 +24,7 @@ import static net.halman.playrecorder.Scale.Clefs.G;
 
 public class RecorderApp {
     public Scale scale = new Scale(0);
-    public Note apparent_note = new Note(Note.c4, Note.Accidentals.NONE);
+    public Note apparent_note = new Note(Note.c4, Note.Accidentals.NONE, false);
     private MusicalInstrument musical_instrument = new Recorder();
     private int last_recorder_fingering = Recorder.BAROQUE;
 
@@ -35,7 +35,9 @@ public class RecorderApp {
 
     void noteByPosition(int position)
     {
+        boolean tr = apparent_note.trill();
         apparent_note = scale.noteByPosition(position);
+        apparent_note.trill(tr);
         if (! canPlay()) {
             if (position < 5) {
                 apparentLowestNote();
@@ -62,24 +64,28 @@ public class RecorderApp {
 
     void apparentLowestNote()
     {
+        boolean tr = noteTrill();
         Note lowest = musical_instrument.apparentLowestNote();
-        Note tmp = new Note(lowest.value(), Note.Accidentals.NONE);
+        Note tmp = new Note(lowest.value(), Note.Accidentals.NONE, false);
         if (scale.noteAbsoluteValue(tmp) == scale.noteAbsoluteValue(lowest)) {
             apparent_note.set(tmp);
         } else {
             apparent_note.set(lowest);
         }
+        apparent_note.trill(tr);
     }
 
     void apparentHighestNote()
     {
+        boolean tr = noteTrill();
         Note highest = musical_instrument.apparentHighestNote();
-        Note tmp = new Note(highest.value(), Note.Accidentals.NONE);
+        Note tmp = new Note(highest.value(), Note.Accidentals.NONE, false);
         if (scale.noteAbsoluteValue(tmp) == scale.noteAbsoluteValue(highest)) {
             apparent_note.set(tmp);
         } else {
             apparent_note.set(highest);
         }
+        apparent_note.trill(tr);
     }
 
     void noteUp()
@@ -143,7 +149,11 @@ public class RecorderApp {
     }
 
     ArrayList<Grip> grips() {
-        return musical_instrument.grips(scale, musical_instrument.apparentNoteToRealNote(apparent_note));
+        if (apparent_note.trill()) {
+            return musical_instrument.trillGrips(scale, musical_instrument.apparentNoteToRealNote(apparent_note));
+        } else {
+            return musical_instrument.grips(scale, musical_instrument.apparentNoteToRealNote(apparent_note));
+        }
     }
 
     int noteNameIndex()
@@ -217,7 +227,7 @@ public class RecorderApp {
         apparent_note.set(apparent);
     }
 
-    void apparentNote(int value, int acc)
+    void apparentNote(int value, int acc, boolean t)
     {
         Note.Accidentals a;
 
@@ -236,12 +246,12 @@ public class RecorderApp {
                 a = Note.Accidentals.FLAT;
                 break;
         }
-        apparent_note.set(value, a);
+        apparent_note.set(value, a, t);
     }
 
-    void realNote(int value, int acc)
+    void realNote(int value, int acc, boolean tr)
     {
-        apparentNote(value, acc);
+        apparentNote(value, acc, tr);
         apparent_note = musical_instrument.realNoteToApparentNote(apparent_note);
     }
 
@@ -261,5 +271,36 @@ public class RecorderApp {
 
     void lastRecorderFingering(int fingering) {
         last_recorder_fingering = fingering;
+    }
+
+    boolean noteTrill()
+    {
+        return apparent_note.trill();
+    }
+
+    void noteTrill(boolean t)
+    {
+        apparent_note.trill(t && musical_instrument.hasTrills());
+    }
+
+    boolean canPlayTrills()
+    {
+        return musical_instrument.hasTrills();
+    }
+
+    void checkLimits()
+    {
+        if (apparent_note.trill() && !musical_instrument.hasTrills()) {
+            apparent_note.trill(false);
+        }
+
+        if (!musical_instrument.canPlay(scale, musical_instrument.apparentNoteToRealNote(apparent_note))) {
+            int idx = scale.noteAbsoluteValue(apparent_note);
+            if (idx < 10) {
+                apparent_note.set(musical_instrument.apparentLowestNote());
+            } else {
+                apparent_note.set(musical_instrument.apparentHighestNote());
+            }
+        }
     }
 }

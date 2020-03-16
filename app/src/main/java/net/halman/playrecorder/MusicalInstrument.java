@@ -22,8 +22,8 @@ import java.util.ArrayList;
 
 public abstract class MusicalInstrument {
 
-    protected int number_of_holes;
-    protected int instrument_type;
+    private int number_of_holes;
+    private int instrument_type;
     private Note lowest_note;
     private Note highest_note;
     private int score_offset;
@@ -43,16 +43,35 @@ public abstract class MusicalInstrument {
         score_offset = 0;
     }
 
-    public int holes() {
+    public int holes()
+    {
         return number_of_holes;
     }
 
-    public int type() {
+    public void holes(int holes)
+    {
+        number_of_holes = holes;
+    }
+
+    public int type()
+    {
         return instrument_type;
     }
 
+    public void type(int atype)
+    {
+        instrument_type = atype;
+    }
+
     public boolean canPlay(Scale scale, Note realNote) {
-        return (grips(scale, realNote) != null);
+        if (lowest_note == null || highest_note == null) {
+            return false;
+        }
+
+        int n = scale.noteAbsoluteValue(realNote);
+        int min = scale.noteAbsoluteValue(realLowestNote());
+        int max = scale.noteAbsoluteValue(realHighestNote());
+        return (n >= min) && (n <= max);
     }
 
     Hole hole(int orientation, int index) {
@@ -79,7 +98,7 @@ public abstract class MusicalInstrument {
     }
 
     Note realHighestNote() {
-        return lowest_note;
+        return highest_note;
     }
 
     void realHighestNote(Note n) {
@@ -90,14 +109,14 @@ public abstract class MusicalInstrument {
         if (lowest_note == null) {
             return null;
         }
-        return new Note(lowest_note.value() + score_offset, lowest_note.accidentals());
+        return new Note(lowest_note.value() + score_offset, lowest_note.accidentals(), false);
     }
 
     Note apparentHighestNote () {
         if (highest_note == null) {
             return null;
         }
-        return new Note(highest_note.value() + score_offset, highest_note.accidentals());
+        return new Note(highest_note.value() + score_offset, highest_note.accidentals(), false);
     }
 
     int scoreOffset()
@@ -112,12 +131,12 @@ public abstract class MusicalInstrument {
 
     Note apparentNoteToRealNote(Note n)
     {
-        return new Note(n.value() - score_offset, n.accidentals());
+        return new Note(n.value() - score_offset, n.accidentals(), n.trill());
     }
 
     Note realNoteToApparentNote(Note n)
     {
-        return new Note(n.value() + score_offset, n.accidentals());
+        return new Note(n.value() + score_offset, n.accidentals(), n.trill());
     }
 
     void addGrip(int noteValue, Grip grip)
@@ -176,9 +195,23 @@ public abstract class MusicalInstrument {
         grips.add(grip);
     }
 
-    ArrayList<Grip> getTrillGrip(int baseNoteValue, int higherNoteValue) {
+    public ArrayList<Grip> getTrillGrip(int baseNoteValue, int higherNoteValue) {
         int key = baseNoteValue + 100 * higherNoteValue;
         return instrument_trill_grips.get(key);
+    }
+
+    public ArrayList<Grip> trillGrips(Scale scale, Note realNote)
+    {
+        Note upper = new Note(realNote);
+        scale.noteUp(upper);
+        int idx = scale.noteAbsoluteValue(realNote);
+        int idx_upper = scale.noteAbsoluteValue(upper);
+        if (idx == idx_upper) {
+            scale.noteUp(upper);
+            idx_upper = scale.noteAbsoluteValue(upper);
+        }
+
+        return getTrillGrip(idx, idx_upper);
     }
 
     void trillGrips(SparseArray<ArrayList<Grip>> array_of_grips)

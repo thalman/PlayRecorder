@@ -208,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("recorder-fingering", app.lastRecorderFingering());
         editor.putInt("note-value", app.noteValue());
         editor.putInt("note-accidentals", app.noteAccidentalsAsInt());
+        editor.putBoolean("note-trill", app.noteTrill());
         editor.putInt("grip-orientation", grip.orientation());
         editor.putBoolean("keep-screen-on", keepScreenOn);
         editor.apply();
@@ -223,10 +224,12 @@ public class MainActivity extends AppCompatActivity {
         app.lastRecorderFingering(sharedPref.getInt("recorder-fingering", Recorder.BAROQUE));
         app.apparentNote(
             sharedPref.getInt("note-value", 0),
-            sharedPref.getInt("note-accidentals", 0)
+            sharedPref.getInt("note-accidentals", 0),
+            sharedPref.getBoolean("note-trill", false)
         );
         grip.orientation(sharedPref.getInt("grip-orientation", Orientation.UP));
         onKeepScreenOn(sharedPref.getBoolean("keep-screen-on", false));
+        app.checkLimits();
     }
 
     public void updateTitle() {
@@ -371,6 +374,7 @@ public class MainActivity extends AppCompatActivity {
                         app.instrument(Constants.TIN_WHISTLE_G);
                         break;
                 }
+                app.checkLimits();
                 grip.invalidate();
                 score.invalidate();
                 invalidateOptionsMenu();

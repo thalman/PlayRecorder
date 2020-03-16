@@ -11,23 +11,23 @@ import static net.halman.playrecorder.Orientation.UP;
 
 public class TinWhistle extends MusicalInstrument {
 
-    public TinWhistle(int type)
+    public TinWhistle(int atype)
     {
-        super(type);
-        if (!Constants.isTinWhistle(type)) {
-            instrument_type = Constants.TIN_WHISTLE_D;
+        super(atype);
+        if (!Constants.isTinWhistle(atype)) {
+            type(Constants.TIN_WHISTLE_D);
         }
 
-        number_of_holes = 6;
-        switch (type) {
+        holes(6);
+        switch (type()) {
             default:
             case Constants.TIN_WHISTLE_D:
-                realLowestNote(new Note(Note.d5, Note.Accidentals.RELEASE));
-                realHighestNote(new Note(Note.e7, Note.Accidentals.RELEASE));
+                realLowestNote(new Note(Note.d5, Note.Accidentals.RELEASE, false));
+                realHighestNote(new Note(Note.e7, Note.Accidentals.RELEASE, false));
                 break;
             case Constants.TIN_WHISTLE_G:
-                realLowestNote(new Note(Note.g5, Note.Accidentals.RELEASE));
-                realHighestNote(new Note(Note.a6 + 12, Note.Accidentals.RELEASE));
+                realLowestNote(new Note(Note.g5, Note.Accidentals.RELEASE, false));
+                realHighestNote(new Note(Note.a6 + 12, Note.Accidentals.RELEASE, false));
                 break;
 
         }
@@ -66,63 +66,62 @@ public class TinWhistle extends MusicalInstrument {
         int offset = new Scale(0).noteAbsoluteValue(realLowestNote());
 
         // D
-        addGrip(14 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE));
+        addGrip(offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE));
         // D#
-        addGrip(15 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, HALFOPEN));
+        addGrip(1 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, HALFOPEN));
         // E
-        addGrip(16 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN));
+        addGrip(2 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN));
         // F
-        addGrip(17 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, HALFOPEN, OPEN));
+        addGrip(3 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, HALFOPEN, OPEN));
         // F#
-        addGrip(18 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN));
+        addGrip(4 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN));
         // G
-        addGrip(19 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN));
+        addGrip(5 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN));
         // G#
-        addGrip(20 + offset, tinWhistleGrip(CLOSE, CLOSE, HALFOPEN, OPEN, OPEN, OPEN));
+        addGrip(6 + offset, tinWhistleGrip(CLOSE, CLOSE, HALFOPEN, OPEN, OPEN, OPEN));
         // A
-        addGrip(21 + offset, tinWhistleGrip(CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN));
+        addGrip(7 + offset, tinWhistleGrip(CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN));
         // A#
-        addGrip(22 + offset, tinWhistleGrip(CLOSE, HALFOPEN, OPEN, OPEN, OPEN, OPEN));
+        addGrip(8 + offset, tinWhistleGrip(CLOSE, HALFOPEN, OPEN, OPEN, OPEN, OPEN));
         // B
-        addGrip(23 + offset, tinWhistleGrip(CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN));
+        addGrip(9 + offset, tinWhistleGrip(CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN));
         // C
+        addGrip(10 + offset, tinWhistleGrip(OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN));
+        addGrip(10 + offset, tinWhistleGrip(HALFOPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        // C#
+        addGrip(11 + offset, tinWhistleGrip(OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        addGrip(11 + offset, tinWhistleGrip(OPEN, OPEN, OPEN, OPEN, OPEN, CLOSE));
+        // D
+        addGrip(12 + offset, tinWhistleGrip(OPEN, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE));
+        addGrip(12 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE));
+        // D#
+        addGrip(13 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, HALFOPEN));
+        // E
+        addGrip(14 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN));
+        // F
+        addGrip(15 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, HALFOPEN, OPEN));
+        // F#
+        addGrip(16 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN));
+        // G
+        addGrip(17 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN));
+        // G#
+        addGrip(18 + offset, tinWhistleGrip(CLOSE, CLOSE, HALFOPEN, OPEN, OPEN, OPEN));
+        // A
+        addGrip(19 + offset, tinWhistleGrip(CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN));
+        // A#
+        addGrip(20 + offset, tinWhistleGrip(CLOSE, HALFOPEN, OPEN, OPEN, OPEN, OPEN));
+        // B
+        addGrip(21 + offset, tinWhistleGrip(CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN));
+        // C
+        addGrip(22 + offset, tinWhistleGrip(HALFOPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        addGrip(22 + offset, tinWhistleGrip(OPEN, CLOSE, OPEN, OPEN, OPEN, OPEN));
+        // C#
+        addGrip(23 + offset, tinWhistleGrip(OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
+        addGrip(23 + offset, tinWhistleGrip(OPEN, OPEN, OPEN, OPEN, OPEN, CLOSE));
+        // D
         addGrip(24 + offset, tinWhistleGrip(OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN));
-        addGrip(24 + offset, tinWhistleGrip(HALFOPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
-        // C#
-        addGrip(25 + offset, tinWhistleGrip(OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
-        addGrip(25 + offset, tinWhistleGrip(OPEN, OPEN, OPEN, OPEN, OPEN, CLOSE));
-        // D
-        addGrip(26 + offset, tinWhistleGrip(OPEN, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE));
-        addGrip(26 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE));
-        // D#
-        addGrip(27 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, HALFOPEN));
-        // E
-        addGrip(28 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, OPEN));
-        // F
-        addGrip(29 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, HALFOPEN, OPEN));
-        // F#
-        addGrip(30 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, CLOSE, OPEN, OPEN));
-        // G
-        addGrip(31 + offset, tinWhistleGrip(CLOSE, CLOSE, CLOSE, OPEN, OPEN, OPEN));
-        // G#
-        addGrip(32 + offset, tinWhistleGrip(CLOSE, CLOSE, HALFOPEN, OPEN, OPEN, OPEN));
-        // A
-        addGrip(33 + offset, tinWhistleGrip(CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN));
-        // A#
-        addGrip(34 + offset, tinWhistleGrip(CLOSE, HALFOPEN, OPEN, OPEN, OPEN, OPEN));
-        // B
-        addGrip(35 + offset, tinWhistleGrip(CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN));
-        // C
-        addGrip(36 + offset, tinWhistleGrip(HALFOPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
-        addGrip(36 + offset, tinWhistleGrip(OPEN, CLOSE, OPEN, OPEN, OPEN, OPEN));
-        // C#
-        addGrip(37 + offset, tinWhistleGrip(OPEN, OPEN, OPEN, OPEN, OPEN, OPEN));
-        addGrip(37 + offset, tinWhistleGrip(OPEN, OPEN, OPEN, OPEN, OPEN, CLOSE));
-        // D
-        addGrip(38 + offset, tinWhistleGrip(OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN));
         // D# can't be find the grip
-        addGrip(39 + offset, tinWhistleGrip(BELLOPEN, BELLOPEN, BELLOPEN, BELLOPEN, BELLOPEN, BELLOPEN));
         // E
-        addGrip(40 + offset, tinWhistleGrip(CLOSE, CLOSE, OPEN, CLOSE, CLOSE, OPEN));
+        addGrip(26 + offset, tinWhistleGrip(CLOSE, CLOSE, OPEN, CLOSE, CLOSE, OPEN));
     }
 }
