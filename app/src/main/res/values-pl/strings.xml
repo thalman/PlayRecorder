@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Play Recorder</string>
+    <string name="instrument">Instrument</string>
+    <string name="fingering">Aplikatura</string>
+    <string name="clef">Klucz</string>
+    <string name="listen">Słuchaj</string>
+    <string name="keepScreenOn">Pozostaw ekran włączony</string>
+    <string name="instrument_title">Typ instrumentu</string>
+    <string-array name="instrument_items">
+        <item>Flet sopranino</item>
+        <item>Flet sopranowy</item>
+        <item>Flet altowy</item>
+        <item>Flet tenorowy</item>
+        <item>Flet basowy</item>
+        <item>Flażolet tonacji D</item>
+        <item>Flażolet tonacji G</item>
+    </string-array>
+    <string name="fingering_title">Typ aplikatury</string>
+    <string-array name="fingering_items">
+        <item>Barokowa (Angielska)</item>
+        <item>Niemiecka</item>
+    </string-array>
+    <string name="clef_title">Typ klucza</string>
+    <string-array name="clef_items">
+        <item>Wiolinowy</item>
+        <item>Basowy</item>
+    </string-array>
+    <string name="recorder_app_title">%1$s (%2$s)</string>
+    <string-array name="note_names">
+        <item>C</item>
+        <item>C♯/D♭</item>
+        <item>D</item>
+        <item>D♯/E♭</item>
+        <item>E</item>
+        <item>F</item>
+        <item>F♯/G♭</item>
+        <item>G</item>
+        <item>G♯/A♭</item>
+        <item>A</item>
+        <item>A♯/B</item>
+        <item>H</item>
+    </string-array>
+</resources>
