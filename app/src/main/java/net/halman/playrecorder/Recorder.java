@@ -243,6 +243,7 @@ public class Recorder extends MusicalInstrument {
         addTrillGrip(idx + 2, idx + 4, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, TRILL, OPEN, OPEN, BELLOPEN));
         // D #
         addTrillGrip(idx + 3, idx + 4, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 3, idx + 5, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, CLOSE, OPEN, CLOSE, OPEN, BELLOPEN));
         // E
         addTrillGrip(idx + 4, idx + 5, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, TRILLONCE, TRILLONCE, TRILL, TRILL, BELLOPEN));
         addTrillGrip(idx + 4, idx + 6, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, TRILLONCE, TRILLONCE, OPEN, OPEN, BELLOPEN));
@@ -389,5 +390,84 @@ public class Recorder extends MusicalInstrument {
 
     private void setGermanTrillGrips() {
         trillGrips(null);
+        int idx = new Scale(0).noteAbsoluteValue(realLowestNote());
+
+        // C
+        addTrillGrip(idx, idx + 2, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, TRILL, BELLOPEN));
+        // C#
+        addTrillGrip(idx + 1, idx + 2, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, OPEN, BELLOPEN));
+        // D
+        addTrillGrip(idx + 2, idx + 4, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, TRILL, OPEN, OPEN, BELLOPEN));
+        // D #
+        addTrillGrip(idx + 3, idx + 4, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 3, idx + 5, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, CLOSE, OPEN, OPEN, OPEN, BELLOPEN));
+        // E
+        addTrillGrip(idx + 4, idx + 5, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, TRILLONCE, TRILLONCE, TRILL, TRILL, BELLOPEN));
+        addTrillGrip(idx + 4, idx + 6, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, TRILLONCE, TRILLONCE, OPEN, OPEN, BELLOPEN));
+        // F
+        addTrillGrip(idx + 5, idx + 6, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, TRILL, TRILL, CLOSE, CLOSE, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 5, idx + 7, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, TRILL, OPEN, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 5, idx + 7, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, TRILL, OPEN, TRILL, TRILL, CLOSE, CLOSE, BELLOPEN));
+        // F#
+        addTrillGrip(idx + 6, idx + 7, recorderGrip(CLOSE, CLOSE, CLOSE, CLOSE, OPEN, TRILL, TRILL, TRILL, CLOSE, CLOSE, BELLOPEN));
+        addTrillGrip(idx + 6, idx + 8, recorderGrip(CLOSE, CLOSE, CLOSE, TRILL, TRILLONCE, CLOSE, CLOSE, CLOSE, OPEN, OPEN, BELLOPEN));
+        // G
+        addTrillGrip(idx + 7, idx + 8, recorderGrip(CLOSE, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, TRILL, TRILL, TRILL, TRILL, BELLOPEN));
+        addTrillGrip(idx + 7, idx + 9, recorderGrip(CLOSE, CLOSE, CLOSE, TRILL, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        // G#
+        addTrillGrip(idx + 8, idx + 9, recorderGrip(CLOSE, CLOSE, CLOSE, OPEN, TRILL, TRILL, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 8, idx + 9, recorderGrip(CLOSE, CLOSE, CLOSE, OPEN, TRILL, TRILL, TRILL, TRILL, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 8, idx + 10, recorderGrip(CLOSE, CLOSE, OPEN, CLOSE, TRILL, CLOSE, CLOSE, CLOSE, CLOSE, OPEN, BELLOPEN));
+        // A
+        // addTrillGrip(idx + 9, idx + 10, ?);
+        addTrillGrip(idx + 9, idx + 11, recorderGrip(CLOSE, CLOSE, TRILL, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        // A#
+        addTrillGrip(idx + 10, idx + 11, recorderGrip(CLOSE, CLOSE, OPEN, TRILL, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 10, idx + 12, recorderGrip(CLOSE, TRILL, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        // B
+        addTrillGrip(idx + 11, idx + 12, recorderGrip(CLOSE, OPEN, CLOSE, TRILL, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 11, idx + 13, recorderGrip(CLOSE, TRILL, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        // C
+        addTrillGrip(idx + 12, idx + 13, recorderGrip(OPEN, CLOSE, CLOSE, TRILL, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 12, idx + 14, recorderGrip(TRILL, OPEN, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        // C#
+        addTrillGrip(idx + 13, idx + 14, recorderGrip(OPEN, TRILL, CLOSE, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 13, idx + 15, recorderGrip(OPEN, TRILL, TRILL, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        // D
+        addTrillGrip(idx + 14, idx + 15, recorderGrip(OPEN, CLOSE, CLOSE, CLOSE, TRILL, CLOSE, CLOSE, CLOSE, CLOSE, OPEN, BELLOPEN));
+        addTrillGrip(idx + 14, idx + 15, recorderGrip(OPEN, CLOSE, CLOSE, CLOSE, TRILL, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, BELLOPEN));
+        addTrillGrip(idx + 14, idx + 15, recorderGrip(OPEN, CLOSE, CLOSE, CLOSE, TRILL, CLOSE, CLOSE, CLOSE, TRILL, TRILL, BELLOPEN));
+        addTrillGrip(idx + 14, idx + 15, recorderGrip(OPEN, TRILL, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, TRILL, BELLOPEN));
+        addTrillGrip(idx + 14, idx + 16, recorderGrip(OPEN, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, CLOSE, CLOSE, CLOSE, CLOSE, BELLOPEN));
+        // D#
+        addTrillGrip(idx + 15, idx + 16, recorderGrip(OPEN, CLOSE, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, TRILL, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 15, idx + 17, recorderGrip(OPEN, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, CLOSE, CLOSE, OPEN, OPEN, BELLOPEN));
+        // E
+        addTrillGrip(idx + 16, idx + 17, recorderGrip(HALFOPEN, CLOSE, CLOSE, CLOSE, CLOSE, TRILL, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 16, idx + 18, recorderGrip(HALFOPEN, CLOSE, CLOSE, CLOSE, TRILL, CLOSE, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        // F
+        addTrillGrip(idx + 17, idx + 18, recorderGrip(HALFOPEN, CLOSE, CLOSE, CLOSE, OPEN, CLOSE, TRILL, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 17, idx + 19, recorderGrip(HALFOPEN, CLOSE, CLOSE, CLOSE, TRILL, OPEN, TRILL, TRILL, OPEN, OPEN, BELLOPEN));
+        // F#
+        addTrillGrip(idx + 18, idx + 19, recorderGrip(HALFOPEN, CLOSE, CLOSE, CLOSE, OPEN, TRILL, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 18, idx + 20, recorderGrip(HALFOPEN, CLOSE, CLOSE, OPEN, CLOSE, TRILL, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        // G
+        addTrillGrip(idx + 19, idx + 20, recorderGrip(HALFOPEN, CLOSE, CLOSE, OPEN, CLOSE, OPEN, TRILL, TRILL, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 19, idx + 21, recorderGrip(HALFOPEN, CLOSE, CLOSE, TRILL, OPEN, OPEN, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        // G#
+        addTrillGrip(idx + 20, idx + 21, recorderGrip(HALFOPEN, CLOSE, CLOSE, OPEN, TRILL, OPEN, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        // A
+        addTrillGrip(idx + 21, idx + 22, recorderGrip(HALFOPEN, CLOSE, CLOSE, TRILL, OPEN, CLOSE, CLOSE, CLOSE, CLOSE, OPEN, BELLOPEN));
+        addTrillGrip(idx + 21, idx + 23, recorderGrip(HALFOPEN, CLOSE, CLOSE, HALFOPEN, CLOSE, CLOSE, TRILL, TRILL, TRILL, TRILL, BELLOPEN));
+        // A#
+        addTrillGrip(idx + 22, idx + 23, recorderGrip(HALFOPEN, CLOSE, CLOSE, OPEN, CLOSE, CLOSE, TRILL, TRILL, OPEN, OPEN, BELLOPEN));
+        // B
+        addTrillGrip(idx + 23, idx + 24, recorderGrip(HALFOPEN, CLOSE, TRILL, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 23, idx + 24, recorderGrip(HALFOPEN, CLOSE, OPEN, OPEN, TRILL, TRILL, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 23, idx + 25, recorderGrip(HALFOPEN, TRILL, TRILL, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        // C
+        addTrillGrip(idx + 24, idx + 25, recorderGrip(HALFOPEN, TRILL, OPEN, OPEN, CLOSE, CLOSE, OPEN, OPEN, OPEN, OPEN, BELLOPEN));
+        addTrillGrip(idx + 24, idx + 26, recorderGrip(HALFOPEN, CLOSE, CLOSE, CLOSE, TRILL, TRILL, OPEN, OPEN, OPEN, OPEN, BELLCLOSE));
+
     }
 }
