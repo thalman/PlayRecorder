@@ -77,9 +77,9 @@ public class Note {
     static final int c8 = c4 + 48;
 
 
-    private int value = 0;
-    private Accidentals accidentals = Accidentals.NONE;
-    private boolean is_trill = false;
+    private int _value = 0;
+    private Accidentals _accidentals = Accidentals.NONE;
+    private boolean _trill = false;
 
     public Note(int value, Accidentals accidentals, boolean tr)
     {
@@ -90,9 +90,9 @@ public class Note {
 
     public Note(Note note)
     {
-        this.value = note.value();
-        this.accidentals = note.accidentals();
-        this.is_trill = note.trill();
+        this._value = note.value();
+        this._accidentals = note.accidentals();
+        this._trill = note.trill();
     }
 
     void set(Note note)
@@ -106,38 +106,38 @@ public class Note {
 
     void set(int value, Accidentals accidentals, boolean trill)
     {
-        this.value = value;
-        this.accidentals = accidentals;
-        this.is_trill = trill;
+        _value = value;
+        _accidentals = accidentals;
+        _trill = trill;
     }
 
     int value()
     {
-        return this.value;
+        return _value;
     }
 
     void value(int value)
     {
-        this.value = value;
+        _value = value;
     }
 
     Accidentals accidentals()
     {
-        return this.accidentals;
+        return _accidentals;
     }
 
     void accidentals(Accidentals accidentals)
     {
-        this.accidentals = accidentals;
+        _accidentals = accidentals;
     }
 
     boolean trill()
     {
-        return is_trill;
+        return _trill;
     }
 
     void trill(boolean t)
     {
-        is_trill = t;
+        _trill = t;
     }
 }
