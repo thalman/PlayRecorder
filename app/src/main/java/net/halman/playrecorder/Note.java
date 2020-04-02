@@ -100,6 +100,7 @@ public class Note {
         if (note != null) {
             value(note.value());
             accidentals(note.accidentals());
+            trill(note.trill());
         }
     }
 
