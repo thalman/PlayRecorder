@@ -352,6 +352,10 @@ public class Scale {
         int abs_value = 0;
         int temp_freq = freq100;
 
+        if (freq100 < 2000) {
+            return null;
+        }
+
         while (temp_freq < frequencies[0]) {
             temp_freq *= 2;
             --octave;

@@ -140,4 +140,9 @@ public class Note {
     {
         _trill = t;
     }
+
+    boolean equal(Note n)
+    {
+        return (_value == n._value && _accidentals == n._accidentals && _trill == n._trill);
+    }
 }

@@ -21,6 +21,10 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Handler;
+import android.util.Log;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 /*
  * This code detects sound frequency (AKA pitch detection) using fast Fourier transformation
@@ -34,12 +38,11 @@ import android.os.Handler;
 public class Frequency implements Runnable {
     public static final int MSG_FREQUENCY = 1;
 
-    private int sampleRate = 8000;
-    private int freq100 = 0;
+    private int sample_rate = 8000;
     private short[] buffer;
     private double[] buffer_real;
     private double[] buffer_img;
-    private double[] hannWindow = null;
+    private double[] hann_window = null;
     private int bufferSize;
     private AudioRecord audioInput;
 
@@ -47,18 +50,29 @@ public class Frequency implements Runnable {
     private int FFT_EXP = 13;
     private int[] fft_bitreverse = null;
     private Handler messageHandler;
+    int buffer_recording_step = 1;
+    int buffer_recording_step_max = 4;
 
     public Frequency(Handler h)
     {
         messageHandler = h;
-        int minSize = 2 * AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_MONO,  AudioFormat.ENCODING_PCM_16BIT);
+        int minSize = AudioRecord.getMinBufferSize(sample_rate, AudioFormat.CHANNEL_IN_MONO,  AudioFormat.ENCODING_PCM_16BIT);
+        buffer_recording_step_max = FFT_SIZE / minSize;
+        if (buffer_recording_step_max > 4) {
+            buffer_recording_step_max = 4;
+        }
+
+        if (buffer_recording_step_max < 1) {
+            buffer_recording_step_max = 1;
+        }
+
         bufferSize = minSize < FFT_SIZE ? FFT_SIZE : minSize;
         buffer = new short[bufferSize];
         buffer_real = new double[bufferSize];
         buffer_img = new double[bufferSize];
         buildHannWindow();
         initFFT();
-        audioInput = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
+        audioInput = new AudioRecord(MediaRecorder.AudioSource.MIC, sample_rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
     }
 
     private void initFFT()
@@ -139,34 +153,59 @@ public class Frequency implements Runnable {
 
     private void buildHannWindow()
     {
-        hannWindow = new double[bufferSize];
+        hann_window = new double[bufferSize];
         for (int i = 0; i < bufferSize; ++i) {
-            hannWindow[i] = .5 * (1 - Math.cos(2 * Math.PI * i / (bufferSize - 1.0)));
+            hann_window[i] = .5 * (1 - Math.cos(2 * Math.PI * i / (bufferSize - 1.0)));
         }
     }
 
     private void recordSample() {
-        // keep half of the recording to make the update smoother
-        System.arraycopy(buffer, bufferSize/2, buffer, 0, bufferSize/2);
-        audioInput.read(buffer, bufferSize/2, bufferSize/2);
+        switch(buffer_recording_step) {
+            default:
+            case 1:
+                audioInput.read(buffer, 0, bufferSize);
+                break;
+            case 2:
+                System.arraycopy(buffer, bufferSize / 2, buffer, 0, bufferSize / 2);
+                audioInput.read(buffer, bufferSize / 2, bufferSize / 2);
+                break;
+            case 4:
+                System.arraycopy(buffer, bufferSize / 4, buffer, 0, bufferSize * 3 / 4);
+                audioInput.read(buffer, bufferSize * 3 / 4, bufferSize / 4);
+                break;
+        }
+    }
+
+    private void prepareBuffers(boolean last_quarter)
+    {
+        Arrays.fill(buffer_img, 0.0);
+        Arrays.fill(buffer_real, 0.0);
+
+        int idx = 0;
+        if (last_quarter) {
+            idx = bufferSize * 3 / 4;
+        }
+
+        for(int i = idx; i < bufferSize; ++i) {
+            buffer_real[i] = buffer[i];
+        }
     }
 
     private void lowPass()
     {
-        int lastInput = 0;
+        double lastInput = 0;
 
         for(int i = 0; i < bufferSize; ++i) {
-            double output = (lastInput + buffer[i]) / 2.0;
-            lastInput = buffer[i];
+            double output = (lastInput + buffer_real[i]) / 2.0;
+            lastInput = buffer_real[i];
             buffer_real[i] = output;
-            buffer_img[i] = 0.0;
         }
     }
 
     private void applyWindow()
     {
         for(int i = 0; i < bufferSize; ++i) {
-            buffer_real[i] *= hannWindow[i];
+            buffer_real[i] *= hann_window[i];
         }
     }
 
@@ -183,27 +222,51 @@ public class Frequency implements Runnable {
             }
         }
 
-        return (sampleRate * maxIndex) / (double)( FFT_SIZE );
+        return (sample_rate * maxIndex) / (double)( FFT_SIZE );
     }
 
     public void run() {
+        long time_elapsed;
+        int freq100;
+        int freq100_low_precision;
+
         try {
             audioInput.startRecording();
-            recordSample();
             while (!Thread.currentThread().isInterrupted()) {
                 recordSample();
+                time_elapsed = System.currentTimeMillis();
+
+                // calculate FFT on whole 1second sample to get good precision for tunning
+                prepareBuffers(false);
                 lowPass();
                 applyWindow();
                 applyFFT();
-                int newFreq100 = (int) (peak() * 100);
+                freq100 = (int) (peak() * 100);
 
-                freq100 = newFreq100;
+                // calculate FFT on last 0.25second sample to get better reaction on sound change
+                prepareBuffers(true);
+                lowPass();
+                applyWindow();
+                applyFFT();
+                freq100_low_precision = (int) (peak() * 100);
+                time_elapsed = System.currentTimeMillis() - time_elapsed;
+
+                // check whether we can calculate FFT 4 x per second
+                if (time_elapsed < 100) {
+                    buffer_recording_step = 4;
+                } else if (time_elapsed < 200) {
+                    buffer_recording_step = 2;
+                } else {
+                    buffer_recording_step = 1;
+                }
+                Log.d("FREQUENCY","freq100 " + freq100 + " freq100lp " + freq100_low_precision);
+                Log.d("FREQUENCY","calculation time " + time_elapsed);
+
                 if (messageHandler != null) {
-                    messageHandler.sendMessage(messageHandler.obtainMessage(MSG_FREQUENCY, freq100, 0));
+                    messageHandler.sendMessage(messageHandler.obtainMessage(MSG_FREQUENCY, freq100, freq100_low_precision));
                 }
             }
         } catch (Exception e) {
-            freq100 = 0;
         }
 
         if (messageHandler != null) {

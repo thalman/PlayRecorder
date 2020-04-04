@@ -96,8 +96,9 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message inputMessage) {
             if (inputMessage.what == Frequency.MSG_FREQUENCY) {
                 int freq100 = inputMessage.arg1;
-                Log.d("FREQUENCY", "Frequency update: " + freq100);
-                onFrequency(freq100);
+                int freq100_low_precision = inputMessage.arg2;
+                Log.d("FREQUENCY", "Frequency update: " + freq100 + " " + freq100_low_precision);
+                onFrequency(freq100, freq100_low_precision);
             }
         }
     };
@@ -442,16 +443,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onFrequency(int freq100)
+    public void onFrequency(int freq100, int freq100_low_precision)
     {
-        if (freq100 < 2000) {
-            Log.d("FREQUENCY", "too deep frequency");
+
+        Note n = app.scale.frequencyNearestNote(freq100);
+        Note nlp = app.scale.frequencyNearestNote(freq100_low_precision);
+
+        if (nlp == null || n == null) {
             grip.onFrequency(false, 0, 0);
             return;
         }
 
-        Note n = app.scale.frequencyNearestNote(freq100);
-        if (! app.canPlay(n)) {
+        if (app.canPlay(nlp) && ! nlp.equal(n)) {
+            freq100 = freq100_low_precision;
+            n = nlp;
+        }
+
+        if (!app.canPlay(n)) {
             Log.d("FREQUENCY", "this sound can't be played on the instrument");
             grip.onFrequency(false, 0, 0);
             return;
