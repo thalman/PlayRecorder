@@ -436,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 42);
         } else {
-            frequencyAnalyzer = new Thread(new Frequency(freqHandler));
+            frequencyAnalyzer = new Thread(new Frequency(freqHandler, app.instrumentHighestFreq100()));
             frequencyAnalyzer.start();
             grip.listen(true);
             invalidateOptionsMenu();

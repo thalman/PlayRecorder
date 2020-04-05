@@ -75,6 +75,11 @@ public class RecorderApp {
         apparent_note.trill(tr);
     }
 
+    int instrumentHighestFreq100() {
+        Note n = musical_instrument.realHighestNote();
+        return scale.noteToFrequency(n);
+    }
+
     void apparentHighestNote()
     {
         boolean tr = noteTrill();

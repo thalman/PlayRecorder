@@ -38,41 +38,33 @@ import java.util.Arrays;
 public class Frequency implements Runnable {
     public static final int MSG_FREQUENCY = 1;
 
-    private int sample_rate = 8000;
+    private final int sample_rate = 8000;
+    private final int FFT_SIZE = 8192;
+    private final int FFT_EXP = 13;
     private short[] buffer;
     private double[] buffer_real;
     private double[] buffer_img;
     private double[] hann_window = null;
-    private int bufferSize;
-    private AudioRecord audioInput;
+    private int buffer_size;
+    private AudioRecord audio_input;
 
-    private int FFT_SIZE = 8192;
-    private int FFT_EXP = 13;
     private int[] fft_bitreverse = null;
-    private Handler messageHandler;
-    int buffer_recording_step = 1;
-    int buffer_recording_step_max = 4;
+    private Handler message_handler;
+    private int buffer_recording_step = 1;
 
-    public Frequency(Handler h)
+    public Frequency(Handler h, int highest_frequency_100)
     {
-        messageHandler = h;
-        int minSize = AudioRecord.getMinBufferSize(sample_rate, AudioFormat.CHANNEL_IN_MONO,  AudioFormat.ENCODING_PCM_16BIT);
-        buffer_recording_step_max = FFT_SIZE / minSize;
-        if (buffer_recording_step_max > 4) {
-            buffer_recording_step_max = 4;
-        }
+        message_handler = h;
+        int minSize = 4 * AudioRecord.getMinBufferSize(sample_rate, AudioFormat.CHANNEL_IN_MONO,  AudioFormat.ENCODING_PCM_16BIT);
 
-        if (buffer_recording_step_max < 1) {
-            buffer_recording_step_max = 1;
-        }
-
-        bufferSize = minSize < FFT_SIZE ? FFT_SIZE : minSize;
-        buffer = new short[bufferSize];
-        buffer_real = new double[bufferSize];
-        buffer_img = new double[bufferSize];
+        buffer_size = minSize < FFT_SIZE ? FFT_SIZE : minSize;
+        buffer = new short[buffer_size];
+        buffer_real = new double[buffer_size];
+        buffer_img = new double[buffer_size];
         buildHannWindow();
         initFFT();
-        audioInput = new AudioRecord(MediaRecorder.AudioSource.MIC, sample_rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
+        computeSecondOrderLowPassParameters(highest_frequency_100 / 100.0);
+        audio_input = new AudioRecord(MediaRecorder.AudioSource.MIC, sample_rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, buffer_size);
     }
 
     private void initFFT()
@@ -153,9 +145,9 @@ public class Frequency implements Runnable {
 
     private void buildHannWindow()
     {
-        hann_window = new double[bufferSize];
-        for (int i = 0; i < bufferSize; ++i) {
-            hann_window[i] = .5 * (1 - Math.cos(2 * Math.PI * i / (bufferSize - 1.0)));
+        hann_window = new double[buffer_size];
+        for (int i = 0; i < buffer_size; ++i) {
+            hann_window[i] = .5 * (1 - Math.cos(2 * Math.PI * i / (buffer_size - 1.0)));
         }
     }
 
@@ -163,15 +155,15 @@ public class Frequency implements Runnable {
         switch(buffer_recording_step) {
             default:
             case 1:
-                audioInput.read(buffer, 0, bufferSize);
+                audio_input.read(buffer, 0, buffer_size);
                 break;
             case 2:
-                System.arraycopy(buffer, bufferSize / 2, buffer, 0, bufferSize / 2);
-                audioInput.read(buffer, bufferSize / 2, bufferSize / 2);
+                System.arraycopy(buffer, buffer_size / 2, buffer, 0, buffer_size / 2);
+                audio_input.read(buffer, buffer_size / 2, buffer_size / 2);
                 break;
             case 4:
-                System.arraycopy(buffer, bufferSize / 4, buffer, 0, bufferSize * 3 / 4);
-                audioInput.read(buffer, bufferSize * 3 / 4, bufferSize / 4);
+                System.arraycopy(buffer, buffer_size / 4, buffer, 0, buffer_size * 3 / 4);
+                audio_input.read(buffer, buffer_size * 3 / 4, buffer_size / 4);
                 break;
         }
     }
@@ -183,28 +175,61 @@ public class Frequency implements Runnable {
 
         int idx = 0;
         if (last_quarter) {
-            idx = bufferSize * 3 / 4;
+            idx = buffer_size * 3 / 4;
         }
 
-        for(int i = idx; i < bufferSize; ++i) {
+        for(int i = idx; i < buffer_size; ++i) {
             buffer_real[i] = buffer[i];
         }
     }
 
+    private double[] low_pass_parameter_a = {0, 0};
+    private double[] low_pass_parameter_b = {0, 0, 0};
+
+    private void computeSecondOrderLowPassParameters(double highest_freq)
+    {
+        double a0;
+        double w0 = 2 * Math.PI * highest_freq / sample_rate;
+        double cosw0 = Math.cos(w0);
+        double sinw0 = Math.sin(w0);
+        //double alpha = sinw0/2;
+        double alpha = sinw0 / 2 * Math.sqrt(2);
+
+        a0   = 1 + alpha;
+        low_pass_parameter_a[0] = (-2 * cosw0) / a0;
+        low_pass_parameter_a[1] = (1 - alpha) / a0;
+        low_pass_parameter_b[0] = ((1 - cosw0) / 2) / a0;
+        low_pass_parameter_b[1] = (1 - cosw0) / a0;
+        low_pass_parameter_b[2] = low_pass_parameter_b[0];
+    }
+
+    private double processSecondOrderFilter(double x, double[] mem)
+    {
+        double ret = low_pass_parameter_b[0] * x + low_pass_parameter_b[1] * mem[0] + low_pass_parameter_b[2] * mem[1]
+                - low_pass_parameter_a[0] * mem[2] - low_pass_parameter_a[1] * mem[3] ;
+
+        mem[1] = mem[0];
+        mem[0] = x;
+        mem[3] = mem[2];
+        mem[2] = ret;
+
+        return ret;
+    }
+
     private void lowPass()
     {
-        double lastInput = 0;
+        double[] mem1 = {0, 0, 0, 0};
+        double[] mem2 = {0, 0, 0, 0};
 
-        for(int i = 0; i < bufferSize; ++i) {
-            double output = (lastInput + buffer_real[i]) / 2.0;
-            lastInput = buffer_real[i];
-            buffer_real[i] = output;
+        for(int i = 0; i < buffer_size; ++i) {
+            buffer_real[i] = processSecondOrderFilter(buffer_real[i], mem1);
+            buffer_real[i] = processSecondOrderFilter(buffer_real[i], mem2);
         }
     }
 
     private void applyWindow()
     {
-        for(int i = 0; i < bufferSize; ++i) {
+        for(int i = 0; i < buffer_size; ++i) {
             buffer_real[i] *= hann_window[i];
         }
     }
@@ -222,6 +247,12 @@ public class Frequency implements Runnable {
             }
         }
 
+        Log.d("FREQUENCY", "strength " + maxVal);
+        if (maxVal < 100) {
+            // filter out very week signal
+            return 0;
+        }
+
         return (sample_rate * maxIndex) / (double)( FFT_SIZE );
     }
 
@@ -231,7 +262,7 @@ public class Frequency implements Runnable {
         int freq100_low_precision;
 
         try {
-            audioInput.startRecording();
+            audio_input.startRecording();
             while (!Thread.currentThread().isInterrupted()) {
                 recordSample();
                 time_elapsed = System.currentTimeMillis();
@@ -262,16 +293,16 @@ public class Frequency implements Runnable {
                 Log.d("FREQUENCY","freq100 " + freq100 + " freq100lp " + freq100_low_precision);
                 Log.d("FREQUENCY","calculation time " + time_elapsed);
 
-                if (messageHandler != null) {
-                    messageHandler.sendMessage(messageHandler.obtainMessage(MSG_FREQUENCY, freq100, freq100_low_precision));
+                if (message_handler != null) {
+                    message_handler.sendMessage(message_handler.obtainMessage(MSG_FREQUENCY, freq100, freq100_low_precision));
                 }
             }
         } catch (Exception e) {
         }
 
-        if (messageHandler != null) {
-            messageHandler.sendMessage(messageHandler.obtainMessage(MSG_FREQUENCY, 0, 0));
+        if (message_handler != null) {
+            message_handler.sendMessage(message_handler.obtainMessage(MSG_FREQUENCY, 0, 0));
         }
-        audioInput.stop();
+        audio_input.stop();
     }
 }
