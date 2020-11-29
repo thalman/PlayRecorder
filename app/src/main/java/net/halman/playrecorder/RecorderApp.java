@@ -308,4 +308,8 @@ public class RecorderApp {
             }
         }
     }
+
+    int getMidiNote() {
+        return scale.noteMidiValue(musical_instrument.apparentNoteToRealNote(apparent_note));
+    }
 }

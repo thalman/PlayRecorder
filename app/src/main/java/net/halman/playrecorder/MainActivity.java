@@ -39,13 +39,24 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import cn.sherlock.com.sun.media.sound.SF2Soundbank;
+import cn.sherlock.com.sun.media.sound.SoftSynthesizer;
+import jp.kshoji.javax.sound.midi.MidiChannel;
+import jp.kshoji.javax.sound.midi.MidiUnavailableException;
+
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class MainActivity extends AppCompatActivity implements ScoreView.ScoreViewListener, GripView.GripViewListener {
+    public static final int MSG_MIDIOFF = 2;
+
     RecorderApp app = null;
     ScoreView score = null;
     GripView grip = null;
     Thread frequencyAnalyzer = null;
+    SoftSynthesizer synthesizer = null;
     boolean keepScreenOn = false;
     boolean playSound = true;
     PointF lastTouch = new PointF();
@@ -92,14 +103,23 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         }
     };
 
-    Handler freqHandler = new Handler(Looper.getMainLooper()) {
+    Handler msgHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message inputMessage) {
-            if (inputMessage.what == Frequency.MSG_FREQUENCY) {
-                int freq100 = inputMessage.arg1;
-                int freq100_low_precision = inputMessage.arg2;
-                Log.d("FREQUENCY", "Frequency update: " + freq100 + " " + freq100_low_precision);
-                onFrequency(freq100, freq100_low_precision);
+            switch (inputMessage.what) {
+                case Frequency.MSG_FREQUENCY: {
+                    int freq100 = inputMessage.arg1;
+                    int freq100_low_precision = inputMessage.arg2;
+                    Log.d("FREQUENCY", "Frequency update: " + freq100 + " " + freq100_low_precision);
+                    onFrequency(freq100, freq100_low_precision);
+                    break;
+                }
+                case MSG_MIDIOFF: {
+                    if (synthesizer != null) {
+                        synthesizer.getChannels()[0].allNotesOff();
+                    }
+                    break;
+                }
             }
         }
     };
@@ -116,6 +136,23 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         grip.setOnTouchListener(gripOnTouchListener);
         grip.setOnClickListener(gripOnClickListener);
         grip.setGripViewListener(this);
+
+        // initialize midi synthetizer
+        try {
+            /* credit to https://stackoverflow.com/questions/56541361/android-play-soundfont-with-midi-file */
+            InputStream sff = getResources().openRawResource(R.raw.soundfont);
+            SF2Soundbank sf = new SF2Soundbank(sff);
+            synthesizer = new SoftSynthesizer();
+            synthesizer.open();
+            synthesizer.loadAllInstruments(sf);
+        } catch (IOException e) {
+            synthesizer = null;
+            e.printStackTrace();
+        } catch (MidiUnavailableException e) {
+            synthesizer = null;
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -175,6 +212,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         loadState();
         updateTitle();
         updateOrientation();
+        updateMidi();
     }
 
     @Override
@@ -184,6 +222,10 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
             frequencyAnalyzer.interrupt();
             frequencyAnalyzer = null;
             grip.listen(false);
+        }
+
+        if (synthesizer != null) {
+            synthesizer.getChannels()[0].allNotesOff();
         }
         saveState();
     }
@@ -204,6 +246,30 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         }
     }
 
+    private void updateMidi() {
+        if (synthesizer == null) {
+            return;
+        }
+
+        if (Constants.isTinWhistle(app.instrumentType())) {
+            synthesizer.getChannels()[0].programChange(1);
+        } else {
+            // default - recorder
+            synthesizer.getChannels()[0].programChange(0);
+        }
+    }
+
+    private void playMidiNote() {
+        if (synthesizer == null) {
+            return;
+        }
+
+        msgHandler.removeMessages(MSG_MIDIOFF);
+        MidiChannel chanel = synthesizer.getChannels()[0];
+        chanel.allNotesOff();
+        chanel.noteOn(app.getMidiNote(), 127);
+        msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDIOFF), 1000);
+    }
 
     void saveState () {
         if (app == null) {
@@ -447,7 +513,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 42);
         } else {
-            frequencyAnalyzer = new Thread(new Frequency(freqHandler, app.instrumentHighestFreq100()));
+            frequencyAnalyzer = new Thread(new Frequency(msgHandler, app.instrumentHighestFreq100()));
             frequencyAnalyzer.start();
             grip.listen(true);
             invalidateOptionsMenu();
@@ -512,30 +578,45 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     {
         app.noteUp();
         grip.invalidate();
+        if (playSound && frequencyAnalyzer == null) {
+            playMidiNote();
+        }
     }
 
     public void onScoreViewNoteDown()
     {
         app.noteDown();
         grip.invalidate();
+        if (playSound && frequencyAnalyzer == null) {
+            playMidiNote();
+        }
     }
 
     public void onScoreViewNoteUpHalf()
     {
         app.noteUpHalf();
         grip.invalidate();
+        if (playSound && frequencyAnalyzer == null) {
+            playMidiNote();
+        }
     }
 
     public void onScoreViewNoteDownHalf()
     {
         app.noteDownHalf();
         grip.invalidate();
+        if (playSound && frequencyAnalyzer == null) {
+            playMidiNote();
+        }
     }
 
     public void onScoreViewNotePosition(int position)
     {
         app.noteByPosition(position);
         grip.invalidate();
+        if (playSound && frequencyAnalyzer == null) {
+            playMidiNote();
+        }
     }
 
     public void onScoreViewSignatureUp()

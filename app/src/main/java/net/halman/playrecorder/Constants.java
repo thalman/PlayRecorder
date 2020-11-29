@@ -18,7 +18,6 @@
 package net.halman.playrecorder;
 
 public class Constants {
-
     // instrument types
     static final int RECORDER_SOPRANINO_BAROQUE = 0;
     static final int RECORDER_SOPRANO_BAROQUE = 1;
