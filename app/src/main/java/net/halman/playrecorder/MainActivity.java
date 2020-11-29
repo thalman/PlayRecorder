@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     GripView grip = null;
     Thread frequencyAnalyzer = null;
     boolean keepScreenOn = false;
+    boolean playSound = true;
     PointF lastTouch = new PointF();
 
     View.OnTouchListener scoreOnTouchListener = new View.OnTouchListener() {
@@ -131,6 +132,9 @@ public class MainActivity extends AppCompatActivity {
         item = menu.findItem(R.id.actionKeepScreenOn);
         item.setChecked(keepScreenOn);
 
+        item = menu.findItem(R.id.actionPlaySound);
+        item.setChecked(playSound);
+
         return true;
     }
 
@@ -146,6 +150,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.actionClef:
                 onClef();
+                return true;
+            case R.id.actionPlaySound:
+                item.setChecked(!item.isChecked());
+                onPlaySound(item.isChecked());
                 return true;
             case R.id.actionListen:
                 item.setChecked(!item.isChecked());
@@ -212,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putBoolean("note-trill", app.noteTrill());
         editor.putInt("grip-orientation", grip.orientation());
         editor.putBoolean("keep-screen-on", keepScreenOn);
+        editor.putBoolean("play-sound", playSound);
         editor.apply();
     }
 
@@ -230,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
         );
         grip.orientation(sharedPref.getInt("grip-orientation", Orientation.UP));
         onKeepScreenOn(sharedPref.getBoolean("keep-screen-on", false));
+        onPlaySound(sharedPref.getBoolean("play-sound", true));
         app.checkLimits();
     }
 
@@ -480,6 +490,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
+
+        invalidateOptionsMenu();
+    }
+
+    private void onPlaySound(boolean playSound)
+    {
+        this.playSound = playSound;
 
         invalidateOptionsMenu();
     }

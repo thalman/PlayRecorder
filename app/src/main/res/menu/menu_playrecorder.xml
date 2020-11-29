@@ -13,13 +13,18 @@
         android:orderInCategory="120"
         android:title="@string/clef" />
     <item
-        android:id="@+id/actionListen"
+        android:id="@+id/actionPlaySound"
         android:checkable="true"
         android:orderInCategory="130"
+        android:title="@string/playSound" />
+    <item
+        android:id="@+id/actionListen"
+        android:checkable="true"
+        android:orderInCategory="140"
         android:title="@string/listen" />
     <item
         android:id="@+id/actionKeepScreenOn"
         android:checkable="true"
-        android:orderInCategory="140"
+        android:orderInCategory="150"
         android:title="@string/keepScreenOn" />
 </menu>
