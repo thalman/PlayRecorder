@@ -41,7 +41,7 @@ import android.widget.LinearLayout;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ScoreView.ScoreViewListener, GripView.GripViewListener {
     RecorderApp app = null;
     ScoreView score = null;
     GripView grip = null;
@@ -111,10 +111,11 @@ public class MainActivity extends AppCompatActivity {
         score = findViewById(R.id.Score);
         score.setOnTouchListener(scoreOnTouchListener);
         score.setOnClickListener(scoreOnClickListener);
+        score.setScoreViewListener(this);
         grip = findViewById(R.id.Grip);
         grip.setOnTouchListener(gripOnTouchListener);
         grip.setOnClickListener(gripOnClickListener);
-        score.setGripView(grip);
+        grip.setGripViewListener(this);
     }
 
     @Override
@@ -500,4 +501,65 @@ public class MainActivity extends AppCompatActivity {
 
         invalidateOptionsMenu();
     }
+
+    // ScoreView Interface
+    public RecorderApp getRecorderApp()
+    {
+        return app;
+    }
+
+    public void onScoreViewNoteUp()
+    {
+        app.noteUp();
+        grip.invalidate();
+    }
+
+    public void onScoreViewNoteDown()
+    {
+        app.noteDown();
+        grip.invalidate();
+    }
+
+    public void onScoreViewNoteUpHalf()
+    {
+        app.noteUpHalf();
+        grip.invalidate();
+    }
+
+    public void onScoreViewNoteDownHalf()
+    {
+        app.noteDownHalf();
+        grip.invalidate();
+    }
+
+    public void onScoreViewNotePosition(int position)
+    {
+        app.noteByPosition(position);
+        grip.invalidate();
+    }
+
+    public void onScoreViewSignatureUp()
+    {
+        app.signatureUp();
+        grip.invalidate();
+    }
+
+    public void onScoreViewSignatureDown()
+    {
+        app.signatureDown();
+        grip.invalidate();
+    }
+
+    public void onScoreViewTrill()
+    {
+        app.noteTrill(!app.noteTrill());
+        grip.invalidate();
+    }
+
+    public void onScoreViewClef()
+    {
+        onClef();
+    }
+
+    public void onGripViewListen(boolean listen) { onListen(listen); }
 }
