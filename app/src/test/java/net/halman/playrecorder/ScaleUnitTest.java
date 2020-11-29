@@ -37,7 +37,7 @@ public class ScaleUnitTest {
     @Test
     public void noteUp ()
     {
-        Note n = new Note (4, Note.Accidentals.NONE);
+        Note n = new Note (4, Note.Accidentals.NONE, false);
         Scale s = new Scale (1);
 
         s.noteUp (n);
@@ -47,7 +47,7 @@ public class ScaleUnitTest {
         assertEquals (7, n.value ());
         assertEquals (Note.Accidentals.NONE, n.accidentals ());
 
-        n = new Note (4+12, Note.Accidentals.NONE);
+        n = new Note (4+12, Note.Accidentals.NONE, false);
         s.noteUp (n);
         assertEquals (5+12, n.value ());
         assertEquals ( Note.Accidentals.NONE, n.accidentals ());
@@ -56,11 +56,11 @@ public class ScaleUnitTest {
         assertEquals (Note.Accidentals.NONE, n.accidentals ());
 
 
-        n.set(Note.c4 - 3*12, Note.Accidentals.NONE);
+        n.set(Note.c4 - 3*12, Note.Accidentals.NONE, false);
         s.noteUp(n);
         assertEquals(Note.d4 - 3*12, n.value());
 
-        n.set(Note.f3, Note.Accidentals.NONE);
+        n.set(Note.f3, Note.Accidentals.NONE, false);
         s.noteUp(n);
         assertEquals(Note.g3, n.value());
     }
@@ -68,7 +68,7 @@ public class ScaleUnitTest {
     @Test
     public void noteDown ()
     {
-        Note n = new Note (0, Note.Accidentals.NONE);
+        Note n = new Note (0, Note.Accidentals.NONE, false);
         Scale s = new Scale (-2);
 
         s.noteDown (n);
@@ -78,7 +78,7 @@ public class ScaleUnitTest {
         assertEquals (-3, n.value ());
         assertEquals (Note.Accidentals.NONE, n.accidentals ());
 
-        n.set(Note.c4 - 3*12, Note.Accidentals.NONE);
+        n.set(Note.c4 - 3*12, Note.Accidentals.NONE, false);
         s.noteDown (n);
         assertEquals (Note.b4 - 4*12, n.value ());
     }
@@ -86,7 +86,7 @@ public class ScaleUnitTest {
     @Test
     public void noteHalfUp ()
     {
-        Note n = new Note (Note.d4, Note.Accidentals.NONE);
+        Note n = new Note (Note.d4, Note.Accidentals.NONE, false);
         Scale s = new Scale (1);
 
         s.noteUpHalf (n);
@@ -109,7 +109,7 @@ public class ScaleUnitTest {
     @Test
     public void noteHalfDown ()
     {
-        Note n = new Note (Note.a4, Note.Accidentals.NONE);
+        Note n = new Note (Note.a4, Note.Accidentals.NONE, false);
         Scale s = new Scale (1);
 
         s.noteDownHalf (n);
@@ -139,16 +139,16 @@ public class ScaleUnitTest {
     public void noteAbsoluteValue() {
         Scale s = new Scale (-1);
 
-        Note n = new Note (Note.b4, Note.Accidentals.NONE);
+        Note n = new Note (Note.b4, Note.Accidentals.NONE, false);
         assertEquals(10, s.noteAbsoluteValue(n));
 
-        n.set(Note.b4, Note.Accidentals.FLAT);
+        n.set(Note.b4, Note.Accidentals.FLAT, false);
         assertEquals(10, s.noteAbsoluteValue(n));
 
-        n.set(Note.b4, Note.Accidentals.RELEASE);
+        n.set(Note.b4, Note.Accidentals.RELEASE, false);
         assertEquals(11, s.noteAbsoluteValue(n));
 
-        n.set(Note.b4, Note.Accidentals.SHARP);
+        n.set(Note.b4, Note.Accidentals.SHARP, false);
         assertEquals(12, s.noteAbsoluteValue(n));
     }
 
@@ -157,24 +157,24 @@ public class ScaleUnitTest {
     {
         Scale s = new Scale (0);
 
-        Note n = new Note (Note.a4, Note.Accidentals.NONE);
+        Note n = new Note (Note.a4, Note.Accidentals.NONE, false);
         assertEquals(44000, s.noteToFrequency(n));
 
-        n.set(Note.a3, Note.Accidentals.NONE);
+        n.set(Note.a3, Note.Accidentals.NONE, false);
         assertEquals(22000, s.noteToFrequency(n));
 
-        n.set(Note.a5, Note.Accidentals.NONE);
+        n.set(Note.a5, Note.Accidentals.NONE, false);
         assertEquals(88000, s.noteToFrequency(n));
 
-        n.set(Note.c5, Note.Accidentals.NONE);
+        n.set(Note.c5, Note.Accidentals.NONE, false);
         assertEquals(26163 * 2, s.noteToFrequency(n));
 
         s = new Scale(1);
 
-        n.set(Note.f5, Note.Accidentals.NONE);
+        n.set(Note.f5, Note.Accidentals.NONE, false);
         assertEquals(36999 * 2, s.noteToFrequency(n));
 
-        n.set(Note.f3, Note.Accidentals.NONE);
+        n.set(Note.f3, Note.Accidentals.NONE, false);
         assertEquals(36999 / 2, s.noteToFrequency(n));
     }
 
@@ -194,6 +194,18 @@ public class ScaleUnitTest {
 
         n = s.frequencyNearestNote(4785);
         assertEquals(n.value(), Note.g4 - 3*12);
+    }
+
+    @Test
+    public void midiNoteTest()
+    {
+        Scale s = new Scale (0);
+
+        Note n = new Note(0, Note.Accidentals.NONE, false);
+        assertEquals(60, s.noteMidiValue(n));
+
+        n.set(Note.a3, Note.Accidentals.SHARP, false);
+        assertEquals(58, s.noteMidiValue(n));
     }
 }
 
