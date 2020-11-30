@@ -6,6 +6,7 @@
 <string name="clef">Notenschlüssel</string>
 <string name="instrument_title">Wählen Sie die Musikinstrument</string>
 <string name="listen">Zuhören</string>
+<string name="playSound">Note abspielen</string>
 <string name="keepScreenOn">Bildschirm an lassen</string>
 <string-array name="instrument_items">
     <item>Sopraninoblockflöte</item>
