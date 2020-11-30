@@ -5,6 +5,7 @@
     <string name="fingering">Aplikatura</string>
     <string name="clef">Klucz</string>
     <string name="listen">Słuchaj</string>
+    <string name="playSound">Zagraj nutę</string>
     <string name="keepScreenOn">Pozostaw ekran włączony</string>
     <string name="instrument_title">Typ instrumentu</string>
     <string-array name="instrument_items">

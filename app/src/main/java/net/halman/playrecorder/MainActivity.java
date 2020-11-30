@@ -32,6 +32,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -39,14 +40,29 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import cn.sherlock.com.sun.media.sound.SF2Soundbank;
+import cn.sherlock.com.sun.media.sound.SoftSynthesizer;
+import jp.kshoji.javax.sound.midi.MidiChannel;
+import jp.kshoji.javax.sound.midi.MidiUnavailableException;
+
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ScoreView.ScoreViewListener, GripView.GripViewListener {
+    public static final int MSG_MIDIOFF = 2;
+    public static final int MSG_MIDION = 3;
+    public static final int MSG_MIDINEXT = 4;
+
     RecorderApp app = null;
     ScoreView score = null;
     GripView grip = null;
     Thread frequencyAnalyzer = null;
+    SoftSynthesizer synthesizer = null;
     boolean keepScreenOn = false;
+    boolean playSound = true;
+    int playCounter = 0;
     PointF lastTouch = new PointF();
 
     View.OnTouchListener scoreOnTouchListener = new View.OnTouchListener() {
@@ -91,14 +107,38 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    Handler freqHandler = new Handler(Looper.getMainLooper()) {
+    Handler msgHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message inputMessage) {
-            if (inputMessage.what == Frequency.MSG_FREQUENCY) {
-                int freq100 = inputMessage.arg1;
-                int freq100_low_precision = inputMessage.arg2;
-                Log.d("FREQUENCY", "Frequency update: " + freq100 + " " + freq100_low_precision);
-                onFrequency(freq100, freq100_low_precision);
+            switch (inputMessage.what) {
+                case Frequency.MSG_FREQUENCY: {
+                    int freq100 = inputMessage.arg1;
+                    int freq100_low_precision = inputMessage.arg2;
+                    Log.d("FREQUENCY", "Frequency update: " + freq100 + " " + freq100_low_precision);
+                    onFrequency(freq100, freq100_low_precision);
+                    break;
+                }
+                case MSG_MIDIOFF: {
+                    if (synthesizer != null) {
+                        synthesizer.getChannels()[0].allNotesOff();
+                    }
+                    break;
+                }
+                case MSG_MIDION: {
+                    if (synthesizer != null) {
+                        MidiChannel channel = synthesizer.getChannels()[0];
+                        channel.allNotesOff();
+                        channel.noteOn(inputMessage.arg1, 127);
+                    }
+                    break;
+                }
+                case MSG_MIDINEXT: {
+                    if (synthesizer != null) {
+                        synthesizer.getChannels()[0].allNotesOff();
+                        longPlayMidiNote();
+                    }
+                    break;
+                }
             }
         }
     };
@@ -110,10 +150,28 @@ public class MainActivity extends AppCompatActivity {
         score = findViewById(R.id.Score);
         score.setOnTouchListener(scoreOnTouchListener);
         score.setOnClickListener(scoreOnClickListener);
+        score.setScoreViewListener(this);
         grip = findViewById(R.id.Grip);
         grip.setOnTouchListener(gripOnTouchListener);
         grip.setOnClickListener(gripOnClickListener);
-        score.setGripView(grip);
+        grip.setGripViewListener(this);
+
+        // initialize midi synthetizer
+        try {
+            /* credit to https://stackoverflow.com/questions/56541361/android-play-soundfont-with-midi-file */
+            InputStream sff = getResources().openRawResource(R.raw.soundfont);
+            SF2Soundbank sf = new SF2Soundbank(sff);
+            synthesizer = new SoftSynthesizer();
+            synthesizer.open();
+            synthesizer.loadAllInstruments(sf);
+        } catch (IOException e) {
+            synthesizer = null;
+            e.printStackTrace();
+        } catch (MidiUnavailableException e) {
+            synthesizer = null;
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -131,6 +189,9 @@ public class MainActivity extends AppCompatActivity {
         item = menu.findItem(R.id.actionKeepScreenOn);
         item.setChecked(keepScreenOn);
 
+        item = menu.findItem(R.id.actionPlaySound);
+        item.setChecked(playSound);
+
         return true;
     }
 
@@ -146,6 +207,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.actionClef:
                 onClef();
+                return true;
+            case R.id.actionPlaySound:
+                item.setChecked(!item.isChecked());
+                onPlaySound(item.isChecked());
                 return true;
             case R.id.actionListen:
                 item.setChecked(!item.isChecked());
@@ -166,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
         loadState();
         updateTitle();
         updateOrientation();
+        updateMidi();
     }
 
     @Override
@@ -175,6 +241,10 @@ public class MainActivity extends AppCompatActivity {
             frequencyAnalyzer.interrupt();
             frequencyAnalyzer = null;
             grip.listen(false);
+        }
+
+        if (synthesizer != null) {
+            synthesizer.getChannels()[0].allNotesOff();
         }
         saveState();
     }
@@ -195,6 +265,75 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void updateMidi() {
+        if (synthesizer == null) {
+            return;
+        }
+
+        if (Constants.isTinWhistle(app.instrumentType())) {
+            synthesizer.getChannels()[0].programChange(1);
+        } else {
+            // default - recorder
+            synthesizer.getChannels()[0].programChange(0);
+        }
+    }
+
+    private void stopMidiNote() {
+        if (synthesizer == null) {
+            return;
+        }
+
+        msgHandler.removeMessages(MSG_MIDION);
+        msgHandler.removeMessages(MSG_MIDIOFF);
+        msgHandler.removeMessages(MSG_MIDINEXT);
+        synthesizer.getChannels()[0].allNotesOff();
+        playCounter = 0;
+    }
+
+    private void playMidiNote() {
+        if (synthesizer == null) {
+            return;
+        }
+
+        stopMidiNote();
+        if (app.noteTrill()) {
+            Pair<Integer, Integer> notes = app.getTrillMidiNotes();
+            int i;
+            for (i = 0; i < 8; i+=2) {
+                msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDION, notes.second, 0), i * 90);
+                msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDION, notes.first, 0), (i + 1) * 90);
+            }
+        } else {
+            msgHandler.sendMessage(msgHandler.obtainMessage(MSG_MIDION, app.getMidiNote(), 0));
+        }
+        msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDIOFF), 1000);
+    }
+
+    private void longPlayMidiNote() {
+        if (synthesizer == null) {
+            return;
+        }
+
+        int left = playCounter - 1;
+        stopMidiNote();
+        if (left > 0) {
+            playCounter = left;
+
+            if (app.noteTrill()) {
+                Pair<Integer, Integer> notes = app.getTrillMidiNotes();
+                int i;
+                for (i = 0; i < 16; i+=2) {
+                    msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDION, notes.second, 0), i * 90);
+                    msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDION, notes.first, 0), (i + 1) * 90);
+                }
+            } else {
+                msgHandler.sendMessage(msgHandler.obtainMessage(MSG_MIDION, app.getMidiNote(), 0));
+            }
+
+            msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDIOFF), 1900);
+            msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDINEXT), 2000);
+        }
+    }
 
     void saveState () {
         if (app == null) {
@@ -212,6 +351,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putBoolean("note-trill", app.noteTrill());
         editor.putInt("grip-orientation", grip.orientation());
         editor.putBoolean("keep-screen-on", keepScreenOn);
+        editor.putBoolean("play-sound", playSound);
         editor.apply();
     }
 
@@ -230,6 +370,7 @@ public class MainActivity extends AppCompatActivity {
         );
         grip.orientation(sharedPref.getInt("grip-orientation", Orientation.UP));
         onKeepScreenOn(sharedPref.getBoolean("keep-screen-on", false));
+        onPlaySound(sharedPref.getBoolean("play-sound", true));
         app.checkLimits();
     }
 
@@ -380,6 +521,7 @@ public class MainActivity extends AppCompatActivity {
                 score.invalidate();
                 invalidateOptionsMenu();
                 updateTitle();
+                updateMidi();
             }
         });
         builder.show();
@@ -436,7 +578,7 @@ public class MainActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 42);
         } else {
-            frequencyAnalyzer = new Thread(new Frequency(freqHandler, app.instrumentHighestFreq100()));
+            frequencyAnalyzer = new Thread(new Frequency(msgHandler, app.instrumentHighestFreq100()));
             frequencyAnalyzer.start();
             grip.listen(true);
             invalidateOptionsMenu();
@@ -482,5 +624,97 @@ public class MainActivity extends AppCompatActivity {
         }
 
         invalidateOptionsMenu();
+    }
+
+    private void onPlaySound(boolean playSound)
+    {
+        this.playSound = playSound;
+
+        invalidateOptionsMenu();
+    }
+
+    // ScoreView Interface
+    public RecorderApp getRecorderApp()
+    {
+        return app;
+    }
+
+    public void onScoreViewNoteUp()
+    {
+        app.noteUp();
+        grip.invalidate();
+        if (playSound && frequencyAnalyzer == null) {
+            playMidiNote();
+        }
+    }
+
+    public void onScoreViewNoteDown()
+    {
+        app.noteDown();
+        grip.invalidate();
+        if (playSound && frequencyAnalyzer == null) {
+            playMidiNote();
+        }
+    }
+
+    public void onScoreViewNoteUpHalf()
+    {
+        app.noteUpHalf();
+        grip.invalidate();
+        if (playSound && frequencyAnalyzer == null) {
+            playMidiNote();
+        }
+    }
+
+    public void onScoreViewNoteDownHalf()
+    {
+        app.noteDownHalf();
+        grip.invalidate();
+        if (playSound && frequencyAnalyzer == null) {
+            playMidiNote();
+        }
+    }
+
+    public void onScoreViewNotePosition(int position)
+    {
+        app.noteByPosition(position);
+        grip.invalidate();
+        if (playSound && frequencyAnalyzer == null) {
+            playMidiNote();
+        }
+    }
+
+    public void onScoreViewSignatureUp()
+    {
+        app.signatureUp();
+        grip.invalidate();
+    }
+
+    public void onScoreViewSignatureDown()
+    {
+        app.signatureDown();
+        grip.invalidate();
+    }
+
+    public void onScoreViewTrill()
+    {
+        app.noteTrill(!app.noteTrill());
+        grip.invalidate();
+    }
+
+    public void onScoreViewClef()
+    {
+        onClef();
+    }
+
+    public void onGripViewListen(boolean listen) { onListen(listen); }
+
+    public void onScoreViewPlay() {
+        if (playCounter > 0) {
+            stopMidiNote();
+        } else {
+            playCounter = 15 + 1;
+            longPlayMidiNote();
+        }
     }
 }

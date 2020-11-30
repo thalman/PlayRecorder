@@ -4,6 +4,7 @@
     <string name="instrument">Instrument</string>
     <string name="fingering">Fingering</string>
     <string name="clef">Clef</string>
+    <string name="playSound">Play the Note</string>
     <string name="listen">Listen</string>
     <string name="keepScreenOn">Keep the screen on</string>
     <string name="instrument_title">Select instrument</string>

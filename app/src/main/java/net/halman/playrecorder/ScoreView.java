@@ -48,8 +48,9 @@ public class ScoreView extends View {
     private Drawable flat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat, null);
     private Drawable natural = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_natural, null);
     private Drawable trill = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_trill, null);
+    private Drawable playBtn = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_stop, null);
     private ShapeDrawable line = new ShapeDrawable(new RectShape());
-    private View grip = null;
+    private ScoreViewListener listener = null;
 
     enum Buttons {
         UP,
@@ -60,7 +61,8 @@ public class ScoreView extends View {
         SCALEDOWN,
         SETNOTE,
         CLEF,
-        TRILL
+        TRILL,
+        PLAY
     }
 
     private double scalefactor = 1.0;
@@ -73,31 +75,28 @@ public class ScoreView extends View {
     private int score_center_y = 0;
 
     Map<Buttons, Rect> buttonPositions = new HashMap<Buttons, Rect>() {{
-        put(Buttons.UP,        new Rect(270, 10, 340, 80));
-        put(Buttons.DOWN,      new Rect(270, score_height - 80, 340, score_height - 10));
-        put(Buttons.HALFUP,    new Rect(355, 10, 425, 80));
-        put(Buttons.HALFDOWN,  new Rect(355, score_height - 80, 425, score_height - 10));
-        put(Buttons.SCALEUP,   new Rect(100, 10, 170, 80));
+        put(Buttons.UP, new Rect(270, 10, 340, 80));
+        put(Buttons.DOWN, new Rect(270, score_height - 80, 340, score_height - 10));
+        put(Buttons.HALFUP, new Rect(355, 10, 425, 80));
+        put(Buttons.HALFDOWN, new Rect(355, score_height - 80, 425, score_height - 10));
+        put(Buttons.SCALEUP, new Rect(100, 10, 170, 80));
         put(Buttons.SCALEDOWN, new Rect(100, score_height - 80, 170, score_height - 10));
-        put(Buttons.SETNOTE,   new Rect(note_position - 35,80, note_position + 35, score_height - 80));
-        put(Buttons.CLEF,      new Rect(score_offset_x + 15,score_offset_y - 15, score_offset_x + 65, score_offset_y + 5 * 20 + 15));
-        put(Buttons.TRILL,     new Rect(185, 10, 255, 80));
+        put(Buttons.SETNOTE, new Rect(note_position - 35, 80, note_position + 35, score_height - 80));
+        put(Buttons.CLEF, new Rect(score_offset_x + 15, score_offset_y - 15, score_offset_x + 65, score_offset_y + 5 * 20 + 15));
+        put(Buttons.TRILL, new Rect(185, 10, 255, 80));
+        put(Buttons.PLAY, new Rect(185, score_height - 80, 255, score_height - 10));
     }};
 
-    MainActivity activity = null;
-
-    private Point touchdown = new Point (0, 0);
+    private Point touchdown = new Point(0, 0);
 
     public ScoreView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-        init(context);
     }
 
     public ScoreView(Context context)
     {
         super(context);
-        init(context);
     }
 
     void onClick(PointF point)
@@ -105,9 +104,9 @@ public class ScoreView extends View {
         int x = unscale(Math.round(point.x) - score_center_x);
         int y = unscale(Math.round(point.y) - score_center_y);
 
-        for (Map.Entry<Buttons, Rect> item: buttonPositions.entrySet()) {
+        for (Map.Entry<Buttons, Rect> item : buttonPositions.entrySet()) {
             Rect r = item.getValue();
-            if (r.contains (x, y)) {
+            if (r.contains(x, y)) {
                 switch (item.getKey()) {
                     case UP:
                         noteUp();
@@ -131,10 +130,15 @@ public class ScoreView extends View {
                         setNote(y);
                         return;
                     case CLEF:
-                        activity.onClef();
+                        if (listener != null) {
+                            listener.onScoreViewClef();
+                        }
                         return;
                     case TRILL:
                         setTrill();
+                        return;
+                    case PLAY:
+                        playNote();
                         return;
                 }
             }
@@ -143,23 +147,21 @@ public class ScoreView extends View {
 
     int scale(int dim)
     {
-        return (int)Math.round(dim * scalefactor);
+        return (int) Math.round(dim * scalefactor);
     }
 
     int unscale(int dim)
     {
-        return (int)Math.round(dim / scalefactor);
+        return (int) Math.round(dim / scalefactor);
     }
 
-    private void init(Context context) {
-        activity = (MainActivity) context;
-    }
-
-    int getItemCenterX(Drawable drawable) {
+    int getItemCenterX(Drawable drawable)
+    {
         return drawable.getIntrinsicWidth() / 2;
     }
 
-    int getItemCenterY(Drawable drawable) {
+    int getItemCenterY(Drawable drawable)
+    {
         if (drawable == gclef) {
             return drawable.getIntrinsicHeight() * 75 / 100;
         }
@@ -177,14 +179,15 @@ public class ScoreView extends View {
         int offsetx = getItemCenterX(drawable);
         int offsety = getItemCenterY(drawable);
         drawable.setBounds(
-                scale(x - (int)(offsetx * zoom)) + score_center_x,
-                scale(y - (int)(offsety * zoom)) + score_center_y,
-                scale(x + (int)((-offsetx + drawable.getIntrinsicWidth()) * zoom)) + score_center_x,
-                scale(y + (int)((-offsety + drawable.getIntrinsicHeight()) * zoom)) + score_center_y);
+                scale(x - (int) (offsetx * zoom)) + score_center_x,
+                scale(y - (int) (offsety * zoom)) + score_center_y,
+                scale(x + (int) ((-offsetx + drawable.getIntrinsicWidth()) * zoom)) + score_center_x,
+                scale(y + (int) ((-offsety + drawable.getIntrinsicHeight()) * zoom)) + score_center_y);
         drawable.draw(canvas);
     }
 
-    void putDrawable(int x, int y, Drawable drawable, Canvas canvas) {
+    void putDrawable(int x, int y, Drawable drawable, Canvas canvas)
+    {
         putDrawable(x, y, drawable, canvas, 1.0);
     }
 
@@ -210,44 +213,55 @@ public class ScoreView extends View {
     void drawScoreLines(Canvas canvas)
     {
         for (int a = 0; a < 5; a++) {
-            drawLine(score_offset_x, score_offset_y + a*20 + 1, score_width, 2, canvas);
+            drawLine(score_offset_x, score_offset_y + a * 20 + 1, score_width, 2, canvas);
         }
-   }
+    }
 
-    void drawSignature(Canvas canvas) {
-        int [] accidentalsPositions = new int []{3,7,4,8,5,9,6,0,10,7,11,8,5,9,6};
+    void drawSignature(Canvas canvas)
+    {
+        int[] accidentalsPositions = new int[]{3, 7, 4, 8, 5, 9, 6, 0, 10, 7, 11, 8, 5, 9, 6};
 
-        if (activity == null || activity.app == null) {
+        if (listener == null) {
             return;
         }
 
-        int signature = activity.app.scale.signature();
+        RecorderApp app = listener.getRecorderApp();
+        if (app == null) {
+            return;
+        }
+
+        int signature = app.scale.signature();
         int offset = 0;
-        if (activity.app.clef() == Scale.Clefs.F) {
+        if (app.clef() == Scale.Clefs.F) {
             offset = 2;
         }
         // draw #
-        for(int i = 1; i <= signature; i++) {
+        for (int i = 1; i <= signature; i++) {
             putDrawable(80 + i * 20, score_offset_y + 5 * 20 - (accidentalsPositions[i + 7] - offset) * 10 + 1, sharp, canvas);
         }
         // draw b
-        for(int i = -1; i >= signature; i--) {
+        for (int i = -1; i >= signature; i--) {
             putDrawable(80 - i * 20, score_offset_y + 5 * 20 - (accidentalsPositions[i + 7] - offset) * 10 + 1, flat, canvas);
         }
     }
 
     void drawNote(Canvas canvas)
     {
-        if (activity == null || activity.app == null) {
+        if (listener == null) {
             return;
         }
 
-        int position = activity.app.notePosition();
+        RecorderApp app = listener.getRecorderApp();
+        if (app == null) {
+            return;
+        }
+
+        int position = app.notePosition();
 
         // debug("pos " + Integer.toString(position) + " sh" + Integer.toString(score_height), canvas);
         int y = score_offset_y + 2 + 5 * 20 - position * 10;
         putDrawable(note_position, y, note, canvas);
-        switch (activity.app.apparent_note.accidentals()) {
+        switch (app.apparent_note.accidentals()) {
             case SHARP:
                 putDrawable(note_position - 40, y, sharp, canvas);
                 break;
@@ -268,7 +282,7 @@ public class ScoreView extends View {
             drawLine(note_position - 35, score_offset_y - (a - 11) * 10 - 10 + 1, 70, 2, canvas);
         }
 
-        if (activity.app.apparent_note.trill()) {
+        if (app.apparent_note.trill()) {
             if (y > score_offset_y) {
                 y = score_offset_y;
             }
@@ -291,12 +305,14 @@ public class ScoreView extends View {
         putDrawable(buttonPositions.get(Buttons.HALFDOWN).centerX(), buttonPositions.get(Buttons.HALFDOWN).centerY(), arrowDown05, canvas);
         putDrawable(buttonPositions.get(Buttons.SCALEUP).centerX(), buttonPositions.get(Buttons.SCALEUP).centerY(), sharpPlus, canvas);
         putDrawable(buttonPositions.get(Buttons.SCALEDOWN).centerX(), buttonPositions.get(Buttons.SCALEDOWN).centerY(), flatPlus, canvas);
-        if (activity != null && activity.app != null && activity.app.canPlayTrills()) {
+        putDrawable(buttonPositions.get(Buttons.PLAY).centerX(), buttonPositions.get(Buttons.PLAY).centerY(), playBtn, canvas);
+        if (listener != null && listener.getRecorderApp() != null && listener.getRecorderApp().canPlayTrills()) {
             putDrawable(buttonPositions.get(Buttons.TRILL).centerX(), buttonPositions.get(Buttons.TRILL).centerY(), trillBtn, canvas);
         }
     }
 
-    private void calculateScale() {
+    private void calculateScale()
+    {
         double sh, sv;
         double height, width;
 
@@ -318,7 +334,16 @@ public class ScoreView extends View {
 
     private void drawClef(Canvas canvas)
     {
-        if (activity.app.clef() == Scale.Clefs.G) {
+        if (listener == null) {
+            return;
+        }
+
+        RecorderApp app = listener.getRecorderApp();
+        if (app == null) {
+            return;
+        }
+
+        if (app.clef() == Scale.Clefs.G) {
             putDrawable(score_offset_x + 40, score_offset_y + 4 * 20, gclef, canvas);
         } else {
             putDrawable(score_offset_x + 40, score_offset_y + 20, fclef, canvas);
@@ -335,72 +360,109 @@ public class ScoreView extends View {
         drawButtons(canvas);
     }
 
-    void setGripView(View v)
-    {
-        grip = v;
-    }
-
-    private void invalidateGripView() {
-        if (grip != null) {
-            grip.invalidate();
-        }
-    }
-
     private void noteUp()
     {
-        activity.app.noteUp();
+        if (listener == null) {
+            return;
+        }
+
+        listener.onScoreViewNoteUp();
         invalidate();
-        invalidateGripView();
     }
 
     private void noteDown()
     {
-        activity.app.noteDown();
+        if (listener == null) {
+            return;
+        }
+
+        listener.onScoreViewNoteDown();
         invalidate();
-        invalidateGripView();
     }
+
     private void noteUpHalf()
     {
-        activity.app.noteUpHalf();
+        if (listener == null) {
+            return;
+        }
+
+        listener.onScoreViewNoteUpHalf();
         invalidate();
-        invalidateGripView();
     }
 
     private void noteDownHalf()
     {
-        activity.app.noteDownHalf();
+        if (listener == null) {
+            return;
+        }
+
+        listener.onScoreViewNoteDownHalf();
         invalidate();
-        invalidateGripView();
     }
 
     private void scaleUp()
     {
-        activity.app.signatureUp();
+        if (listener == null) {
+            return;
+        }
+
+        listener.onScoreViewSignatureUp();
         invalidate();
-        invalidateGripView();
     }
 
     private void scaleDown()
     {
-        activity.app.signatureDown();
+        if (listener == null) {
+            return;
+        }
+
+        listener.onScoreViewSignatureDown();
         invalidate();
-        invalidateGripView();
     }
 
     private void setNote(int y)
     {
+        if (listener == null) {
+            return;
+        }
+
         int position = (score_offset_y + 2 + 5 * 20 - y + 3) / 10;
-        activity.app.noteByPosition(position);
+        listener.onScoreViewNotePosition(position);
         invalidate();
-        invalidateGripView();
     }
 
-    private  void setTrill()
+    private void setTrill()
     {
-        if (activity != null && activity.app != null) {
-            activity.app.noteTrill(!activity.app.noteTrill());
+        if (listener != null) {
+            listener.onScoreViewTrill();
             invalidate();
-            invalidateGripView();
         }
+    }
+
+    private void playNote()
+    {
+        if (listener != null) {
+            listener.onScoreViewPlay();
+        }
+    }
+
+    void setScoreViewListener(ScoreViewListener listener)
+    {
+        this.listener = listener;
+    }
+
+    interface ScoreViewListener
+    {
+        RecorderApp getRecorderApp();
+        void onScoreViewClef();
+        void onScoreViewNoteUp();
+        void onScoreViewNoteDown();
+        void onScoreViewNoteUpHalf();
+        void onScoreViewNoteDownHalf();
+        void onScoreViewNotePosition(int position);
+        void onScoreViewSignatureUp();
+        void onScoreViewSignatureDown();
+        void onScoreViewTrill();
+        void onScoreViewPlay();
     }
 }

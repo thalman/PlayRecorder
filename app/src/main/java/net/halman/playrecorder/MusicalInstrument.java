@@ -17,6 +17,7 @@
 
 package net.halman.playrecorder;
 
+import android.util.Pair;
 import android.util.SparseArray;
 import java.util.ArrayList;
 
@@ -217,5 +218,20 @@ public abstract class MusicalInstrument {
     void trillGrips(SparseArray<ArrayList<Grip>> array_of_grips)
     {
         instrument_trill_grips = array_of_grips;
+    }
+
+    Pair<Note,Note> trillNotes(Scale scale, Note real_note)
+    {
+        Note base = new Note(real_note);
+        Note upper = new Note(base);
+        scale.noteUp(upper);
+
+        int idx = scale.noteAbsoluteValue(base);
+        int idx_upper = scale.noteAbsoluteValue(upper);
+        if (idx == idx_upper) {
+            scale.noteUp(upper);
+        }
+
+        return new Pair<>(base, upper);
     }
 }

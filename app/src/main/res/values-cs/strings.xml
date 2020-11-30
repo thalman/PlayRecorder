@@ -4,6 +4,7 @@
     <string name="instrument">Nástroj</string>
     <string name="fingering">Prstoklad</string>
     <string name="clef">Klíč</string>
+    <string name="playSound">Hrát notu</string>
     <string name="listen">Naslouchat</string>
     <string name="keepScreenOn">Nezhasínat obrazovku</string>
     <string name="instrument_title">Vyberte typ flétny</string>

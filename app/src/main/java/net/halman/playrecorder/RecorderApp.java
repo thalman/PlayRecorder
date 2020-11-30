@@ -17,6 +17,8 @@
 
 package net.halman.playrecorder;
 
+import android.util.Pair;
+
 import java.util.ArrayList;
 
 import static net.halman.playrecorder.Scale.*;
@@ -307,5 +309,14 @@ public class RecorderApp {
                 apparent_note.set(musical_instrument.apparentHighestNote());
             }
         }
+    }
+
+    int getMidiNote() {
+        return scale.noteMidiValue(musical_instrument.apparentNoteToRealNote(apparent_note));
+    }
+
+    Pair<Integer, Integer> getTrillMidiNotes() {
+        Pair<Note, Note> trill = musical_instrument.trillNotes(scale, musical_instrument.apparentNoteToRealNote(apparent_note));
+        return new Pair<>(scale.noteMidiValue(trill.first), scale.noteMidiValue(trill.second));
     }
 }

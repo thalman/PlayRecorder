@@ -261,6 +261,10 @@ public class Scale {
         return result;
     }
 
+    int noteMidiValue(Note note)
+    {
+        return noteAbsoluteValue(note) + 60;
+    }
 
     int noteNameIndex(Note n)
     {

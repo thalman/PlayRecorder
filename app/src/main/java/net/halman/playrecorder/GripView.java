@@ -42,7 +42,7 @@ public class GripView extends View {
         MEASURE
     }
 
-    private MainActivity activity = null;
+    GripViewListener listener = null;
 
     private Drawable hole_close = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole, null);
     private Drawable hole_open = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_empty, null);
@@ -86,8 +86,7 @@ public class GripView extends View {
     }
 
     private void init(Context context) {
-        activity = (MainActivity) context;
-        noteNames = getResources().getStringArray(R.array.note_names);
+        noteNames = context.getResources().getStringArray(R.array.note_names);
     }
 
     private void calculateScale() {
@@ -148,7 +147,7 @@ public class GripView extends View {
                         changeOrientation();
                         return;
                     case MEASURE:
-                        if (activity != null) { activity.onListen(!listening); }
+                        if (listener != null) { listener.onGripViewListen(!listening); }
                         return;
                 }
             }
@@ -260,12 +259,21 @@ public class GripView extends View {
 
     private void drawGrip(ArrayList<Grip> grips, Canvas canvas)
     {
+        if (listener == null) {
+            return;
+        }
+
+        RecorderApp app = listener.getRecorderApp();
+        if (app == null) {
+            return;
+        }
+
         if ((grips == null) || (grips.size() == 0)) {
             drawText(grip_width / 2, grip_height / 2 + 85, 100, "?", canvas);
             return;
         }
 
-        int holesCount = activity.app.numberOfHoles();
+        int holesCount = app.numberOfHoles();
 
         int step = grip_width / (grips.size() + 1);
 
@@ -273,7 +281,7 @@ public class GripView extends View {
             int x = step + g * step;
             Grip grip = grips.get(g);
             for (int i = 0; i < holesCount; i++) {
-                Hole h = activity.app.getHole(current_orientation, i);
+                Hole h = app.getHole(current_orientation, i);
                 switch (grip.get(i)) {
                     case Hole.OPEN:
                         putDrawable(x + h.x, h.y, hole_open, canvas, h.zoom);
@@ -299,14 +307,15 @@ public class GripView extends View {
     }
 
     protected void onDraw(Canvas canvas) {
-        if (activity != null && activity.app != null) {
+        if (listener != null && listener.getRecorderApp() != null) {
             calculateScale();
-            ArrayList<Grip> grips = activity.app.grips();
+            RecorderApp app = listener.getRecorderApp();
+            ArrayList<Grip> grips = app.grips();
 
             drawButtons(canvas);
             drawGrip(grips, canvas);
             drawPointer(canvas);
-            drawText(grip_width / 2, 50, 30, noteNames[activity.app.noteNameIndex()], canvas);
+            drawText(grip_width / 2, 50, 30, noteNames[app.noteNameIndex()], canvas);
         }
     }
 
@@ -334,5 +343,15 @@ public class GripView extends View {
             listening = l;
             invalidate();
         }
+    }
+
+    void setGripViewListener(GripViewListener listener)
+    {
+        this.listener = listener;
+    }
+
+    interface GripViewListener {
+        RecorderApp getRecorderApp();
+        void onGripViewListen(boolean listen);
     }
 }
