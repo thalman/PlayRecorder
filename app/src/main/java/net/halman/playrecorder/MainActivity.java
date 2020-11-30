@@ -644,4 +644,8 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     }
 
     public void onGripViewListen(boolean listen) { onListen(listen); }
+
+    public void onScoreViewPlay() {
+        playMidiNote();
+    }
 }

@@ -48,6 +48,7 @@ public class ScoreView extends View {
     private Drawable flat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat, null);
     private Drawable natural = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_natural, null);
     private Drawable trill = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_trill, null);
+    private Drawable playBtn = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_stop, null);
     private ShapeDrawable line = new ShapeDrawable(new RectShape());
     private ScoreViewListener listener = null;
 
@@ -60,7 +61,8 @@ public class ScoreView extends View {
         SCALEDOWN,
         SETNOTE,
         CLEF,
-        TRILL
+        TRILL,
+        PLAY
     }
 
     private double scalefactor = 1.0;
@@ -82,6 +84,7 @@ public class ScoreView extends View {
         put(Buttons.SETNOTE, new Rect(note_position - 35, 80, note_position + 35, score_height - 80));
         put(Buttons.CLEF, new Rect(score_offset_x + 15, score_offset_y - 15, score_offset_x + 65, score_offset_y + 5 * 20 + 15));
         put(Buttons.TRILL, new Rect(185, 10, 255, 80));
+        put(Buttons.PLAY, new Rect(185, score_height - 80, 255, score_height - 10));
     }};
 
     private Point touchdown = new Point(0, 0);
@@ -133,6 +136,9 @@ public class ScoreView extends View {
                         return;
                     case TRILL:
                         setTrill();
+                        return;
+                    case PLAY:
+                        playNote();
                         return;
                 }
             }
@@ -299,6 +305,7 @@ public class ScoreView extends View {
         putDrawable(buttonPositions.get(Buttons.HALFDOWN).centerX(), buttonPositions.get(Buttons.HALFDOWN).centerY(), arrowDown05, canvas);
         putDrawable(buttonPositions.get(Buttons.SCALEUP).centerX(), buttonPositions.get(Buttons.SCALEUP).centerY(), sharpPlus, canvas);
         putDrawable(buttonPositions.get(Buttons.SCALEDOWN).centerX(), buttonPositions.get(Buttons.SCALEDOWN).centerY(), flatPlus, canvas);
+        putDrawable(buttonPositions.get(Buttons.PLAY).centerX(), buttonPositions.get(Buttons.PLAY).centerY(), playBtn, canvas);
         if (listener != null && listener.getRecorderApp() != null && listener.getRecorderApp().canPlayTrills()) {
             putDrawable(buttonPositions.get(Buttons.TRILL).centerX(), buttonPositions.get(Buttons.TRILL).centerY(), trillBtn, canvas);
         }
@@ -432,6 +439,13 @@ public class ScoreView extends View {
         }
     }
 
+    private void playNote()
+    {
+        if (listener != null) {
+            listener.onScoreViewPlay();
+        }
+    }
+
     void setScoreViewListener(ScoreViewListener listener)
     {
         this.listener = listener;
@@ -449,5 +463,6 @@ public class ScoreView extends View {
         void onScoreViewSignatureUp();
         void onScoreViewSignatureDown();
         void onScoreViewTrill();
+        void onScoreViewPlay();
     }
 }
