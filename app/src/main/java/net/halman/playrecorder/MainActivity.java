@@ -32,6 +32,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -51,7 +52,8 @@ import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class MainActivity extends AppCompatActivity implements ScoreView.ScoreViewListener, GripView.GripViewListener {
     public static final int MSG_MIDIOFF = 2;
-    public static final int MSG_MIDINEXT = 3;
+    public static final int MSG_MIDION = 3;
+    public static final int MSG_MIDINEXT = 4;
 
     RecorderApp app = null;
     ScoreView score = null;
@@ -119,6 +121,14 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                 case MSG_MIDIOFF: {
                     if (synthesizer != null) {
                         synthesizer.getChannels()[0].allNotesOff();
+                    }
+                    break;
+                }
+                case MSG_MIDION: {
+                    if (synthesizer != null) {
+                        MidiChannel channel = synthesizer.getChannels()[0];
+                        channel.allNotesOff();
+                        channel.noteOn(inputMessage.arg1, 127);
                     }
                     break;
                 }
@@ -273,6 +283,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
             return;
         }
 
+        msgHandler.removeMessages(MSG_MIDION);
         msgHandler.removeMessages(MSG_MIDIOFF);
         msgHandler.removeMessages(MSG_MIDINEXT);
         synthesizer.getChannels()[0].allNotesOff();
@@ -285,8 +296,16 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         }
 
         stopMidiNote();
-        MidiChannel chanel = synthesizer.getChannels()[0];
-        chanel.noteOn(app.getMidiNote(), 127);
+        if (app.noteTrill()) {
+            Pair<Integer, Integer> notes = app.getTrillMidiNotes();
+            int i;
+            for (i = 0; i < 8; i+=2) {
+                msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDION, notes.second, 0), i * 90);
+                msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDION, notes.first, 0), (i + 1) * 90);
+            }
+        } else {
+            msgHandler.sendMessage(msgHandler.obtainMessage(MSG_MIDION, app.getMidiNote(), 0));
+        }
         msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDIOFF), 1000);
     }
 
@@ -299,8 +318,18 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         stopMidiNote();
         if (left > 0) {
             playCounter = left;
-            MidiChannel chanel = synthesizer.getChannels()[0];
-            chanel.noteOn(app.getMidiNote(), 127);
+
+            if (app.noteTrill()) {
+                Pair<Integer, Integer> notes = app.getTrillMidiNotes();
+                int i;
+                for (i = 0; i < 16; i+=2) {
+                    msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDION, notes.second, 0), i * 90);
+                    msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDION, notes.first, 0), (i + 1) * 90);
+                }
+            } else {
+                msgHandler.sendMessage(msgHandler.obtainMessage(MSG_MIDION, app.getMidiNote(), 0));
+            }
+
             msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDIOFF), 1900);
             msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDINEXT), 2000);
         }
