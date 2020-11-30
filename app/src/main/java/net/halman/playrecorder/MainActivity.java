@@ -457,6 +457,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                 score.invalidate();
                 invalidateOptionsMenu();
                 updateTitle();
+                updateMidi();
             }
         });
         builder.show();
