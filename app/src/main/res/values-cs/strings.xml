@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Play Recorder</string>
     <string name="instrument">Nástroj</string>
     <string name="fingering">Prstoklad</string>
     <string name="clef">Klíč</string>

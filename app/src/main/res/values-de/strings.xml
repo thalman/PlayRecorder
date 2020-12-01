@@ -1,46 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="app_name">Play Recorder</string>
-<string name="instrument">Musikinstrument</string>
-<string name="fingering">Griffweise</string>
-<string name="clef">Notenschlüssel</string>
-<string name="instrument_title">Wählen Sie die Musikinstrument</string>
-<string name="listen">Zuhören</string>
-<string name="playSound">Note abspielen</string>
-<string name="keepScreenOn">Bildschirm an lassen</string>
-<string-array name="instrument_items">
-    <item>Sopraninoblockflöte</item>
-    <item>Sopranblockflöte</item>
-    <item>Altblockflöte</item>
-    <item>Tenorblockflöte</item>
-    <item>Bassblockflöte</item>
-    <item>Tin Whistle in D</item>
-    <item>Tin Whistle in G</item>
-</string-array>
-<string name="fingering_title">Wählen Sie die Blockflötengriffe</string>
-<string-array name="fingering_items">
-    <item>Barock</item>
-    <item>Deutsch</item>
-</string-array>
-<string name="clef_title">Wählen Sie den Notenschlüssel</string>
-<string-array name="clef_items">
-    <item>Violinschlüssel</item>
-    <item>Bassschlüssel</item>
-</string-array>
-<string name="recorder_app_title">%1$s (%2$s)</string>
-<!--    name="app_title">Altblockflöte (Barock)< -->
-<string-array name="note_names">
-    <item>C</item>
-    <item>C♯/D♭</item>
-    <item>D</item>
-    <item>D♯/E♭</item>
-    <item>E</item>
-    <item>F</item>
-    <item>F♯/G♭</item>
-    <item>G</item>
-    <item>G♯/A♭</item>
-    <item>A</item>
-    <item>B</item>
-    <item>H</item>
-</string-array>
+    <string name="instrument">Musikinstrument</string>
+    <string name="fingering">Griffweise</string>
+    <string name="clef">Notenschlüssel</string>
+    <string name="instrument_title">Wählen Sie die Musikinstrument</string>
+    <string name="listen">Zuhören</string>
+    <string name="playSound">Note abspielen</string>
+    <string name="keepScreenOn">Bildschirm an lassen</string>
+    <string-array name="instrument_items">
+        <item>Sopraninoblockflöte</item>
+        <item>Sopranblockflöte</item>
+        <item>Altblockflöte</item>
+        <item>Tenorblockflöte</item>
+        <item>Bassblockflöte</item>
+        <item>Tin Whistle in D</item>
+        <item>Tin Whistle in G</item>
+    </string-array>
+    <string name="fingering_title">Wählen Sie die Blockflötengriffe</string>
+    <string-array name="fingering_items">
+        <item>Barock</item>
+        <item>Deutsch</item>
+    </string-array>
+    <string name="clef_title">Wählen Sie den Notenschlüssel</string>
+    <string-array name="clef_items">
+        <item>Violinschlüssel</item>
+        <item>Bassschlüssel</item>
+    </string-array>
+    <string name="recorder_app_title">%1$s (%2$s)</string>
+    <!--    name="app_title">Altblockflöte (Barock)< -->
+    <string-array name="note_names">
+        <item>C</item>
+        <item>C♯/D♭</item>
+        <item>D</item>
+        <item>D♯/E♭</item>
+        <item>E</item>
+        <item>F</item>
+        <item>F♯/G♭</item>
+        <item>G</item>
+        <item>G♯/A♭</item>
+        <item>A</item>
+        <item>B</item>
+        <item>H</item>
+    </string-array>
 </resources>
