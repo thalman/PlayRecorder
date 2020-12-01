@@ -22,13 +22,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ## Soundfonts
 
-PlayRecorder uses MIDI synthetizer to play the sound.
-
-Included soundfont for Tin Whistle can be found at
-https://musical-artifacts.com/artifacts/546 and
-is published under "Creative Commons Attribution 4.0 International".
-
-Recorder sound comes from tgsf21x soundfont.
+PlayRecorder uses MIDI synthetizer to play the sound. Included instuments
+comes from tgsf21x soundfont.
 
 ## Screenshots
 
