@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     SoftSynthesizer synthesizer = null;
     boolean keepScreenOn = false;
     boolean playSound = true;
+    Long doNotListenUntil = 0l;
     int playCounter = 0;
     PointF lastTouch = new PointF();
 
@@ -115,12 +116,17 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                     int freq100 = inputMessage.arg1;
                     int freq100_low_precision = inputMessage.arg2;
                     Log.d("FREQUENCY", "Frequency update: " + freq100 + " " + freq100_low_precision);
-                    onFrequency(freq100, freq100_low_precision);
+                    if (doNotListenUntil < System.currentTimeMillis()) {
+                        onFrequency(freq100, freq100_low_precision);
+                    } else {
+                        onFrequency(0, 0);
+                    }
                     break;
                 }
                 case MSG_MIDIOFF: {
                     if (synthesizer != null) {
                         synthesizer.getChannels()[0].allNotesOff();
+                        doNotListenUntil = System.currentTimeMillis() + 500;
                     }
                     break;
                 }
@@ -129,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                         MidiChannel channel = synthesizer.getChannels()[0];
                         channel.allNotesOff();
                         channel.noteOn(inputMessage.arg1, 127);
+                        doNotListenUntil = System.currentTimeMillis() + 2500;
                     }
                     break;
                 }
