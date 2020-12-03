@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     public static final int MSG_MIDIOFF = 2;
     public static final int MSG_MIDION = 3;
     public static final int MSG_MIDINEXT = 4;
+    private static final int LONG_NOTE_DURATION = 2000;
+    private static final int SHORT_NOTE_DURATION = 1000;
 
     RecorderApp app = null;
     ScoreView score = null;
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     SoftSynthesizer synthesizer = null;
     boolean keepScreenOn = false;
     boolean playSound = true;
-    Long doNotListenUntil = 0l;
+    Long midiOffTimestamp = 0l;
     int playCounter = 0;
     PointF lastTouch = new PointF();
 
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                     int freq100 = inputMessage.arg1;
                     int freq100_low_precision = inputMessage.arg2;
                     Log.d("FREQUENCY", "Frequency update: " + freq100 + " " + freq100_low_precision);
-                    if (doNotListenUntil < System.currentTimeMillis()) {
+                    if (midiOffTimestamp + 500 < System.currentTimeMillis()) {
                         onFrequency(freq100, freq100_low_precision);
                     } else {
                         onFrequency(0, 0);
@@ -126,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                 case MSG_MIDIOFF: {
                     if (synthesizer != null) {
                         synthesizer.getChannels()[0].allNotesOff();
-                        doNotListenUntil = System.currentTimeMillis() + 500;
+                        midiOffTimestamp = System.currentTimeMillis();
                     }
                     break;
                 }
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                         MidiChannel channel = synthesizer.getChannels()[0];
                         channel.allNotesOff();
                         channel.noteOn(inputMessage.arg1, 127);
-                        doNotListenUntil = System.currentTimeMillis() + 2500;
+                        midiOffTimestamp = System.currentTimeMillis() + LONG_NOTE_DURATION;
                     }
                     break;
                 }
@@ -313,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         } else {
             msgHandler.sendMessage(msgHandler.obtainMessage(MSG_MIDION, app.getMidiNote(), 0));
         }
-        msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDIOFF), 1000);
+        msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDIOFF), SHORT_NOTE_DURATION);
     }
 
     private void longPlayMidiNote() {
@@ -337,8 +339,8 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                 msgHandler.sendMessage(msgHandler.obtainMessage(MSG_MIDION, app.getMidiNote(), 0));
             }
 
-            msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDIOFF), 1900);
-            msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDINEXT), 2000);
+            msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDIOFF), LONG_NOTE_DURATION - 100);
+            msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_MIDINEXT), LONG_NOTE_DURATION);
         }
     }
 
@@ -650,7 +652,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     {
         app.noteUp();
         grip.invalidate();
-        if (playSound && frequencyAnalyzer == null) {
+        if (playSound) {
             playMidiNote();
         }
     }
@@ -659,7 +661,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     {
         app.noteDown();
         grip.invalidate();
-        if (playSound && frequencyAnalyzer == null) {
+        if (playSound) {
             playMidiNote();
         }
     }
@@ -668,7 +670,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     {
         app.noteUpHalf();
         grip.invalidate();
-        if (playSound && frequencyAnalyzer == null) {
+        if (playSound) {
             playMidiNote();
         }
     }
@@ -677,7 +679,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     {
         app.noteDownHalf();
         grip.invalidate();
-        if (playSound && frequencyAnalyzer == null) {
+        if (playSound) {
             playMidiNote();
         }
     }
@@ -686,7 +688,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     {
         app.noteByPosition(position);
         grip.invalidate();
-        if (playSound && frequencyAnalyzer == null) {
+        if (playSound) {
             playMidiNote();
         }
     }
