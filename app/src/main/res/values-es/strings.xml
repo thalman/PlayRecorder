@@ -3,6 +3,7 @@
     <string name="instrument">Instrumento</string>
     <string name="fingering">Digitación</string>
     <string name="clef">Clave</string>
+    <string name="playSound">Toca la nota</string>
     <string name="listen">Grabar</string>
     <string name="keepScreenOn">Mantener la pantalla encendida</string>
     <string name="instrument_title">Seleccionar instrumento</string>

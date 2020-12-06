@@ -3,6 +3,7 @@
     <string name="instrument">Instrumentua</string>
     <string name="fingering">Digitazioa</string>
     <string name="clef">Ikurra</string>
+    <string name="playSound">Nota jo</string>
     <string name="listen">Grabatu</string>
     <string name="keepScreenOn">Mantendu pantaila piztuta</string>
     <string name="instrument_title">Instrumentua aukeratu</string>
