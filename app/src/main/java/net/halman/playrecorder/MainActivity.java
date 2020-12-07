@@ -709,6 +709,9 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     {
         app.noteTrill(!app.noteTrill());
         grip.invalidate();
+        if (playSound) {
+            playMidiNote();
+        }
     }
 
     public void onScoreViewClef()
