@@ -41,4 +41,13 @@
         <item>B</item>
         <item>H</item>
     </string-array>
+
+    <string name="promoteRate">Ohodnoťte PlayRecorder</string>
+    <string name="promoteRateDetail">Pokud se Vám aplikace PlayRecorder líbí, prosím věnujte chvíli jejímu ohodnocení. Díky!</string>
+    <string name="promoteRateNow">Ohodnotit</string>
+    <string name="promoteRateLater">Později</string>
+    <string name="promoteRateNo">Ne, děkuji</string>
+    <string name="promoteSupport">Podpořit PlayRecorder</string>
+    <string name="promoteSupportDetail">Pokud se Vám aplikace PlayRecorder líbí, můžete podpořit vývoj zakoupením placené verze PlayRecorder+.</string>
+    <string name="promoteSupportNow">Do obchodu</string>
 </resources>

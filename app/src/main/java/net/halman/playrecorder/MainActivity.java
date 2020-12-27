@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     public static final int MSG_MIDIOFF = 2;
     public static final int MSG_MIDION = 3;
     public static final int MSG_MIDINEXT = 4;
+    public static final int MSG_FEEDBACK = 5;
     private static final int LONG_NOTE_DURATION = 2000;
     private static final int SHORT_NOTE_DURATION = 1000;
 
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     SoftSynthesizer synthesizer = null;
     boolean keepScreenOn = false;
     boolean playSound = true;
+    Promotion promotion = null;
     Long midiOffTimestamp = 0l;
     int playCounter = 0;
     PointF lastTouch = new PointF();
@@ -148,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                     }
                     break;
                 }
+                case MSG_FEEDBACK: {
+                    promotion.promote();
+                }
             }
         }
     };
@@ -181,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
             e.printStackTrace();
         }
 
+        promotion = new Promotion(this);
     }
 
     @Override
@@ -642,6 +648,12 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         invalidateOptionsMenu();
     }
 
+    private void sendFeedbackMessage()
+    {
+        msgHandler.removeMessages(MSG_FEEDBACK);
+        msgHandler.sendMessageDelayed(msgHandler.obtainMessage(MSG_FEEDBACK), 7000);
+    }
+
     // ScoreView Interface
     public RecorderApp getRecorderApp()
     {
@@ -652,6 +664,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     {
         app.noteUp();
         grip.invalidate();
+        sendFeedbackMessage();
         if (playSound) {
             playMidiNote();
         }
@@ -661,6 +674,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     {
         app.noteDown();
         grip.invalidate();
+        sendFeedbackMessage();
         if (playSound) {
             playMidiNote();
         }
@@ -670,6 +684,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     {
         app.noteUpHalf();
         grip.invalidate();
+        sendFeedbackMessage();
         if (playSound) {
             playMidiNote();
         }
@@ -679,6 +694,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     {
         app.noteDownHalf();
         grip.invalidate();
+        sendFeedbackMessage();
         if (playSound) {
             playMidiNote();
         }
@@ -688,6 +704,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     {
         app.noteByPosition(position);
         grip.invalidate();
+        sendFeedbackMessage();
         if (playSound) {
             playMidiNote();
         }

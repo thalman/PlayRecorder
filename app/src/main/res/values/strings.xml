@@ -42,4 +42,13 @@
         <item>A♯/B♭</item>
         <item>B</item>
     </string-array>
+
+    <string name="promoteRate">Rate PlayRecorder</string>
+    <string name="promoteRateDetail">If you enjoy using PlayRecorder, please take a moment to rate it. Thanks for your support!</string>
+    <string name="promoteRateNow">Rate</string>
+    <string name="promoteRateLater">Later</string>
+    <string name="promoteRateNo">No, thanks</string>
+    <string name="promoteSupport">Support PlayRecorder</string>
+    <string name="promoteSupportDetail">If you enjoy using PlayRecorder, you may consider support the development by buying PlayRecorder +.</string>
+    <string name="promoteSupportNow">Buy PlayRecorder +</string>
 </resources>
