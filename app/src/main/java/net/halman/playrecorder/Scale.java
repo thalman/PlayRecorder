@@ -391,6 +391,42 @@ public class Scale {
         while (noteAbsoluteValue(n) > abs_value) {
             noteDownHalf(n);
         }
+
+        if (n.accidentals() != NONE) {
+            // found note with accidentals, lets look for a better one
+            Note betterNote = new Note(n);
+            noteDownHalf(betterNote);
+            noteDownHalf(betterNote);
+            for (int i = 0; i < 5; i++) {
+                noteUpHalf(betterNote);
+                if (noteAbsoluteValue(betterNote) == abs_value && betterNote.accidentals() == NONE) {
+                    return betterNote;
+                }
+            }
+            for (int i = 0; i < 5; i++) {
+                noteDownHalf(betterNote);
+                if (noteAbsoluteValue(betterNote) == abs_value && betterNote.accidentals() == NONE) {
+                    return betterNote;
+                }
+            }
+
+            betterNote.set(n);
+            noteDownHalf(betterNote);
+            noteDownHalf(betterNote);
+            for (int i = 0; i < 5; i++) {
+                noteUpHalf(betterNote);
+                if (noteAbsoluteValue(betterNote) == abs_value && betterNote.accidentals() == RELEASE) {
+                    return betterNote;
+                }
+            }
+            for (int i = 0; i < 5; i++) {
+                noteDownHalf(betterNote);
+                if (noteAbsoluteValue(betterNote) == abs_value && betterNote.accidentals() == RELEASE) {
+                    return betterNote;
+                }
+            }
+        }
+
         return n;
     }
 }
