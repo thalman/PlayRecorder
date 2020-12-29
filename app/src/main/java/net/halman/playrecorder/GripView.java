@@ -239,8 +239,15 @@ public class GripView extends View {
         }
 
         Rect pos = buttonPositions.get(Buttons.MEASURE);
-        // TODO use logarithmic scale here
-        int x = pos.centerX() + delta100 / 75;
+        int delta_scale = delta100 / 75;
+        if (delta_scale > 40) {
+            delta_scale = 40;
+        }
+        if (delta_scale < -40) {
+            delta_scale = -40;
+        }
+
+        int x = pos.centerX() + delta_scale;
 
         if (signal_detected > 0) {
             pointer = pointer_far;

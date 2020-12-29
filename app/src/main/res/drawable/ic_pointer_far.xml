@@ -8,7 +8,7 @@
       android:strokeAlpha="1"
       android:strokeLineJoin="miter"
       android:strokeWidth="0"
-      android:fillColor="#ff0000"
+      android:fillColor="#cc0000"
       android:strokeColor="#000000"
       android:fillAlpha="1"
       android:strokeLineCap="round"/>
