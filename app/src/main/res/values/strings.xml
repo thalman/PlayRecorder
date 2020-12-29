@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Play Recorder</string>
+    <string name="app_name" translatable="false">Play Recorder +</string>
     <string name="instrument">Instrument</string>
     <string name="fingering">Fingering</string>
     <string name="clef">Clef</string>
