@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                     int freq100 = inputMessage.arg1;
                     int freq100_low_precision = inputMessage.arg2;
                     Log.d("FREQUENCY", "Frequency update: " + freq100 + " " + freq100_low_precision);
-                    if (midiOffTimestamp + 1000 < System.currentTimeMillis()) {
+                    if (midiOffTimestamp + 1500 < System.currentTimeMillis()) {
                         onFrequency(freq100, freq100_low_precision);
                     } else {
                         onFrequency(0, 0);
