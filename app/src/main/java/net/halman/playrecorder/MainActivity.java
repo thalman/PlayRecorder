@@ -40,13 +40,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import cn.sherlock.com.sun.media.sound.SF2Soundbank;
 import cn.sherlock.com.sun.media.sound.SoftSynthesizer;
 import jp.kshoji.javax.sound.midi.MidiChannel;
-import jp.kshoji.javax.sound.midi.MidiUnavailableException;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
@@ -128,26 +126,16 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                     break;
                 }
                 case MSG_MIDIOFF: {
-                    if (synthesizer != null) {
-                        synthesizer.getChannels()[0].allNotesOff();
-                        midiOffTimestamp = System.currentTimeMillis();
-                    }
+                    noteOff();
                     break;
                 }
                 case MSG_MIDION: {
-                    if (synthesizer != null) {
-                        MidiChannel channel = synthesizer.getChannels()[0];
-                        channel.allNotesOff();
-                        channel.noteOn(inputMessage.arg1, 127);
-                        midiOffTimestamp = System.currentTimeMillis() + LONG_NOTE_DURATION;
-                    }
+                    noteOn(inputMessage.arg1);
                     break;
                 }
                 case MSG_MIDINEXT: {
-                    if (synthesizer != null) {
-                        synthesizer.getChannels()[0].allNotesOff();
-                        longPlayMidiNote();
-                    }
+                    noteOff();
+                    longPlayMidiNote();
                     break;
                 }
                 case MSG_FEEDBACK: {
@@ -170,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         grip.setOnClickListener(gripOnClickListener);
         grip.setGripViewListener(this);
 
-        // initialize midi synthetizer
+        // initialize midi synthesizer
         try {
             /* credit to https://stackoverflow.com/questions/56541361/android-play-soundfont-with-midi-file */
             InputStream sff = getResources().openRawResource(R.raw.soundfont);
@@ -178,15 +166,21 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
             synthesizer = new SoftSynthesizer();
             synthesizer.open();
             synthesizer.loadAllInstruments(sf);
-        } catch (IOException e) {
+        } catch (Exception e) {
             synthesizer = null;
-            e.printStackTrace();
-        } catch (MidiUnavailableException e) {
-            synthesizer = null;
-            e.printStackTrace();
         }
 
         promotion = new Promotion(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (synthesizer != null) {
+            synthesizer.close();
+            synthesizer = null;
+        }
+
+        super.onDestroy();
     }
 
     @Override
@@ -246,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         loadState();
         updateTitle();
         updateOrientation();
-        updateMidi();
+        updateMidiInstrument();
     }
 
     @Override
@@ -258,10 +252,30 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
             grip.listen(false);
         }
 
-        if (synthesizer != null) {
-            synthesizer.getChannels()[0].allNotesOff();
-        }
+        noteOff();
         saveState();
+    }
+
+    private void noteOn(int note)
+    {
+        if (synthesizer != null) {
+            try {
+                MidiChannel channel = synthesizer.getChannels()[0];
+                channel.allNotesOff();
+                channel.noteOn(note, 127);
+            } catch (Exception e) {}
+        }
+        midiOffTimestamp = System.currentTimeMillis() + LONG_NOTE_DURATION;
+    }
+
+    private void noteOff()
+    {
+        if (synthesizer != null) {
+            try {
+                synthesizer.getChannels()[0].allNotesOff();
+            } catch (Exception e) {}
+        }
+        midiOffTimestamp = System.currentTimeMillis();
     }
 
     private void updateOrientation() {
@@ -280,17 +294,19 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         }
     }
 
-    private void updateMidi() {
+    private void updateMidiInstrument() {
         if (synthesizer == null) {
             return;
         }
 
-        if (Constants.isTinWhistle(app.instrumentType())) {
-            synthesizer.getChannels()[0].programChange(1);
-        } else {
-            // default - recorder
-            synthesizer.getChannels()[0].programChange(0);
-        }
+        try {
+            if (Constants.isTinWhistle(app.instrumentType())) {
+                synthesizer.getChannels()[0].programChange(1);
+            } else {
+                // default - recorder
+                synthesizer.getChannels()[0].programChange(0);
+            }
+        } catch (Exception e) {};
     }
 
     private void stopMidiNote() {
@@ -301,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         msgHandler.removeMessages(MSG_MIDION);
         msgHandler.removeMessages(MSG_MIDIOFF);
         msgHandler.removeMessages(MSG_MIDINEXT);
-        synthesizer.getChannels()[0].allNotesOff();
+        noteOff();
         playCounter = 0;
     }
 
@@ -536,7 +552,7 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                 score.invalidate();
                 invalidateOptionsMenu();
                 updateTitle();
-                updateMidi();
+                updateMidiInstrument();
             }
         });
         builder.show();
