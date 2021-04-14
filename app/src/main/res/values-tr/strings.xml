@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Turkish translation for PlayRecorder -->
+<!-- Credit to Vedat Arda Kucuk -->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" translatable="false">Play Recorder</string>
+    <string name="instrument">Enstrüman</string>
+    <string name="fingering">Parmak düzeni</string>
+    <string name="clef">Klef/Anahtar</string>
+    <string name="playSound">Notayı çal</string>
+    <string name="listen">Dinle</string>
+    <string name="keepScreenOn">Ekranı açık tut</string>
+    <string name="instrument_title">Enstrüman tipini seçin</string>
+    <string-array name="instrument_items">
+        <item>Sopranino blokflüt</item>
+        <item>Soprano blokflüt</item>
+        <item>Alto blokflüt</item>
+        <item>Tenor blokflüt</item>
+        <item>Bas blokflüt</item>
+        <item>İrlanda kavalı (Re)</item>
+        <item>İrlanda kavalı (Sol)</item>
+    </string-array>
+    <string name="fingering_title">Parmak düzenini seçin</string>
+    <string-array name="fingering_items">
+        <item>Barok/İngiliz</item>
+        <item>Modern/Alman</item>
+    </string-array>
+    <string name="clef_title">Klef/Anahtar tipini seçiniz</string>
+    <string-array name="clef_items">
+        <item>Tiz klefi / Sol Anahtarı</item>
+        <item>Bas klefi / Fa Anahtarı</item>
+    </string-array>
+    <string name="recorder_app_title">%1$s (%2$s)</string>
+    <string-array name="note_names">
+        <item tools:ignore="TypographyOther">do (C)</item>
+        <item>do♯/re♭ (C♯/D♭)</item>
+        <item>re (D)</item>
+        <item>re♯/mi♭ (D♯/E♭)</item>
+        <item>mi (E)</item>
+        <item>fa (F)</item>
+        <item>fa♯/sol♭ (F♯/G♭)</item>
+        <item>sol (G)</item>
+        <item>sol♯/la♭ (G♯/A♭)</item>
+        <item>la (A)</item>
+        <item>la♯/si♭ (A♯/B♭)</item>
+        <item>si (B)</item>
+    </string-array>
+
+    <string name="promoteRate">PlayRecorder\'ı puanlayın</string>
+    <string name="promoteRateDetail">Eğer PlayRecorder\'ı beğendiyseniz birkaç dakikanızı ayırıp PlayRecorder\'ı puanlayabilirsiniz. Desteğiniz için teşekkür ederiz!</string>
+    <string name="promoteRateNow">Puanla</string>
+    <string name="promoteRateLater">Başka zaman</string>
+    <string name="promoteRateNo">Puanlama</string>
+    <string name="promoteSupport">PlayRecorder\'ı destekleyin</string>
+    <string name="promoteSupportDetail">Eğer PlayRecorder\'ı beğendiyseniz, programı satın alarak geliştirilmesine destek verebilirsiniz +.</string>
+    <string name="promoteSupportNow">PlayRecorder\'ı satın al+</string>
+
+    <!-- Turkish translation for PlayRecorder -->
+    <!-- Credit to Vedat Arda Kucuk -->
+</resources>
