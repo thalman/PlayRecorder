@@ -206,7 +206,7 @@ public class GripView extends View {
 
         double zoom = scale(60) * 0.01;
         int idx = txt.indexOf("♯");
-        if (idx > 0) {
+        while (idx > 0) {
             String tmp = txt_space.substring(0, idx);
             int inpos = (int)paint.measureText(tmp);
             sharp.setBounds(
@@ -215,9 +215,10 @@ public class GripView extends View {
                     xpos + inpos + (int)(sharp.getIntrinsicWidth() * zoom),
                     ypos + (int)(sharp.getIntrinsicHeight() * zoom) - height);
             sharp.draw(c);
+            idx = txt.indexOf("♯", idx + 1);
         }
         idx = txt.indexOf("♭");
-        if (idx > 0) {
+        while (idx > 0) {
             String tmp = txt_space.substring(0, idx);
             int inpos = (int)paint.measureText(tmp);
             flat.setBounds(
@@ -226,7 +227,7 @@ public class GripView extends View {
                     xpos + inpos + (int)(flat.getIntrinsicWidth() * zoom),
                     ypos + (int)(flat.getIntrinsicHeight() * zoom) - height);
             flat.draw(c);
-
+            idx = txt.indexOf("♭", idx + 1);
         }
     }
 
