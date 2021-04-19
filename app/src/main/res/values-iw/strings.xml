@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">נגינת חלילית</string>
+    <string name="instrument">כלי נגינה</string>
+    <string name="fingering">איצבוע</string>
+    <string name="clef">מפתח</string>
+    <string name="playSound">נגנו את התו</string>
+    <string name="listen">האזינו</string>
+    <string name="keepScreenOn">השאר את המסך פעיל</string>
+    <string name="instrument_title">בחרו כלי נגינה</string>
+    <string-array name="instrument_items">
+        <item>חלילית סופרנינו</item>
+        <item>חלילית סופרן</item>
+        <item>חלילית אלט</item>
+        <item>חלילית טנור</item>
+        <item>חלילית בס</item>
+        <item>חלילית אירית בסולם רה</item>
+        <item>חלילית אירית בסולם סול</item>
+    </string-array>
+    <string name="fingering_title">בחרו סוג איצבוע</string>
+    <string-array name="fingering_items">
+        <item>בארוק</item>
+        <item>גרמני</item>
+    </string-array>
+    <string name="clef_title">בחרו מפתח</string>
+    <string-array name="clef_items">
+        <item>סול</item>
+        <item>פה</item>
+    </string-array>
+    <string name="recorder_app_title">%1$s (%2$s)</string>
+    <string-array name="note_names">
+        <item>דו</item>
+        <item>דו דיאז \\ רה במול</item>
+        <item>רה</item>
+        <item>רה דיאז \\ מי במול</item>
+        <item>מי</item>
+        <item>פה</item>
+        <item>פה דיאז \\ סול במול</item>
+        <item>סול</item>
+        <item>סול דיאז \\ לה במול</item>
+        <item>לה</item>
+        <item>לה דיאז \\ סי במול</item>
+        <item>סי</item>
+    </string-array>
+
+    <string name="promoteRate">דרגו את האפליקציה</string>
+    <string name="promoteRateDetail">אם נהניתם מהשימוש באפליקציה, אנא דרגו אותה - זה לוקח דקה או פחות. תודה רבה על התמיכה!</string>
+    <string name="promoteRateNow">לדירוג</string>
+    <string name="promoteRateLater">השהה</string>
+    <string name="promoteRateNo">לא, תודה</string>
+    <string name="promoteSupport">תימכו באפליקציה</string>
+    <string name="promoteSupportDetail">אם אתם נהנים מהשימוש באפליקציה, תוכלו לתמוך בפיתוחה העתידי באמצעות רכישה של נגינת חלילית פלוס.</string>
+    <string name="promoteSupportNow">לרכישת נגינת חלילית פלוס</string>
+</resources>
