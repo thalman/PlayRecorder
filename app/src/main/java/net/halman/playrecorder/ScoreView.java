@@ -87,6 +87,18 @@ public class ScoreView extends View {
         put(Buttons.PLAY, new Rect(185, score_height - 80, 255, score_height - 10));
     }};
 
+    enum Drawables {
+        GCLEF,
+        FCLEF,
+        NOTE
+    }
+
+    Map<Drawables, Point> drawablesSize = new HashMap<Drawables, Point>() {{
+        put(Drawables.GCLEF, new Point(51, 140));
+        put(Drawables.FCLEF, new Point(59, 65));
+        put(Drawables.NOTE, new Point(38, 24));
+    }};
+
     private Point touchdown = new Point(0, 0);
 
     public ScoreView(Context context, AttributeSet attrs)
@@ -155,23 +167,49 @@ public class ScoreView extends View {
         return (int) Math.round(dim / scalefactor);
     }
 
+    private int getDrawableHeight(Drawable drawable) {
+        if (drawable == gclef) {
+            return drawablesSize.get(Drawables.GCLEF).y;
+        }
+        if (drawable == fclef) {
+            return drawablesSize.get(Drawables.FCLEF).y;
+        }
+        if (drawable == note) {
+            return drawablesSize.get(Drawables.NOTE).y;
+        }
+        return drawable.getIntrinsicHeight();
+    }
+
+    private int getDrawableWidth(Drawable drawable) {
+        if (drawable == gclef) {
+            return drawablesSize.get(Drawables.GCLEF).x;
+        }
+        if (drawable == fclef) {
+            return drawablesSize.get(Drawables.FCLEF).x;
+        }
+        if (drawable == note) {
+            return drawablesSize.get(Drawables.NOTE).x;
+        }
+        return drawable.getIntrinsicWidth();
+    }
+
     int getItemCenterX(Drawable drawable)
     {
-        return drawable.getIntrinsicWidth() / 2;
+        return getDrawableWidth(drawable) / 2;
     }
 
     int getItemCenterY(Drawable drawable)
     {
         if (drawable == gclef) {
-            return drawable.getIntrinsicHeight() * 75 / 100;
+            return getDrawableHeight(drawable) * 75 / 100;
         }
         if (drawable == fclef) {
-            return drawable.getIntrinsicHeight() * 25 / 100;
+            return  getDrawableHeight(drawable) * 25 / 100;
         }
         if (drawable == flat) {
-            return drawable.getIntrinsicHeight() * 72 / 100;
+            return  getDrawableHeight(drawable) * 72 / 100;
         }
-        return drawable.getIntrinsicHeight() / 2;
+        return  getDrawableHeight(drawable) / 2;
     }
 
     void putDrawable(int x, int y, Drawable drawable, Canvas canvas, double zoom)
@@ -181,8 +219,8 @@ public class ScoreView extends View {
         drawable.setBounds(
                 scale(x - (int) (offsetx * zoom)) + score_center_x,
                 scale(y - (int) (offsety * zoom)) + score_center_y,
-                scale(x + (int) ((-offsetx + drawable.getIntrinsicWidth()) * zoom)) + score_center_x,
-                scale(y + (int) ((-offsety + drawable.getIntrinsicHeight()) * zoom)) + score_center_y);
+                scale(x + (int) ((-offsetx +  getDrawableWidth(drawable) * zoom))) + score_center_x,
+                scale(y + (int) ((-offsety +  getDrawableHeight(drawable) * zoom))) + score_center_y);
         drawable.draw(canvas);
     }
 
