@@ -409,7 +409,7 @@ public class ScoreView extends View {
         }
         int signature = app.scale.signature();
         String text = names[signature + 7];
-        drawText(10, 140, 20, text, canvas);
+        drawText(10, 150, 30, text, canvas);
     }
 
     protected void onDraw(Canvas canvas)
