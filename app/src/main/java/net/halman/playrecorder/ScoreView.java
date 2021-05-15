@@ -388,6 +388,30 @@ public class ScoreView extends View {
         }
     }
 
+    private void drawText(int x, int y, int size, String txt, Canvas canvas)
+    {
+        int height = (int)scale(size);
+        int xpos = scale(x) + score_center_x;
+        int ypos = scale(y) + score_center_y;
+        MusicalText.draw(xpos, ypos, height, false, txt, canvas, sharp, flat);
+    }
+
+    private void drawScaleName(Canvas canvas)
+    {
+        if (listener == null) {
+            return;
+        }
+
+        String [] names = getResources().getStringArray(R.array.scale_names);
+        RecorderApp app = listener.getRecorderApp();
+        if (app == null) {
+            return;
+        }
+        int signature = app.scale.signature();
+        String text = names[signature + 7];
+        drawText(10, 140, 20, text, canvas);
+    }
+
     protected void onDraw(Canvas canvas)
     {
         calculateScale();
@@ -396,6 +420,7 @@ public class ScoreView extends View {
         drawSignature(canvas);
         drawNote(canvas);
         drawButtons(canvas);
+        drawScaleName(canvas);
     }
 
     private void noteUp()

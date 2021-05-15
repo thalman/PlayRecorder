@@ -190,45 +190,12 @@ public class GripView extends View {
         putDrawable(buttonPositions.get(Buttons.MEASURE).centerX(), buttonPositions.get(Buttons.MEASURE).centerY(), measure, canvas, 1.0);
     }
 
-    private void drawText(int x, int y, int size, String txt, Canvas c)
+    private void drawText(int x, int y, int size, String txt, Canvas canvas)
     {
-        Paint paint = new Paint();
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.BLACK);
         int height = (int)scale(size);
-        paint.setTextSize(height);
-
-        String txt_space = txt.replace("♯", " ").replace("♭"," ");
-        int width = (int)paint.measureText(txt_space);
-        int xpos = scale(x) - width / 2 + grip_center_x;
-        int ypos = scale(y) - height / 2 + grip_center_y;
-        c.drawText(txt_space, xpos, ypos, paint);
-
-        double zoom = scale(60) * 0.01;
-        int idx = txt.indexOf("♯");
-        while (idx > 0) {
-            String tmp = txt_space.substring(0, idx);
-            int inpos = (int)paint.measureText(tmp);
-            sharp.setBounds(
-                    xpos + inpos,
-                    ypos - height,
-                    xpos + inpos + (int)(sharp.getIntrinsicWidth() * zoom),
-                    ypos + (int)(sharp.getIntrinsicHeight() * zoom) - height);
-            sharp.draw(c);
-            idx = txt.indexOf("♯", idx + 1);
-        }
-        idx = txt.indexOf("♭");
-        while (idx > 0) {
-            String tmp = txt_space.substring(0, idx);
-            int inpos = (int)paint.measureText(tmp);
-            flat.setBounds(
-                    xpos + inpos,
-                    ypos - height,
-                    xpos + inpos + (int)(flat.getIntrinsicWidth() * zoom),
-                    ypos + (int)(flat.getIntrinsicHeight() * zoom) - height);
-            flat.draw(c);
-            idx = txt.indexOf("♭", idx + 1);
-        }
+        int xpos = scale(x) + grip_center_x;
+        int ypos = scale(y) + grip_center_y;
+        MusicalText.draw(xpos, ypos, height, true, txt, canvas, sharp, flat);
     }
 
     private void drawPointer(Canvas canvas)
