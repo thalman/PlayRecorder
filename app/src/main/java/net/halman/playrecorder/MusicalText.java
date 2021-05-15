@@ -17,7 +17,7 @@ public class MusicalText {
         int width = (int)paint.measureText(txt_space);
         int space_width = (int)paint.measureText(" ");
         int xpos = x;
-        int ypos = y - size / 2;
+        int ypos = y  + size / 2;
         if (center) {
             xpos -= width / 2;
         }
