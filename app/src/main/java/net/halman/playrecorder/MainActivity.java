@@ -776,6 +776,11 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
         onClef();
     }
 
+    public void onScoreViewScale()
+    {
+        onScale();
+    }
+
     public void onGripViewListen(boolean listen) { onListen(listen); }
 
     public void onScoreViewPlay() {

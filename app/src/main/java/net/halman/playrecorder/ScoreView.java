@@ -61,6 +61,7 @@ public class ScoreView extends View {
         SCALEDOWN,
         SETNOTE,
         CLEF,
+        SCALE,
         TRILL,
         PLAY
     }
@@ -83,6 +84,7 @@ public class ScoreView extends View {
         put(Buttons.SCALEDOWN, new Rect(100, score_height - 80, 170, score_height - 10));
         put(Buttons.SETNOTE, new Rect(note_position - 60, 80, note_position + 60, score_height - 80));
         put(Buttons.CLEF, new Rect(score_offset_x + 15, score_offset_y - 15, score_offset_x + 65, score_offset_y + 5 * 20 + 15));
+        put(Buttons.SCALE, new Rect(10, 130 - 15, 80, 130 + 15));
         put(Buttons.TRILL, new Rect(185, 10, 255, 80));
         put(Buttons.PLAY, new Rect(185, score_height - 80, 255, score_height - 10));
     }};
@@ -144,6 +146,11 @@ public class ScoreView extends View {
                     case CLEF:
                         if (listener != null) {
                             listener.onScoreViewClef();
+                        }
+                        return;
+                    case SCALE:
+                        if (listener != null) {
+                            listener.onScoreViewScale();
                         }
                         return;
                     case TRILL:
@@ -409,7 +416,7 @@ public class ScoreView extends View {
         }
         int signature = app.scale.signature();
         String text = names[signature + 7];
-        drawText(10, 150, 30, text, canvas);
+        drawText(10, 130, 30, text, canvas);
     }
 
     protected void onDraw(Canvas canvas)
@@ -518,6 +525,7 @@ public class ScoreView extends View {
     {
         RecorderApp getRecorderApp();
         void onScoreViewClef();
+        void onScoreViewScale();
         void onScoreViewNoteUp();
         void onScoreViewNoteDown();
         void onScoreViewNoteUpHalf();
