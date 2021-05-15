@@ -43,6 +43,24 @@
         <item>B</item>
     </string-array>
 
+    <string-array name="scale_names">
+        <item>C♭major/a♭minor</item>
+        <item>G♭major/e♭minor</item>
+        <item>D♭major/b♭minor</item>
+        <item>A♭major/f minor</item>
+        <item>E♭major/c minor</item>
+        <item>B♭major/g minor</item>
+        <item>F major/d minor</item>
+        <item>C major/a minor</item>
+        <item>G major/e minor</item>
+        <item>D major/b minor</item>
+        <item>A major/f♯minor</item>
+        <item>E major/c♯minor</item>
+        <item>B major/g♯minor</item>
+        <item>F♯major/d♯minor</item>
+        <item>C♯major/a♯minor</item>
+    </string-array>
+
     <string name="promoteRate">Rate PlayRecorder</string>
     <string name="promoteRateDetail">If you enjoy using PlayRecorder, please take a moment to rate it. Thanks for your support!</string>
     <string name="promoteRateNow">Rate</string>
