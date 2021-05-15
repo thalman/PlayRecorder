@@ -13,6 +13,10 @@
         android:orderInCategory="120"
         android:title="@string/clef" />
     <item
+        android:id="@+id/actionScale"
+        android:orderInCategory="125"
+        android:title="@string/scale" />
+    <item
         android:id="@+id/actionPlaySound"
         android:checkable="true"
         android:orderInCategory="130"

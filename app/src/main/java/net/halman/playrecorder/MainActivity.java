@@ -40,6 +40,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
+import net.halman.playrecorder.R.id;
+
 import java.io.InputStream;
 
 import cn.sherlock.com.sun.media.sound.SF2Soundbank;
@@ -207,31 +209,39 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.actionFingering:
-                onFingering();
-                return true;
-            case R.id.actionInstrument:
-                onInstrument();
-                return true;
-            case R.id.actionClef:
-                onClef();
-                return true;
-            case R.id.actionPlaySound:
-                item.setChecked(!item.isChecked());
-                onPlaySound(item.isChecked());
-                return true;
-            case R.id.actionListen:
-                item.setChecked(!item.isChecked());
-                onListen(item.isChecked());
-                return true;
-            case R.id.actionKeepScreenOn:
-                item.setChecked(!item.isChecked());
-                onKeepScreenOn(item.isChecked());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        if (id == R.id.actionFingering) {
+            onFingering();
+            return true;
         }
+        if (id ==R.id.actionInstrument) {
+            onInstrument();
+            return true;
+        }
+        if (id == R.id.actionClef) {
+            onClef();
+            return true;
+        }
+        if (id == R.id.actionScale) {
+            onScale();
+            return true;
+        }
+        if (id == R.id.actionPlaySound) {
+            item.setChecked(!item.isChecked());
+            onPlaySound(item.isChecked());
+            return true;
+        }
+        if (id == R.id.actionListen) {
+            item.setChecked(!item.isChecked());
+            onListen(item.isChecked());
+            return true;
+        }
+        if (id == R.id.actionKeepScreenOn) {
+            item.setChecked(!item.isChecked());
+            onKeepScreenOn(item.isChecked());
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -576,6 +586,20 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                         score.invalidate();
                         break;
                 }
+            }
+        });
+        builder.show();
+    }
+
+    public void onScale()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.scale_title);
+        builder.setItems(R.array.scale_names, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                app.signature(which - 7);
+                grip.invalidate();
+                score.invalidate();
             }
         });
         builder.show();

@@ -4,6 +4,7 @@
     <string name="instrument">Instrument</string>
     <string name="fingering">Fingering</string>
     <string name="clef">Clef</string>
+    <string name="scale">Scale</string>
     <string name="playSound">Play the Note</string>
     <string name="listen">Listen</string>
     <string name="keepScreenOn">Keep the screen on</string>
@@ -43,6 +44,7 @@
         <item>B</item>
     </string-array>
 
+    <string name="scale_title">Select scale</string>
     <string-array name="scale_names">
         <item>C♭major/a♭minor</item>
         <item>G♭major/e♭minor</item>
