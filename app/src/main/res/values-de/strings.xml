@@ -3,6 +3,7 @@
     <string name="instrument">Musikinstrument</string>
     <string name="fingering">Griffweise</string>
     <string name="clef">Notenschlüssel</string>
+    <string name="scale">Tonleiter</string>
     <string name="instrument_title">Wählen Sie die Musikinstrument</string>
     <string name="listen">Zuhören</string>
     <string name="playSound">Note abspielen</string>
@@ -42,4 +43,24 @@
         <item>B</item>
         <item>H</item>
     </string-array>
+
+    <string name="scale_title">Wählen Sie die Tonleiter</string>
+    <string-array name="scale_names">
+        <item>C♭Dur/a♭Moll</item>
+        <item>G♭Dur/e♭Moll</item>
+        <item>D♭Dur/b Moll</item>
+        <item>A♭Dur/f Moll</item>
+        <item>E♭Dur/c Moll</item>
+        <item>B Dur/g Moll</item>
+        <item>F Dur/d Moll</item>
+        <item>C Dur/a Moll</item>
+        <item>G Dur/e Moll</item>
+        <item>D Dur/h Moll</item>
+        <item>A Dur/f♯Moll</item>
+        <item>E Dur/c♯Moll</item>
+        <item>H Dur/g♯Moll</item>
+        <item>F♯Dur/d♯Moll</item>
+        <item>C♯Dur/a♯Moll</item>
+    </string-array>
+
 </resources>
