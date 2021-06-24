@@ -84,7 +84,7 @@ public class ScoreView extends View {
         put(Buttons.SCALEDOWN, new Rect(100, score_height - 80, 170, score_height - 10));
         put(Buttons.SETNOTE, new Rect(note_position - 60, 80, note_position + 60, score_height - 80));
         put(Buttons.CLEF, new Rect(score_offset_x + 15, score_offset_y - 15, score_offset_x + 65, score_offset_y + 5 * 20 + 15));
-        put(Buttons.SCALE, new Rect(10, 130 - 15, 80, 130 + 15));
+        put(Buttons.SCALE, new Rect(score_offset_x + 75, score_offset_y - 15, score_offset_x + 250, score_offset_y + 5 * 20 + 15));
         put(Buttons.TRILL, new Rect(185, 10, 255, 80));
         put(Buttons.PLAY, new Rect(185, score_height - 80, 255, score_height - 10));
     }};
