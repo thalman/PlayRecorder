@@ -19,6 +19,7 @@ package net.halman.playrecorder;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -400,7 +401,7 @@ public class ScoreView extends View {
         int height = (int)scale(size);
         int xpos = scale(x) + score_center_x;
         int ypos = scale(y) + score_center_y;
-        MusicalText.draw(xpos, ypos, height, false, txt, canvas, sharp, flat);
+        MusicalText.draw(xpos, ypos, height, false, txt, Color.GRAY, canvas, sharp, flat);
     }
 
     private void drawScaleName(Canvas canvas)
@@ -415,8 +416,9 @@ public class ScoreView extends View {
             return;
         }
         int signature = app.scale.signature();
-        String text = names[signature + 7];
-        drawText(10, 130, 30, text, canvas);
+        String text = getResources().getString(R.string.scale_format, names[signature + 7]);
+
+        drawText(70, 310, 25, text, canvas);
     }
 
     protected void onDraw(Canvas canvas)

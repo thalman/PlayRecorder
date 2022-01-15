@@ -45,20 +45,20 @@
 
     <string name="scale_title">Sélectionner la gamme</string>
     <string-array name="scale_names">
-        <item>DO♭majeur/la♭mineur</item>
-        <item>SOL♭majeur/mi♭mineur</item>
-        <item>RE♭majeur/si♭mineur</item>
-        <item>LA♭majeur/fa mineur</item>
-        <item>MI♭majeur/do mineur</item>
-        <item>SI♭majeur/sol mineur</item>
+        <item>DO♭ majeur/la♭ mineur</item>
+        <item>SOL♭ majeur/mi♭ mineur</item>
+        <item>RE♭ majeur/si♭ mineur</item>
+        <item>LA♭ majeur/fa mineur</item>
+        <item>MI♭ majeur/do mineur</item>
+        <item>SI♭ majeur/sol mineur</item>
         <item>FA majeur/ré mineur</item>
         <item>DO majeur/la mineur</item>
         <item>SOL majeur/mi mineur</item>
         <item>RE majeur/si mineur</item>
-        <item>LA majeur/fa♯mineur</item>
-        <item>MI majeur/do♯mineur</item>
-        <item>SI majeur/sol♯mineur</item>
-        <item>FA♯majeur/ré♯mineur</item>
-        <item>DO♯majeur/la♯mineur</item>
+        <item>LA majeur/fa♯ mineur</item>
+        <item>MI majeur/do♯ mineur</item>
+        <item>SI majeur/sol♯ mineur</item>
+        <item>FA♯ majeur/ré♯ mineur</item>
+        <item>DO♯ majeur/la♯ mineur</item>
     </string-array>
 </resources>
