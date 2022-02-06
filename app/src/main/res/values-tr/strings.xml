@@ -4,12 +4,12 @@
 <!-- Credit to Vedat Arda Kucuk -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name" translatable="false">Play Recorder</string>
-    <string name="instrument">Enstrüman</string>
+    <string name="instrument">Enstrüman tipi</string>
     <string name="fingering">Parmak düzeni</string>
     <string name="clef">Klef/Anahtar</string>
+	<string name="scale">Dizi/Gam</string>
     <string name="playSound">Notayı çal</string>
-    <string name="listen">Dinle</string>
+    <string name="listen">Çaldığım notayı dinle</string>
     <string name="keepScreenOn">Ekranı açık tut</string>
     <string name="instrument_title">Enstrüman tipini seçin</string>
     <string-array name="instrument_items">
@@ -21,10 +21,10 @@
         <item>İrlanda kavalı (Re)</item>
         <item>İrlanda kavalı (Sol)</item>
     </string-array>
-    <string name="fingering_title">Parmak düzenini seçin</string>
+    <string name="fingering_title">Parmak düzenini seçiniz</string>
     <string-array name="fingering_items">
-        <item>Barok/İngiliz</item>
-        <item>Modern/Alman</item>
+        <item>Barok düzeni</item>
+        <item>Modern düzen</item>
     </string-array>
     <string name="clef_title">Klef/Anahtar tipini seçiniz</string>
     <string-array name="clef_items">
@@ -47,10 +47,29 @@
         <item>si (B)</item>
     </string-array>
 
-    <string name="promoteRate">PlayRecorder\'ı puanlayın</string>
+    <string name="scale_title">Diziyi/gamı seçiniz</string>
+    <string-array name="scale_names">
+        <item>C♭ MAJÖR (a♭ minör) dizisi</item>
+        <item>G♭ MAJÖR (e♭ minör) dizisi</item>
+        <item>D♭ MAJÖR (b♭ minör) dizisi</item>
+        <item>A♭ MAJÖR (f minör) dizisi</item>
+        <item>E♭ MAJÖR (c minör) dizisi</item>
+        <item>B♭ MAJÖR (g minör) dizisi</item>
+        <item>F MAJÖR (d minör) dizisi</item>
+        <item>C MAJÖR (a minör) dizisi</item>
+        <item>G MAJÖR (e minör) dizisi</item>
+        <item>D MAJÖR (b minör) dizisi</item>
+        <item>A MAJÖR (f♯ minör) dizisi</item>
+        <item>E MAJÖR (c♯ minör) dizisi</item>
+        <item>B MAJÖR (g♯ minör) dizisi</item>
+        <item>F♯ MAJÖR (d♯ minör) dizisi</item>
+        <item>C♯ MAJÖR (a♯ minör) dizisi</item>
+    </string-array>
+
+    <string name="promoteRate">Lütfen PlayRecorder\'ı puanlayın</string>
     <string name="promoteRateDetail">Eğer PlayRecorder\'ı beğendiyseniz birkaç dakikanızı ayırıp PlayRecorder\'ı puanlayabilirsiniz. Desteğiniz için teşekkür ederiz!</string>
-    <string name="promoteRateNow">Puanla</string>
-    <string name="promoteRateLater">Başka zaman</string>
+    <string name="promoteRateNow">Hemen puanla</string>
+    <string name="promoteRateLater">Daha sonra puanla</string>
     <string name="promoteRateNo">Puanlama</string>
     <string name="promoteSupport">PlayRecorder\'ı destekleyin</string>
     <string name="promoteSupportDetail">Eğer PlayRecorder\'ı beğendiyseniz, programı satın alarak geliştirilmesine destek verebilirsiniz +.</string>
