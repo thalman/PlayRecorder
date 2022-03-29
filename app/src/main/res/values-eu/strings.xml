@@ -3,6 +3,7 @@
     <string name="instrument">Instrumentua</string>
     <string name="fingering">Digitazioa</string>
     <string name="clef">Ikurra</string>
+    <string name="scale">Eskala</string>
     <string name="playSound">Nota jo</string>
     <string name="listen">Grabatu</string>
     <string name="keepScreenOn">Mantendu pantaila piztuta</string>
@@ -41,4 +42,31 @@
         <item>la♯/si♭</item>
         <item>si</item>
     </string-array>
+
+    <string name="scale_title">Selecciona la escala</string>
+    <string-array name="scale_names">
+        <item>DO♭ maior/la♭ minor</item>
+        <item>SOL♭ maior/mi♭ minor</item>
+        <item>RE♭ maior/si♭ minor</item>
+        <item>LA♭ maior/fa minor</item>
+        <item>MI♭ maior/do minor</item>
+        <item>SI♭ maior/sol minor</item>
+        <item>FA maior/re minor</item>
+        <item>DO maior/la minor</item>
+        <item>SOL maior/mi minor</item>
+        <item>RE maior/si minor</item>
+        <item>LA maior/fa♯ minor</item>
+        <item>MI maior/do♯ minor</item>
+        <item>SI maior/sol♯ minor</item>
+        <item>FA♯ maior/re♯ minor</item>
+        <item>DO♯ maior/la♯ minor</item>
+    </string-array>
+    <string name="promoteRate">PlayRecorder baloratu</string>
+    <string name="promoteRateDetail">PlayRecorder gustatu bazaizu, mesedez, denbora pixka bat hartu nota jartzeko. Eskerrik asko zure laguntzarengatik.</string>
+    <string name="promoteRateNow">Orain baloratu</string>
+    <string name="promoteRateLater">Gero</string>
+    <string name="promoteRateNo">Ez, eskerrik asko</string>
+    <string name="promoteSupport">PlayRecorder lagundu</string>
+    <string name="promoteSupportDetail">PlayRecorder gustatu bazaizu, bere garapenenean lagundu dezakezu PlayRecorder + erosiz.</string>
+    <string name="promoteSupportNow">PlayRecorder + erosi</string>
 </resources>
