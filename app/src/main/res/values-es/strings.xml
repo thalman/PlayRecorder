@@ -3,6 +3,7 @@
     <string name="instrument">Instrumento</string>
     <string name="fingering">Digitación</string>
     <string name="clef">Clave</string>
+    <string name="scale">Escala</string>
     <string name="playSound">Toca la nota</string>
     <string name="listen">Grabar</string>
     <string name="keepScreenOn">Mantener la pantalla encendida</string>
@@ -41,4 +42,31 @@
         <item>la♯/si♭</item>
         <item>si</item>
     </string-array>
+
+    <string name="scale_title">Selecciona la escala</string>
+    <string-array name="scale_names">
+        <item>DO♭ mayor/la♭ menor</item>
+        <item>SOL♭ mayor/mi♭ menor</item>
+        <item>RE♭ mayor/si♭ menor</item>
+        <item>LA♭ mayor/fa menor</item>
+        <item>MI♭ mayor/do menor</item>
+        <item>SI♭ mayor/sol menor</item>
+        <item>FA mayor/re menor</item>
+        <item>DO mayor/la menor</item>
+        <item>SOL mayor/mi menor</item>
+        <item>RE mayor/si menor</item>
+        <item>LA mayor/fa♯ menor</item>
+        <item>MI mayor/do♯ menor</item>
+        <item>SI mayor/sol♯ menor</item>
+        <item>FA♯ mayor/re♯ menor</item>
+        <item>DO♯ mayor/la♯ menor</item>
+    </string-array>
+    <string name="promoteRate">Valora PlayRecorder</string>
+    <string name="promoteRateDetail">Si te gusta usar PlayRecorder, por favor, tómese un momento para calificarlo. Gracias por su apoyo.</string>
+    <string name="promoteRateNow">Valorar ahora</string>
+    <string name="promoteRateLater">Después</string>
+    <string name="promoteRateNo">No, gracias</string>
+    <string name="promoteSupport">Apoya PlayRecorder</string>
+    <string name="promoteSupportDetail">Si te gusta usar PlayRecorder, puede considerar apoyar el desarrollo comprando PlayRecorder +.</string>
+    <string name="promoteSupportNow">Comprar PlayRecorder +</string>
 </resources>
