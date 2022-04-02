@@ -3,6 +3,7 @@
     <string name="instrument">Instrument</string>
     <string name="fingering">Aplikatura</string>
     <string name="clef">Klucz</string>
+    <string name="scale">Skala</string>
     <string name="listen">Słuchaj</string>
     <string name="playSound">Zagraj nutę</string>
     <string name="keepScreenOn">Pozostaw ekran włączony</string>
@@ -40,5 +41,24 @@
         <item>A</item>
         <item>A♯/B</item>
         <item>H</item>
+    </string-array>
+
+    <string name="scale_title">Typ skali</string>
+    <string-array name="scale_names">
+        <item>C♭ dur/a♭ moll</item>
+        <item>G♭ dur/e♭ moll</item>
+        <item>D♭ dur/b moll</item>
+        <item>A♭ dur/f moll</item>
+        <item>E♭ dur/c moll</item>
+        <item>B dur/g moll</item>
+        <item>F dur/d moll</item>
+        <item>C dur/a moll</item>
+        <item>G dur/e moll</item>
+        <item>D dur/h moll</item>
+        <item>A dur/f♯ moll</item>
+        <item>E dur/c♯ moll</item>
+        <item>H dur/g♯ moll</item>
+        <item>F♯ dur/d♯ moll</item>
+        <item>C♯ dur/a♯ moll</item>
     </string-array>
 </resources>
