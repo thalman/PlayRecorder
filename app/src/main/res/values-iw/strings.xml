@@ -4,6 +4,7 @@
     <string name="instrument">כלי נגינה</string>
     <string name="fingering">איצבוע</string>
     <string name="clef">מפתח</string>
+    <string name="scale">סולם</string>
     <string name="playSound">נגנו את התו</string>
     <string name="listen">האזינו</string>
     <string name="keepScreenOn">השאר את המסך פעיל</string>
@@ -16,7 +17,7 @@
         <item>חלילית בס</item>
         <item>חלילית אירית בסולם רה</item>
         <item>חלילית אירית בסולם סול</item>
-        <item>Fife (Yamaha YRF-21)</item>
+        <item>חלילית פייף (Yamaha YRF-21)</item>
     </string-array>
     <string name="fingering_title">בחרו סוג איצבוע</string>
     <string-array name="fingering_items">
