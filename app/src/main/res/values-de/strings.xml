@@ -16,6 +16,7 @@
         <item>Bassblockflöte</item>
         <item>Tin Whistle in D</item>
         <item>Tin Whistle in G</item>
+        <item>Fife (Yamaha YRF-21)</item>
     </string-array>
     <string name="fingering_title">Wählen Sie die Blockflötengriffe</string>
     <string-array name="fingering_items">

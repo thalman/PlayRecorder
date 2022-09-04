@@ -16,6 +16,7 @@
         <item>Basse flûte</item>
         <item>Tin whistle en ré</item>
         <item>Tin whistle en sol</item>
+        <item>Fife (Yamaha YRF-21)</item>
     </string-array>
     <string name="fingering_title">Sélectionner le doigté de la flûte</string>
     <string-array name="fingering_items">

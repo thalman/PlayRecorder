@@ -483,6 +483,11 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
             }
             return;
         }
+
+        if (Constants.isFife(app.instrumentType())) {
+            setTitle(instruments[7]);
+            return;
+        }
         setTitle("Play Recorder");
     }
 
@@ -555,6 +560,9 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                         break;
                     case 6:
                         app.instrument(Constants.TIN_WHISTLE_G);
+                        break;
+                    case 7:
+                        app.instrument(Constants.FIFE);
                         break;
                 }
                 app.checkLimits();
