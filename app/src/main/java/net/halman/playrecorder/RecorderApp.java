@@ -60,6 +60,10 @@ public class RecorderApp {
             musical_instrument = new TinWhistle(type);
             return;
         }
+        if (Constants.isFife(type)) {
+            musical_instrument = new YamahaFife(type);
+            return;
+        }
         musical_instrument = new Recorder(Constants.RECORDER_SOPRANO_BAROQUE);
         lastRecorderFingering(Recorder.BAROQUE);
     }

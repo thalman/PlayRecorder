@@ -17,6 +17,7 @@
         <item>Bass recorder</item>
         <item>Tin whistle in D</item>
         <item>Tin whistle in G</item>
+        <item>Fife (Yamaha YRF-21)</item>
     </string-array>
     <string name="fingering_title">Select recorder fingering</string>
     <string-array name="fingering_items">
