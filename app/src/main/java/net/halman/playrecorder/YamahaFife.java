@@ -25,26 +25,15 @@ public class YamahaFife extends MusicalInstrument {
     }
 
     private void setHoles() {
-        hole(UP, 0, 350, 0.8);
-        hole(UP, 8, 320, 0.8);
-        hole(UP, 0, 290, 1.0);
-        hole(UP, 0, 260, 1.0);
+        hole(0, 230, 0.8);
+        hole(8, 200, 0.8);
+        hole(0, 170, 1.0);
+        hole(0, 140, 1.0);
         // -----
-        hole(UP, 0, 210, 1.0);
-        hole(UP, 0, 180, 0.8);
-        hole(UP, 0, 150, 1.0);
-        hole(UP, 8, 120, 0.8);
-
-
-        hole(DOWN, 0, 120, 0.8);
-        hole(DOWN, -8, 150, 0.8);
-        hole(DOWN, 0, 180, 1.0);
-        hole(DOWN, 0, 210, 1.0);
-        // -----
-        hole(DOWN, 0, 260, 1.0);
-        hole(DOWN, 0, 290, 0.8);
-        hole(DOWN, 0, 320, 1.0);
-        hole(DOWN, -8, 350, 0.8);
+        hole(0, 90, 1.0);
+        hole(0, 60, 0.8);
+        hole(0, 30, 1.0);
+        hole(8, 0, 0.8);
     }
 
     private Grip fifeGrip(int h0, int h1, int h2, int h3,

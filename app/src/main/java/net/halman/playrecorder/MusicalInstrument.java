@@ -19,6 +19,9 @@ package net.halman.playrecorder;
 
 import android.util.Pair;
 import android.util.SparseArray;
+
+import androidx.constraintlayout.solver.widgets.Rectangle;
+
 import java.util.ArrayList;
 
 public abstract class MusicalInstrument {
@@ -30,15 +33,14 @@ public abstract class MusicalInstrument {
     private int score_offset;
     private SparseArray<ArrayList<Grip>> instrument_grips = null;
     private SparseArray<ArrayList<Grip>> instrument_trill_grips = null;
-    private ArrayList<ArrayList<Hole>> holes_positions = null;
+    private final ArrayList<Hole> holes_positions;
+    private final Rectangle grip_size = new Rectangle();
 
     public MusicalInstrument(int type)
     {
         instrument_type = type;
         number_of_holes = 0;
-        holes_positions = new ArrayList<ArrayList<Hole>>();
-        holes_positions.add(new ArrayList<Hole>());
-        holes_positions.add(new ArrayList<Hole>());
+        holes_positions = new ArrayList<>();
         lowest_note = null;
         highest_note = null;
         score_offset = 0;
@@ -54,6 +56,29 @@ public abstract class MusicalInstrument {
         number_of_holes = holes;
     }
 
+    private void updateSize() {
+        int minx, miny, maxx, maxy;
+        if (holes_positions.size() > 0) {
+            Hole h = holes_positions.get(0);
+            minx = h.x;
+            miny = h.y;
+            maxx = minx;
+            maxy = miny;
+        } else {
+            minx = 0;
+            miny = 0;
+            maxx = 0;
+            maxy = 0;
+        }
+        for (Hole h: holes_positions) {
+            if (h.x > maxx) { maxx = h.x; }
+            if (h.y > maxy) { maxy = h.y; }
+            if (h.x < minx) { minx = h.x; }
+            if (h.y < miny) { miny = h.y; }
+        }
+
+        grip_size.setBounds(minx, miny, maxx - minx, maxy - miny);
+    }
     public int type()
     {
         return instrument_type;
@@ -75,19 +100,38 @@ public abstract class MusicalInstrument {
         return (n >= min) && (n <= max);
     }
 
-    Hole hole(int orientation, int index) {
-        if (orientation < 0 || orientation > 1) {
-            return null;
+    private Hole holeTransform(int orientation, Hole h) {
+        if (h != null) {
+            switch (orientation) {
+                case Orientation.UP:
+                    return h;
+                case Orientation.DOWN:
+                    return new Hole(-h.x, grip_size.y + grip_size.height - h.y, h.zoom);
+                case Orientation.LEFT:
+                    return new Hole(h.y, -h.x, h.zoom);
+                case Orientation.RIGHT:
+                    return new Hole(grip_size.y + grip_size.height - h.y, grip_size.y + h.x, h.zoom);
+            }
         }
-        return holes_positions.get(orientation).get(index);
+        return null;
     }
 
-    void hole(int orientation, int x, int y, double zoom)
-    {
-        ArrayList<Hole> list = holes_positions.get(orientation);
-        if (list != null) {
-            list.add(new Hole(x, y, zoom));
+    Hole hole(int orientation, int index) {
+        if (orientation < Orientation.UP || orientation > Orientation.RIGHT) {
+            return null;
         }
+        return holeTransform(orientation, holes_positions.get(index));
+    }
+
+    void hole(int x, int y, double zoom)
+    {
+        holes_positions.add(new Hole(x, y, zoom));
+        updateSize();
+    }
+
+    Rectangle gripSize()
+    {
+        return grip_size;
     }
 
     Note realLowestNote() {

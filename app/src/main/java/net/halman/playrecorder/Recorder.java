@@ -57,29 +57,17 @@ public class Recorder extends MusicalInstrument {
     }
 
     private void setHoles() {
-        hole(UP, 0, 100, 1.0);
-        hole(UP, 0, 150, 1.0);
-        hole(UP, 0, 180, 1.0);
-        hole(UP, 0, 210, 1.0);
-        hole(UP, 0, 260, 1.0);
-        hole(UP, 0, 290, 1.0);
-        hole(UP, -12, 320, 0.9);
-        hole(UP, +12, 320, 0.9);
-        hole(UP, -12, 350, 0.9);
-        hole(UP, +12, 350, 0.9);
-        hole(UP, 0, 380, 1.0);
-
-        hole(DOWN, 0, 350, 1.0);
-        hole(DOWN, 0, 300, 1.0);
-        hole(DOWN, 0, 270, 1.0);
-        hole(DOWN, 0, 240, 1.0);
-        hole(DOWN, 0, 190, 1.0);
-        hole(DOWN, 0, 160, 1.0);
-        hole(DOWN, +12, 130, 0.9);
-        hole(DOWN, -12, 130, 0.9);
-        hole(DOWN, +12, 100, 0.9);
-        hole(DOWN, -12, 100, 0.9);
-        hole(DOWN, 0, 70, 1.0  );
+        hole(0, 0, 1.0);
+        hole(0, 50, 1.0);
+        hole(0, 80, 1.0);
+        hole(0, 110, 1.0);
+        hole(0, 160, 1.0);
+        hole(0, 190, 1.0);
+        hole(-12, 220, 0.9);
+        hole(+12, 220, 0.9);
+        hole(-12, 250, 0.9);
+        hole(+12, 250, 0.9);
+        hole(0, 280, 1.0);
     }
 
     private void setLimits() {

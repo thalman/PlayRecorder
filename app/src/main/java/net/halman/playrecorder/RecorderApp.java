@@ -19,6 +19,8 @@ package net.halman.playrecorder;
 
 import android.util.Pair;
 
+import androidx.constraintlayout.solver.widgets.Rectangle;
+
 import java.util.ArrayList;
 
 import static net.halman.playrecorder.Scale.*;
@@ -322,5 +324,9 @@ public class RecorderApp {
     Pair<Integer, Integer> getTrillMidiNotes() {
         Pair<Note, Note> trill = musical_instrument.trillNotes(scale, musical_instrument.apparentNoteToRealNote(apparent_note));
         return new Pair<>(scale.noteMidiValue(trill.first), scale.noteMidiValue(trill.second));
+    }
+
+    Rectangle gripSize() {
+        return musical_instrument.gripSize();
     }
 }
