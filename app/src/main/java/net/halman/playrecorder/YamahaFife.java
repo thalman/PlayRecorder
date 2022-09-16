@@ -3,14 +3,13 @@ package net.halman.playrecorder;
 import static net.halman.playrecorder.Hole.CLOSE;
 import static net.halman.playrecorder.Hole.HALFOPEN;
 import static net.halman.playrecorder.Hole.OPEN;
-import static net.halman.playrecorder.Orientation.DOWN;
-import static net.halman.playrecorder.Orientation.UP;
+import static net.halman.playrecorder.Hole.SEPARATOR;
+import static net.halman.playrecorder.Hole.BLOW;
 
 public class YamahaFife extends MusicalInstrument {
     public YamahaFife(int type) {
         super(type);
 
-        holes(8);
         switch (type()) {
             default:
             case Constants.FIFE:
@@ -25,10 +24,14 @@ public class YamahaFife extends MusicalInstrument {
     }
 
     private void setHoles() {
+        hole(20, 260, 1.0, Orientation.RIGHT);
+        // -----
         hole(0, 230, 0.8);
         hole(8, 200, 0.8);
         hole(0, 170, 1.0);
         hole(0, 140, 1.0);
+        // -----
+        hole(0, 115, 1.0);
         // -----
         hole(0, 90, 1.0);
         hole(0, 60, 0.8);
@@ -39,7 +42,7 @@ public class YamahaFife extends MusicalInstrument {
     private Grip fifeGrip(int h0, int h1, int h2, int h3,
                                 int h4, int h5, int h6, int h7)
     {
-        int [] gripArray = new int [] {h0, h1, h2, h3, h4, h5, h6, h7};
+        int [] gripArray = new int [] {BLOW, h0, h1, h2, h3, SEPARATOR, h4, h5, h6, h7};
 
         return new Grip(gripArray);
     }

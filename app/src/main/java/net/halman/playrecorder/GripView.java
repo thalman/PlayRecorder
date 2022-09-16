@@ -26,7 +26,6 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import androidx.constraintlayout.solver.widgets.Rectangle;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
@@ -46,9 +45,22 @@ public class GripView extends View {
     private final Drawable hole_close = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole, null);
     private final Drawable hole_open = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_empty, null);
     private final Drawable hole_half = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_half, null);
-    private final Drawable hole_bell = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_bell, null);
+    private final Drawable[] hole_bell = new Drawable[] {
+            ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_bell, null),
+            ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_bell_vertical, null)
+    };
     private final Drawable hole_trill = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_trill, null);
     private final Drawable hole_covered_once = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_hole_co, null);
+    private final Drawable[] hole_separator = new Drawable[] {
+            ResourcesCompat.getDrawable(getResources(), R.drawable.ic_separator, null),
+            ResourcesCompat.getDrawable(getResources(), R.drawable.ic_separator_vertical, null),
+    };
+    private final Drawable[] hole_blow = new Drawable[] {
+            ResourcesCompat.getDrawable(getResources(), R.drawable.ic_blow, null),
+            ResourcesCompat.getDrawable(getResources(), R.drawable.ic_blow_right, null),
+            ResourcesCompat.getDrawable(getResources(), R.drawable.ic_blow_up, null),
+            ResourcesCompat.getDrawable(getResources(), R.drawable.ic_blow_left, null)
+    };
     private final Drawable sharp = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp, null);
     private final Drawable flat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat, null);
     private final Drawable switch_direction = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_switch_direction, null);
@@ -61,7 +73,7 @@ public class GripView extends View {
     private double scalefactor = 1;
     private final int grip_width = 450;
     private final int grip_height = 450;
-    private final Rectangle grip_area = new Rectangle();
+    private final Rect grip_area = new Rect();
     private int grip_center_x = 0;
     private int grip_center_y = 0;
     private String [] noteNames = null;
@@ -87,7 +99,7 @@ public class GripView extends View {
 
     private void init(Context context) {
         noteNames = context.getResources().getStringArray(R.array.note_names);
-        grip_area.setBounds(0, 80, grip_width, grip_height - 2*80);
+        grip_area.set(0, 80, grip_width, grip_height - 80);
     }
 
     private void calculateScale() {
@@ -127,10 +139,7 @@ public class GripView extends View {
 
     void changeOrientation()
     {
-        current_orientation--;
-        if (current_orientation < Orientation.UP) {
-            current_orientation = Orientation.RIGHT;
-        }
+        current_orientation = Orientation.dec(current_orientation);
         invalidate();
     }
 
@@ -172,28 +181,17 @@ public class GripView extends View {
         return drawable.getIntrinsicHeight() / 2;
     }
 
-    private void putDrawable(int x, int y, Drawable drawable, Canvas canvas, double zoom)
-    {
-        putDrawable(x, y, drawable, canvas, zoom, 0);
-    }
 
-    private void putDrawable(int x, int y, Drawable drawable, Canvas canvas, double zoom, int rotate)
+    private void putDrawable(int x, int y, Drawable drawable, Canvas canvas, double zoom)
     {
         int offsetx = getItemCenterX(drawable);
         int offsety = getItemCenterY(drawable);
-        if (rotate != 0) {
-            canvas.save();
-            canvas.rotate(rotate, scale(x) + grip_center_x, scale(y) + grip_center_y);
-        }
         drawable.setBounds(
                 scale(x - (int)(offsetx * zoom)) + grip_center_x,
                 scale(y - (int)(offsety * zoom)) + grip_center_y,
                 scale(x + (int)((-offsetx + drawable.getIntrinsicWidth()) * zoom)) + grip_center_x,
                 scale(y + (int)((-offsety + drawable.getIntrinsicHeight()) * zoom)) + grip_center_y);
         drawable.draw(canvas);
-        if (rotate != 0) {
-            canvas.restore();
-        }
     }
 
     private void drawButtons(Canvas canvas)
@@ -204,7 +202,7 @@ public class GripView extends View {
 
     private void drawText(int x, int y, int size, String txt, Canvas canvas)
     {
-        int height = (int)scale(size);
+        int height = scale(size);
         int xpos = scale(x) + grip_center_x;
         int ypos = scale(y) + grip_center_y;
         MusicalText.draw(xpos, ypos, height, true, txt, canvas, sharp, flat);
@@ -244,23 +242,6 @@ public class GripView extends View {
         putDrawable(x, pos.top + 10, pointer, canvas, 1.0);
     }
 
-    private boolean vertical() {
-        return (current_orientation == Orientation.UP || current_orientation == Orientation.DOWN);
-    }
-
-    private  int angle() {
-        switch (current_orientation) {
-            case Orientation.RIGHT:
-                return 90;
-            case Orientation.DOWN:
-                return 180;
-            case Orientation.LEFT:
-                return 270;
-            default:
-                return 0;
-        }
-    }
-
     private void drawGrip(ArrayList<Grip> grips, Canvas canvas)
     {
         if (listener == null) {
@@ -273,29 +254,29 @@ public class GripView extends View {
         }
 
         if ((grips == null) || (grips.size() == 0)) {
-            drawText(grip_width / 2, grip_height / 2 + 85, 100, "?", canvas);
+            drawText(grip_area.left + grip_area.width() / 2, grip_area.top + grip_area.height() / 2 - 50, 100, "?", canvas);
             return;
         }
 
         int holesCount = app.numberOfHoles();
-        Rectangle grip_size = app.gripSize();
+        Rect grip_size = app.gripSize();
 
         int step;
-        if (vertical()) {
-            step = grip_area.width / (grips.size() + 1);
+        if (Orientation.vertical(current_orientation)) {
+            step = grip_area.width() / (grips.size() + 1);
         } else {
-            step = grip_area.height / (grips.size() + 1);
+            step = grip_area.height() / (grips.size() + 1);
         }
 
         for (int g = 0; g < grips.size(); g++) {
             int x;
             int y;
-            if (vertical()) {
-                x = grip_area.x + step + g * step;
-                y = grip_area.y;
+            if (Orientation.vertical(current_orientation)) {
+                x = grip_area.left + step + g * step;
+                y = grip_area.top;
             } else {
-                x = grip_area.getCenterX() - grip_size.height / 2;
-                y = grip_area.y + step + g * step;
+                x = grip_area.centerX() - grip_size.height() / 2;
+                y = grip_area.top + step + g * step;
             }
             Grip grip = grips.get(g);
             for (int i = 0; i < holesCount; i++) {
@@ -308,16 +289,26 @@ public class GripView extends View {
                         putDrawable(x + h.x, y + h.y, hole_close, canvas, h.zoom);
                         break;
                     case Hole.HALFOPEN:
-                        putDrawable(x + h.x, y + h.y, hole_half, canvas, h.zoom, angle());
+                        putDrawable(x + h.x, y + h.y, hole_half, canvas, h.zoom);
                         break;
                     case Hole.BELLCLOSE:
-                        putDrawable(x + h.x, y + h.y, hole_bell, canvas, h.zoom, vertical() ? 0 : angle());
+                        putDrawable(x + h.x, y + h.y,
+                                hole_bell[Orientation.vertical(current_orientation + h.orientation) ? 0 : 1],
+                                canvas, h.zoom);
                         break;
                     case Hole.TRILL:
                         putDrawable(x + h.x, y + h.y, hole_trill, canvas, h.zoom);
                         break;
                     case Hole.TRILLONCE:
                         putDrawable(x + h.x, y + h.y, hole_covered_once, canvas, h.zoom);
+                        break;
+                    case Hole.SEPARATOR:
+                        putDrawable(x + h.x, y + h.y,
+                                hole_separator[Orientation.vertical(current_orientation + h.orientation) ? 0 : 1],
+                                canvas, h.zoom);
+                        break;
+                    case Hole.BLOW:
+                        putDrawable(x + h.x, y + h.y, hole_blow[Orientation.add(current_orientation, h.orientation)], canvas, h.zoom);
                         break;
                 }
             }

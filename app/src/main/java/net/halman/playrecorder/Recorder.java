@@ -41,7 +41,6 @@ public class Recorder extends MusicalInstrument {
             type(Constants.RECORDER_SOPRANO_BAROQUE);
         }
 
-        holes(11);
         setHoles();
         setLimits();
         fingering();
@@ -50,7 +49,6 @@ public class Recorder extends MusicalInstrument {
     public Recorder()
     {
         super(Constants.RECORDER_SOPRANO_BAROQUE);
-        holes(11);
         setHoles();
         setLimits();
         fingering();

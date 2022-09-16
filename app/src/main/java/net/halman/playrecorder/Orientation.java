@@ -22,4 +22,33 @@ public class Orientation {
     public static final int LEFT = 1;
     public static final int DOWN = 2;
     public static final int RIGHT = 3;
+
+    public static int normalize(int orientation)
+    {
+        while (orientation < UP) {
+            orientation += 4;
+        }
+        return orientation % 4;
+    }
+
+    public static int inc(int orientation)
+    {
+        return normalize(++orientation);
+    }
+
+    public static int dec(int orientation)
+    {
+        return normalize(--orientation);
+    }
+
+    public static int add(int orientation, int add)
+    {
+        return normalize(orientation + add);
+    }
+
+    public static boolean vertical(int orientation)
+    {
+        int o = normalize(orientation);
+        return (o == UP || o == DOWN);
+    }
 }

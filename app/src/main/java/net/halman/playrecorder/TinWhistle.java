@@ -1,13 +1,11 @@
 package net.halman.playrecorder;
 
-import java.util.ArrayList;
-
-import static net.halman.playrecorder.Hole.BELLOPEN;
 import static net.halman.playrecorder.Hole.CLOSE;
 import static net.halman.playrecorder.Hole.HALFOPEN;
 import static net.halman.playrecorder.Hole.OPEN;
-import static net.halman.playrecorder.Orientation.DOWN;
-import static net.halman.playrecorder.Orientation.UP;
+import static net.halman.playrecorder.Hole.SEPARATOR;
+import static net.halman.playrecorder.Hole.BLOW;
+
 
 public class TinWhistle extends MusicalInstrument {
 
@@ -18,7 +16,6 @@ public class TinWhistle extends MusicalInstrument {
             type(Constants.TIN_WHISTLE_D);
         }
 
-        holes(6);
         switch (type()) {
             default:
             case Constants.TIN_WHISTLE_D:
@@ -38,18 +35,20 @@ public class TinWhistle extends MusicalInstrument {
     }
 
     private void setHoles() {
-        hole(0, 0, 1.2);
-        hole(0, 35, 1.2);
-        hole(0, 70, 1.2);
-        hole(0, 120, 1.2);
-        hole(0, 155, 1.2);
-        hole(0, 190, 1.2);
+        hole(0, 0, 1.0);
+        hole(0, 25, 1.2);
+        hole(0, 60, 1.2);
+        hole(0, 95, 1.2);
+        hole(0, 120, 1.0);
+        hole(0, 145, 1.2);
+        hole(0, 180, 1.2);
+        hole(0, 215, 1.2);
     }
 
     private Grip tinWhistleGrip(int h0, int h1, int h2, int h3,
                               int h4, int h5)
     {
-        int [] gripArray = new int [] {h0, h1, h2, h3, h4, h5};
+        int [] gripArray = new int [] {BLOW, h0, h1, h2, SEPARATOR, h3, h4, h5};
 
         return new Grip(gripArray);
     }

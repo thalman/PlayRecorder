@@ -17,9 +17,8 @@
 
 package net.halman.playrecorder;
 
+import android.graphics.Rect;
 import android.util.Pair;
-
-import androidx.constraintlayout.solver.widgets.Rectangle;
 
 import java.util.ArrayList;
 
@@ -326,7 +325,7 @@ public class RecorderApp {
         return new Pair<>(scale.noteMidiValue(trill.first), scale.noteMidiValue(trill.second));
     }
 
-    Rectangle gripSize() {
+    Rect gripSize() {
         return musical_instrument.gripSize();
     }
 }

@@ -25,15 +25,27 @@ public class Hole {
     public static final int BELLCLOSE = 4;
     public static final int TRILL = 5;
     public static final int TRILLONCE = 6;
+    public static final int SEPARATOR = 7;
+    public static final int BLOW = 8;
 
     int x;
     int y;
     double zoom;
+    int orientation;
+
+    Hole(int x, int y, double zoom, int orientation)
+    {
+        this.x = x;
+        this.y = y;
+        this.zoom = zoom;
+        this.orientation = Orientation.normalize(orientation);
+    }
 
     Hole(int x, int y, double zoom)
     {
         this.x = x;
         this.y = y;
         this.zoom = zoom;
+        this.orientation = Orientation.UP;
     }
 }
