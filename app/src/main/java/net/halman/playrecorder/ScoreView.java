@@ -35,24 +35,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ScoreView extends View {
-    private Drawable gclef = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_g_clef, null);
-    private Drawable fclef = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_f_clef, null);
-    private Drawable note = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_whole_note, null);
-    private Drawable arrowUp = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_up, null);
-    private Drawable arrowUp05 = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_up05, null);
-    private Drawable arrowDown = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_down, null);
-    private Drawable arrowDown05 = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_down05, null);
-    private Drawable sharpPlus = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp_plus, null);
-    private Drawable flatPlus = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat_plus, null);
-    private Drawable trillBtn = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_trill_set, null);
-    private Drawable sharp = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp, null);
-    private Drawable flat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat, null);
-    private Drawable natural = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_natural, null);
-    private Drawable trill = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_trill, null);
-    private Drawable playBtn = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_stop, null);
+    private final Drawable gclef = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_g_clef, null);
+    private final Drawable fclef = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_f_clef, null);
+    private final Drawable note = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_whole_note, null);
+    private final Drawable arrowUp = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_up, null);
+    private final Drawable arrowUp05 = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_up05, null);
+    private final Drawable arrowDown = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_down, null);
+    private final Drawable arrowDown05 = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_down05, null);
+    private final Drawable sharpPlus = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp_plus, null);
+    private final Drawable flatPlus = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat_plus, null);
+    private final Drawable trillBtn = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_trill_set, null);
+    private final Drawable sharp = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp, null);
+    private final Drawable flat = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat, null);
+    private final Drawable natural = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_natural, null);
+    private final Drawable trill = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_trill, null);
+    private final Drawable playBtn = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_stop, null);
     private final Drawable sharp_gray = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp_gray, null);
     private final Drawable flat_gray = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat_gray, null);
-    private ShapeDrawable line = new ShapeDrawable(new RectShape());
+    private final ShapeDrawable line = new ShapeDrawable(new RectShape());
     private ScoreViewListener listener = null;
 
     enum Buttons {
@@ -70,11 +70,11 @@ public class ScoreView extends View {
     }
 
     private double scalefactor = 1.0;
-    private int score_offset_x = 0;
-    private int score_offset_y = 200;
-    private int score_height = 450;
-    private int score_width = 450;
-    private int note_position = 350;
+    private final int score_offset_x = 0;
+    private final int score_offset_y = 200;
+    private final int score_height = 450;
+    private final int score_width = 450;
+    private final int note_position = 350;
     private int score_center_x = 0;
     private int score_center_y = 0;
 
@@ -103,8 +103,6 @@ public class ScoreView extends View {
         put(Drawables.FCLEF, new Point(59, 65));
         put(Drawables.NOTE, new Point(38, 24));
     }};
-
-    private Point touchdown = new Point(0, 0);
 
     public ScoreView(Context context, AttributeSet attrs)
     {
@@ -339,12 +337,6 @@ public class ScoreView extends View {
         }
     }
 
-    void drawRect(Rect r, Canvas c)
-    {
-        drawLine(r.left, r.top, r.right - r.left, 2, c);
-        drawLine(r.right, r.top, 2, r.bottom - r.top, c);
-    }
-
     void drawButtons(Canvas canvas)
     {
         putDrawable(buttonPositions.get(Buttons.UP).centerX(), buttonPositions.get(Buttons.UP).centerY(), arrowUp, canvas);
@@ -368,7 +360,7 @@ public class ScoreView extends View {
         height = getHeight();
         sh = width / score_width;
         sv = height / score_height;
-        scalefactor = (sv < sh) ? sv : sh;
+        scalefactor = Math.min(sv, sh);
         if (sh < sv) {
             scalefactor = sh;
             score_center_x = 0;
@@ -400,7 +392,7 @@ public class ScoreView extends View {
 
     private void drawText(int x, int y, int size, String txt, Canvas canvas)
     {
-        int height = (int)scale(size);
+        int height = scale(size);
         int xpos = scale(x) + score_center_x;
         int ypos = scale(y) + score_center_y;
         MusicalText.draw(xpos, ypos, height, false, txt, Color.GRAY, canvas, sharp_gray, flat_gray);
