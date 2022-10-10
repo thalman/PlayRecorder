@@ -50,6 +50,8 @@ public class ScoreView extends View {
     private Drawable natural = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_natural, null);
     private Drawable trill = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_trill, null);
     private Drawable playBtn = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_stop, null);
+    private final Drawable sharp_gray = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sharp_gray, null);
+    private final Drawable flat_gray = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_flat_gray, null);
     private ShapeDrawable line = new ShapeDrawable(new RectShape());
     private ScoreViewListener listener = null;
 
@@ -401,7 +403,7 @@ public class ScoreView extends View {
         int height = (int)scale(size);
         int xpos = scale(x) + score_center_x;
         int ypos = scale(y) + score_center_y;
-        MusicalText.draw(xpos, ypos, height, false, txt, Color.GRAY, canvas, sharp, flat);
+        MusicalText.draw(xpos, ypos, height, false, txt, Color.GRAY, canvas, sharp_gray, flat_gray);
     }
 
     private void drawScaleName(Canvas canvas)
