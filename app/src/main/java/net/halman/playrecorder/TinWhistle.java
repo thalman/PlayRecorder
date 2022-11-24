@@ -26,6 +26,10 @@ public class TinWhistle extends MusicalInstrument {
                 realLowestNote(new Note(Note.g5, Note.Accidentals.RELEASE, false));
                 realHighestNote(new Note(Note.a6 + 12, Note.Accidentals.RELEASE, false));
                 break;
+            case Constants.TIN_WHISTLE_C:
+                realLowestNote(new Note(Note.c5, Note.Accidentals.RELEASE, false));
+                realHighestNote(new Note(Note.d6 + 12, Note.Accidentals.RELEASE, false));
+                break;
 
         }
 

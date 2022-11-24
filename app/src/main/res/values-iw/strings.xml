@@ -15,6 +15,7 @@
         <item>חלילית אלט</item>
         <item>חלילית טנור</item>
         <item>חלילית בס</item>
+        <item>חלילית אירית בסולם דו</item>
         <item>חלילית אירית בסולם רה</item>
         <item>חלילית אירית בסולם סול</item>
         <item>חלילית פייף (Yamaha YRF-21)</item>
@@ -53,4 +54,5 @@
     <string name="promoteSupport">תימכו באפליקציה</string>
     <string name="promoteSupportDetail">אם אתם נהנים מהשימוש באפליקציה, תוכלו לתמוך בפיתוחה העתידי באמצעות רכישה של נגינת חלילית פלוס.</string>
     <string name="promoteSupportNow">לרכישת נגינת חלילית פלוס</string>
+    <string name="scale_title">סולם</string>
 </resources>

@@ -474,18 +474,21 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
 
         if (Constants.isTinWhistle(app.instrumentType())) {
             switch (app.instrumentType()) {
-                case Constants.TIN_WHISTLE_D:
+                case Constants.TIN_WHISTLE_C:
                     setTitle(instruments[5]);
                     break;
-                case Constants.TIN_WHISTLE_G:
+                case Constants.TIN_WHISTLE_D:
                     setTitle(instruments[6]);
+                    break;
+                case Constants.TIN_WHISTLE_G:
+                    setTitle(instruments[7]);
                     break;
             }
             return;
         }
 
         if (Constants.isFife(app.instrumentType())) {
-            setTitle(instruments[7]);
+            setTitle(instruments[8]);
             return;
         }
         setTitle("Play Recorder");
@@ -556,12 +559,15 @@ public class MainActivity extends AppCompatActivity implements ScoreView.ScoreVi
                                 Constants.RECORDER_BASS_GERMAN);
                         break;
                     case 5:
-                        app.instrument(Constants.TIN_WHISTLE_D);
+                        app.instrument(Constants.TIN_WHISTLE_C);
                         break;
                     case 6:
-                        app.instrument(Constants.TIN_WHISTLE_G);
+                        app.instrument(Constants.TIN_WHISTLE_D);
                         break;
                     case 7:
+                        app.instrument(Constants.TIN_WHISTLE_G);
+                        break;
+                    case 8:
                         app.instrument(Constants.FIFE);
                         break;
                 }

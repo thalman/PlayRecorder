@@ -33,8 +33,9 @@ public class Constants {
 
     static final int TIN_WHISTLE_D = 20;
     static final int TIN_WHISTLE_G = 21;
+    static final int TIN_WHISTLE_C = 22;
 
-    static final int FIFE = 22;
+    static final int FIFE = 23;
 
     static boolean isRecorder(int type) {
         return (type >= RECORDER_SOPRANINO_BAROQUE && type <= RECORDER_BASS_GERMAN);
@@ -49,7 +50,7 @@ public class Constants {
     }
 
     static boolean isTinWhistle(int type) {
-        return (type >= TIN_WHISTLE_D && type <= TIN_WHISTLE_G);
+        return (type >= TIN_WHISTLE_D && type <= TIN_WHISTLE_C);
     }
 
     static boolean isFife(int type) {
