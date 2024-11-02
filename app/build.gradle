@@ -4,7 +4,7 @@ android {
     defaultConfig {
         applicationId "net.halman.playrecorder"
         minSdkVersion 16
-        targetSdkVersion 33
+        targetSdkVersion 34
         compileSdk 34
         versionCode 905
         versionName "9.5"
